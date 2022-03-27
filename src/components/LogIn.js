@@ -1,16 +1,18 @@
 import { StyleSheet, Text, View,TextInput,TouchableOpacity, Pressable } from 'react-native';
 import React, {useState} from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 
-export default function LogIn() {
+export default function LogIn({ navigation }) {
     const [user, setUser] =useState("");
     const [pass,setPass] =useState("");
 
     return (
         <View style={styles.container}>
             <View style={styles.top}>
-            <Text style={styles.tittle}> GOLF TRACK </Text>
+            <Text style={styles.tittle}> GOLF TRACK</Text>
             </View>
 
             <View style={styles.middle}>
@@ -30,11 +32,14 @@ export default function LogIn() {
                     autoCapitalize='none'
                     autoCorrect={false}
                     textContentType='newPassword'
-                    enablesReturnKeyAutomatically/>
-                <TouchableOpacity style={styles.submitButton}>
+                    enablesReturnKeyAutomatically
+                    secureTextEntry={true}/>
+                <TouchableOpacity style={styles.submitButton}
+                onPress={() => navigation.navigate('Home')}>
                     <Text style={styles.login}>Login</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.forgotPassButton}>
+                <TouchableOpacity style={styles.forgotPassButton}
+                onPress={()=> navigation.navigate('ForgotPass')}>
                     <Text style={
                         {
                             fontSize: 20,
@@ -43,7 +48,8 @@ export default function LogIn() {
                 </TouchableOpacity>
             </View>
             <View style={styles.newAccountButton}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button}
+                onPress={()=>navigation.navigate('Register')}>
                     <Text style={
                         {
                             fontSize: 20,
