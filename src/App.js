@@ -1,18 +1,17 @@
-import Login from "./components/LogIn";
-import Home from "./components/Home";
+import Home from "./screens/Home";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ForgotPassword from "./components/ForgotPassword";
-import Register from "./components/Register";
-import Frontpage from "./components/Frontpage";
+import ForgotPassword from "./screens/ForgotPassword";
 import RootStackScreen from "./screens/RootStackScreen";
+import TabBar from "./components/TabBar";
 
 export default function App() {
     //const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-        <RootStackScreen/>
+        <TabBar/>
         {/*
+        <RootStackScreen/>
         <Stack.Navigator screenOptions={{
             headerShown: false }}
             initialRouteName="Frontpage">
