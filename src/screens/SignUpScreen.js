@@ -182,13 +182,13 @@ function SignUpScreen({navigation}) {
                         />
                         <TextInput
                             placeholder="Enter your password..."
-                            secureTextEntry={data.secureConfirmTextEntry}
+                            secureTextEntry={data.secureTextEntryConfirm}
                             style={styles.textInput}
                             autoCapitalize="none"
                             onChangeText={(val) => handleConfirmPassword(val)}
                         />
                         <TouchableOpacity onPress={toggleConfirmSecureTextEntry}>
-                            {data.secureConfirmTextEntry ?
+                            {data.secureTextEntryConfirm ?
                                 <Feather
                                     name="eye-off"
                                     color="grey"
