@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TextInput,TouchableOpacity, Pressable } from 'react-native';
+import { StyleSheet, Text, View,TextInput,TouchableOpacity, Pressable, ImageBackground} from 'react-native';
 import React, {useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -11,53 +11,55 @@ export default function LogIn({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.top}>
-            <Text style={styles.tittle}> GOLF TRACK</Text>
-            </View>
+            <ImageBackground source={require('../assets/golfer_bg.jpeg')} resizeMode="cover" style={styles.image}>
+                <View style={styles.top}>
+                    <Text style={styles.tittle}> GOLF TRACK</Text>
+                </View>
 
-            <View style={styles.middle}>
-                <Text style={styles.label}> Username</Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={setUser}
-                    value={user}
-                    placeholder="Username"/>
+                <View style={styles.middle}>
+                    <Text style={styles.label}> Username</Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={setUser}
+                        value={user}
+                        placeholder="Username"/>
 
-                <Text style={styles.label}>Password</Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={setPass}
-                    value={pass}
-                    placeholder="Password"
-                    autoCapitalize='none'
-                    autoCorrect={false}
-                    textContentType='newPassword'
-                    enablesReturnKeyAutomatically
-                    secureTextEntry={true}/>
-                <TouchableOpacity style={styles.submitButton}
-                onPress={() => navigation.navigate('Home')}>
-                    <Text style={styles.login}>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.forgotPassButton}
-                onPress={()=> navigation.navigate('ForgotPass')}>
-                    <Text style={
-                        {
-                            fontSize: 20,
-                        }
-                    }>Forgot your password?</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.newAccountButton}>
-                <TouchableOpacity style={styles.button}
-                onPress={()=>navigation.navigate('Register')}>
-                    <Text style={
-                        {
-                            fontSize: 20,
-                            textDecorationLine: 'underline'
-                        }
-                    }>Create a new account</Text>
-                </TouchableOpacity>
-            </View>
+                    <Text style={styles.label}>Password</Text>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={setPass}
+                        value={pass}
+                        placeholder="Password"
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        textContentType='newPassword'
+                        enablesReturnKeyAutomatically
+                        secureTextEntry={true}/>
+                    <TouchableOpacity style={styles.submitButton}
+                                      onPress={() => navigation.navigate('Home')}>
+                        <Text style={styles.login}>Login</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.forgotPassButton}
+                                      onPress={()=> navigation.navigate('ForgotPass')}>
+                        <Text style={
+                            {
+                                fontSize: 20,
+                            }
+                        }>Forgot your password?</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.newAccountButton}>
+                    <TouchableOpacity style={styles.button}
+                                      onPress={()=>navigation.navigate('Register')}>
+                        <Text style={
+                            {
+                                fontSize: 20,
+                                textDecorationLine: 'underline'
+                            }
+                        }>Create a new account</Text>
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
         </View>
     );
 }
@@ -94,10 +96,6 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        justifyContent: "center",
-        backgroundColor: "#fff",
-        padding: 10,
-
     },
     top: {
         flex: 0.2,
@@ -141,7 +139,11 @@ const styles = StyleSheet.create({
     },
     login: {
         fontSize:20,
-    }
+    },
 
+    image: {
+        flex: 1,
+        justifyContent: "center"
+    },
 
 });
