@@ -20,7 +20,7 @@ export default function ForgotPassword() {
                 <Text style={styles.subtitle}>Press "send" to recieve an email and recover your password.</Text>
                 <TouchableOpacity style={styles.button}
                                   onPress={toggleIcon}>
-                    <Text style={styles.send}>SEND</Text>
+                    <Text style={styles.buttonText}>send</Text>
                 </TouchableOpacity>
 
             </View>
@@ -37,6 +37,10 @@ const styles = StyleSheet.create({
     container:{
         backgroundColor:"#fff",
         flex:1,
+    },
+
+    buttonText:{
+        fontSize:20
     },
 
     send:{
