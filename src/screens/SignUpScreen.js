@@ -86,7 +86,7 @@ function SignUpScreen({navigation}) {
                 style={styles.image}
                 resizeMode="cover">
                 <View style={{flex:1}}>
-                    <StatusBar backgroundColor='#fff' barStyle='light-content'/>
+                    <StatusBar backgroundColor="transparent" translucent barStyle='light-content'/>
                 </View>
                 <Animatable.View
                     style = {styles.footer}

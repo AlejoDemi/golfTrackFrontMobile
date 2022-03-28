@@ -1,5 +1,15 @@
 import React from 'react';
-import {View, StyleSheet, Text, Dimensions, Image, Button, TouchableOpacity, ImageBackground} from "react-native";
+import {
+    View,
+    StyleSheet,
+    Text,
+    Dimensions,
+    Image,
+    Button,
+    TouchableOpacity,
+    ImageBackground,
+    StatusBar
+} from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Animatable from 'react-native-animatable';
 
@@ -10,7 +20,9 @@ function FrontScreen({navigation}) {
                 source={require("../assets/golfer_bg.jpeg")}
                 style={styles.image}
                 resizeMode="cover">
-                <View style={{flex:3}}/>
+                <View style={{flex:3}}>
+                    <StatusBar backgroundColor="transparent" translucent barStyle='light-content'/>
+                </View>
                 <Animatable.View
                     style = {styles.footer}
                     animation="fadeInUpBig"
