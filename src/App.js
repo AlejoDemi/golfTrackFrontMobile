@@ -8,7 +8,7 @@ export default function App() {
     //const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-        <TabBarNavigator/>
+        <RootStackScreen/>
         {/*
         <RootStackScreen/>
         <Stack.Navigator screenOptions={{

@@ -62,7 +62,7 @@ function LogInScreen({navigation}) {
                         <FontAwesome
                             name="user-o"
                             color="#05375a"
-                            size={20}
+                            size={Platform.OS==='ios'? 30: 20}
                         />
                         <TextInput
                         placeholder="Enter your username..."
@@ -76,7 +76,7 @@ function LogInScreen({navigation}) {
                                 <Feather
                                     name="check-circle"
                                     color="green"
-                                    size={20}
+                                    size={Platform.OS==='ios'? 30: 20}
                                 />
                             </Animatable.View>
                             : null}
@@ -87,7 +87,7 @@ function LogInScreen({navigation}) {
                         <Feather
                             name="lock"
                             color="#05375a"
-                            size={20}
+                            size={Platform.OS==='ios'? 30: 20}
                         />
                         <TextInput
                             placeholder="Enter your password..."
@@ -101,12 +101,12 @@ function LogInScreen({navigation}) {
                                 <Feather
                                     name="eye-off"
                                     color="grey"
-                                    size={20}
+                                    size={Platform.OS==='ios'? 30: 20}
                                 /> :
                                 <Feather
                                     name="eye"
                                     color="grey"
-                                    size={20}
+                                    size={Platform.OS==='ios'? 30: 20}
                                 />
                             }
 
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     forgotPassText: {
         textDecorationLine: 'underline',
         fontSize:17,
-        color:"grey",
+        color:'grey',
     },
 });
 
