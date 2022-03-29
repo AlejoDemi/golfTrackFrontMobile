@@ -11,7 +11,7 @@ export default function ForgotPasswordScreen() {
 
 
     const toggleSentMessage = () => {
-        setSent(!sent);
+        setSent(true);
     }
 
     return (
@@ -46,7 +46,7 @@ export default function ForgotPasswordScreen() {
 
                         {sent?
                         <Animatable.View
-                            animation="fadeInUpBig" style={styles.checkIcon}>
+                            animation="rotate" style={styles.checkIcon}>
                             <Feather
                                 name="check-circle"
                                 color="#05375a"
@@ -56,7 +56,7 @@ export default function ForgotPasswordScreen() {
                         }
                         {sent?
                             <Animatable.Text
-                                animation="rotate" style={styles.text_tittle}>
+                                animation="fadeInUpBig" style={styles.text_tittle}>
                                 Check your mailbox!
                             </Animatable.Text> :null
                         }
