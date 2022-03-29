@@ -124,6 +124,11 @@ function LogInScreen({navigation}) {
                     }]}>
                         <Text style={styles.textSignUp}>Sign Up</Text>
                     </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.forgotPass} onPress={() => navigation.navigate('ForgotPass')}>
+                        <Text style={styles.forgotPassText}>Forgot Password?</Text>
+                    </TouchableOpacity>
+
                 </Animatable.View>
             </ImageBackground>
         </View>
@@ -214,7 +219,16 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color:'#4a8a3f'
-    }
+    },
+    forgotPass: {
+        marginTop:25,
+        alignSelf:"flex-end",
+    },
+    forgotPassText: {
+        textDecorationLine: 'underline',
+        fontSize:17,
+        color:"grey",
+    },
 });
 
 export default LogInScreen;

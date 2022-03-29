@@ -30,13 +30,13 @@ export default function ForgotPasswordScreen() {
                   <View style={styles.initialView}>
                     <Text style={[styles.text_tittle,{marginTop:10}]}>Forgot your password?</Text>
                     <View>
-                        <Text style={styles.subtitle}>Press "send" to recieve an email and recover it!</Text>
+                        <Text style={styles.subtitle}>Press "Send" to recieve an email and recover it!</Text>
 
                     </View>
 
 
                     <TouchableOpacity style={styles.button} onPress={toggleSentMessage}>
-                        <Text style={styles.textSign}>send</Text>
+                        <Text style={styles.textSign}>Send</Text>
                     </TouchableOpacity>
                   </View>
 
