@@ -52,8 +52,13 @@ export default function ForgotPasswordScreen() {
                                 color="#05375a"
                                 size={100}
                                 />
-                        </Animatable.View>:
-                            <Animatable.Text animation="fadeInDown">Chau</Animatable.Text>
+                        </Animatable.View> :null
+                        }
+                        {sent?
+                            <Animatable.Text
+                                animation="rotate" style={styles.text_tittle}>
+                                Check your mailbox!
+                            </Animatable.Text> :null
                         }
                     </View>
 
@@ -130,11 +135,10 @@ const styles = StyleSheet.create({
         color: '#05375a',
         fontSize: 30,
         fontWeight: 'bold',
-        marginBottom:50,
         alignSelf:"center",
     },
     subtitle: {
-        marginTop: 20,
+        marginTop: 50,
         fontSize:20,
         alignSelf:"center",
         justifyContent:"center",
