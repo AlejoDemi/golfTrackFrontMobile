@@ -46,7 +46,7 @@ const BubbleTabBar = ({ iconRenderer = constants_1.defaultIconRenderer, activeTa
 exports.default = BubbleTabBar;
 const BubbleTabBarContainer = native_1.default.View `
   flex-direction: row;
-  height: 80px;
+  height: 100px;
   align-items: center;
   justify-content: center;
   padding: 0 50px;
