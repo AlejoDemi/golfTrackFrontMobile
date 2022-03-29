@@ -3,13 +3,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ForgotPassword from "./screens/ForgotPassword";
 import RootStackScreen from "./screens/RootStackScreen";
-import TabBar from "./components/TabBar";
-
+import {TabBarNavigator} from "./components/TabBarNavigator";
 export default function App() {
     //const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-        <TabBar/>
+        <TabBarNavigator/>
         {/*
         <RootStackScreen/>
         <Stack.Navigator screenOptions={{

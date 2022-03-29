@@ -15,7 +15,7 @@ const FeedSVG = ({ color, size }) => {
     return (
         <Svg width={size} height={size} viewBox="0 0 24 24">
             <AnimatedPath
-                d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                d="M96 304h320M96 208h320M96 112h320M96 400h320"
                 stroke={color}
                 strokeWidth={2}
                 fill="none"
