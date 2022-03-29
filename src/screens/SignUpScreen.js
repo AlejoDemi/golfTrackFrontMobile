@@ -212,8 +212,8 @@ function SignUpScreen({navigation}) {
                         borderColor:'#4a8a3f',
                         borderWidth: 1,
                         marginTop: 15,
-                    }]}>
-                        <Text style={styles.textSignUp}>Sign Up</Text>
+                    }]} onPress={() => navigation.navigate('Home')}>
+                        <Text style={styles.textSignUp} >Sign Up</Text>
                     </TouchableOpacity>
                 </Animatable.View>
             </ImageBackground>
