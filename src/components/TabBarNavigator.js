@@ -4,7 +4,7 @@ import {
     faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import {BottomTabBarProps, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import BubbleTabBar from 'react-native-bubble-tabbar';
 import FeedScreen from "../screens/FeedScreen";
@@ -13,18 +13,18 @@ import ProfileScreen from "../screens/ProfileScreen";
 
 const tabs = [
     {
-        activeColor: '#cc0066',
-        activeBackgroundColor: '#f76a8c',
+        activeColor: '#4a8a3f',
+        activeBackgroundColor: '#fff',
         activeIcon: faAlignLeft,
     },
     {
-        activeColor: '#ff6f5e',
-        activeBackgroundColor: '#f8dc88',
+        activeColor: '#4a8a3f',
+        activeBackgroundColor: '#fff',
         activeIcon: faGolfBallTee,
     },
     {
-        activeColor: '#1eb2a6',
-        activeBackgroundColor: '#ccf0e1',
+        activeColor: '#4a8a3f',
+        activeBackgroundColor: '#fff',
         activeIcon: faUser,
     },
 ];
