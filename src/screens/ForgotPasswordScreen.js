@@ -127,7 +127,10 @@ const styles = StyleSheet.create({
     },
     text_tittle: {
         marginTop: 10,
-        fontSize:35,
+        color: '#05375a',
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginBottom:50,
         alignSelf:"center",
     },
     subtitle: {
