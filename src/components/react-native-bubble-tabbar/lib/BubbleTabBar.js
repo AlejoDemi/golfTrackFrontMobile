@@ -5,6 +5,8 @@ const react_1 = tslib_1.__importStar(require("react"));
 const native_1 = tslib_1.__importStar(require("styled-components/native"));
 const BubbleTab_1 = tslib_1.__importDefault(require("./BubbleTab"));
 const constants_1 = require("./constants");
+import {Platform} from "react-native";
+
 const BubbleTabBar = ({ iconRenderer = constants_1.defaultIconRenderer, activeTabSize = constants_1.defaultActiveTabSize, disabledTabSize = constants_1.defaultDisabledTabSize, backgroundColor = constants_1.defaultBackgroundColor, tabs, style, state, descriptors, navigation, }) => {
     const tabRoutes = react_1.useMemo(() => {
         const { routes } = state;
@@ -46,7 +48,7 @@ const BubbleTabBar = ({ iconRenderer = constants_1.defaultIconRenderer, activeTa
 exports.default = BubbleTabBar;
 const BubbleTabBarContainer = native_1.default.View `
   flex-direction: row;
-  height: 100px;
+  height: ${Platform.OS === 'ios' ? '100px': '80px'};
   align-items: center;
   justify-content: center;
   padding: 0 50px;
