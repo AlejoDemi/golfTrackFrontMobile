@@ -4,13 +4,16 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from 'react-native-animatable';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import * as Haptics from "expo-haptics";
 
 export default function ForgotPasswordScreen() {
 
     const [sent, setSent] = useState(false);
+    const [email,setEmail] =useState('');
 
 
     const toggleSentMessage = () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         setSent(true);
     }
 
@@ -29,6 +32,20 @@ export default function ForgotPasswordScreen() {
                 >
                   <View style={styles.initialView}>
                     <Text style={[styles.text_tittle,{marginTop:10}]}>Forgot your password?</Text>
+
+                      <View style={styles.action}>
+                      <Feather
+                          name="mail"
+                          color="#05375a"
+                          size={20}
+                      />
+                      <TextInput
+                          placeholder="Enter your email..."
+                          style={styles.textInput}
+                          autoCapitalize="none"
+                          onChangeText={(val) => setEmail(val)}
+                      />
+                      </View>
                     <View>
                         <Text style={styles.subtitle}>Press "Send" to recieve an email and recover it!</Text>
 
@@ -56,7 +73,7 @@ export default function ForgotPasswordScreen() {
                         }
                         {sent?
                             <Animatable.Text
-                                animation="fadeInUpBig" style={styles.text_tittle}>
+                                animation="bounceIn" style={styles.text_tittle}>
                                 Check your mailbox!
                             </Animatable.Text> :null
                         }
@@ -91,6 +108,22 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 30
     },
+
+    textInput: {
+        flex: 1,
+        marginTop: Platform.OS === 'ios' ? 0 : -12,
+        paddingLeft: 10,
+        color: '#05375a',
+    },
+
+    action: {
+        flexDirection: 'row',
+        marginTop: 30,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f2f2f2',
+        paddingBottom: 5
+    },
+
     text_header: {
         color: '#fff',
         fontWeight: 'bold',
@@ -138,7 +171,7 @@ const styles = StyleSheet.create({
         alignSelf:"center",
     },
     subtitle: {
-        marginTop: 50,
+        marginTop: 30,
         fontSize:20,
         alignSelf:"center",
         justifyContent:"center",

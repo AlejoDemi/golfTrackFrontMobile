@@ -6,6 +6,7 @@ const native_1 = tslib_1.__importStar(require("styled-components/native"));
 const BubbleTab_1 = tslib_1.__importDefault(require("./BubbleTab"));
 const constants_1 = require("./constants");
 import {Platform} from 'react-native';
+import * as Haptics from 'expo-haptics';
 
 const BubbleTabBar = ({ iconRenderer = constants_1.defaultIconRenderer, activeTabSize = constants_1.defaultActiveTabSize, disabledTabSize = constants_1.defaultDisabledTabSize, backgroundColor = constants_1.defaultBackgroundColor, tabs, style, state, descriptors, navigation, }) => {
     const tabRoutes = react_1.useMemo(() => {
@@ -22,6 +23,7 @@ const BubbleTabBar = ({ iconRenderer = constants_1.defaultIconRenderer, activeTa
         }, [name, optionTabBarLabel, optionTitle]);
         const isActive = state.index === index;
         const onPress = react_1.useCallback(() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
             const event = navigation.emit({
                 type: 'tabPress',
                 target: routeKey,
