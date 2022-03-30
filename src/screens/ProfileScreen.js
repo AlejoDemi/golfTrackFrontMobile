@@ -5,32 +5,19 @@ import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from 'react-native-animatable';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-export default function ForgotPasswordScreen() {
+export default function ForgotPasswordScreen({navigation}) {
 
-    const [activate, setActivate]= useState(true);
-    const [country,setCountry]= useState("");
-    const [countryPut,setCountryPut]=useState(false)
-
-    const toggleBell = ()=>{
-        setActivate(!activate);
-    }
     return(
         <Animatable.View
             animation="fadeInUpBig" style={styles.container}>
             <View style={styles.horizontal}>
                 <Text style={styles.tittle}>GolfTrack</Text>
-                  <TouchableOpacity style={styles.bell} onPress={toggleBell}>
-                      {activate?
+                  <TouchableOpacity style={styles.edit} onPress={() => navigation.navigate('EditProfile')}>
                        <Feather
-                           name="bell"
+                           name="edit"
                            color="#05375a"
                            size={30}
-                       />:
-                          <Feather
-                              name="bell-off"
-                              color="#05375a"
-                              size={30}
-                          />}
+                       />
                   </TouchableOpacity>
             </View>
             <View style={styles.picture}>
@@ -45,8 +32,19 @@ export default function ForgotPasswordScreen() {
                     <Text style={styles.data}>country</Text>
                     <Text style={styles.data}>your bio</Text>
                 </View>
-                <View style={styles.horizontal}>
-
+                <View style={styles.stats}>
+                    <View style={styles.statsLeft}>
+                        <Text style={styles.username}>83.0</Text>
+                        <Text style={styles.chartLabels}>AVG SCORE</Text>
+                    </View>
+                    <View style={styles.statsCenter}>
+                        <Text style={styles.username}>35</Text>
+                        <Text style={styles.chartLabels}>ROUNDS</Text>
+                    </View>
+                    <View style={styles.statsRight}>
+                        <Text style={styles.username}>7.2</Text>
+                        <Text style={styles.chartLabels}>HANDICAP</Text>
+                    </View>
                 </View>
             </View>
         </Animatable.View>
@@ -55,7 +53,8 @@ export default function ForgotPasswordScreen() {
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        marginTop:20,
     },
 
     tittle:{
@@ -66,11 +65,11 @@ const styles = StyleSheet.create({
     },
 
     horizontal:{
-        marginTop:10,
+        marginTop:50,
         flexDirection: 'row',
-        flex:2,
+        //flex:2,
     },
-    bell: {
+    edit: {
         alignSelf:"flex-end",
         marginLeft:220,
     },
@@ -78,6 +77,7 @@ const styles = StyleSheet.create({
     picture:{
         flex:2,
         alignContent:"center",
+        marginTop:50
     },
 
     image:{
@@ -101,6 +101,40 @@ const styles = StyleSheet.create({
         color: '#05375a',
         marginLeft:10,
         marginTop:10,
+    },
+
+    stats: {
+        flexDirection:"row",
+        flex:2,
+        flexWrap: 'wrap',
+        marginTop:20
+    },
+
+    statsLeft:{
+        alignSelf:"flex-start",
+        flex:1,
+        marginLeft:30,
+        alignContent:"center",
+        marginRight:10
+    },
+
+    statsCenter:{
+        alignSelf:"center",
+        flex:1,
+        alignContent:"center",
+        marginRight:10
+    },
+
+    statsRight:{
+        alignSelf:"flex-end",
+        flex:1,
+        alignContent:"center",
+        marginRight:30,
+    },
+
+    chartLabels:{
+        fontSize:15,
+        alignSelf:"center",
     }
 
 
