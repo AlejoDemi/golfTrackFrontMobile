@@ -8,6 +8,8 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 export default function ForgotPasswordScreen() {
 
     const [activate, setActivate]= useState(true);
+    const [country,setCountry]= useState("");
+    const [countryPut,setCountryPut]=useState(false)
 
     const toggleBell = ()=>{
         setActivate(!activate);
@@ -38,7 +40,14 @@ export default function ForgotPasswordScreen() {
                     size={100}
                     style={styles.image}
                 />
-                <Text style={styles.username}>Username</Text>
+                <View>
+                    <Text style={styles.username}>Username</Text>
+                    <Text style={styles.data}>country</Text>
+                    <Text style={styles.data}>your bio</Text>
+                </View>
+                <View style={styles.horizontal}>
+
+                </View>
             </View>
         </Animatable.View>
     );
@@ -59,6 +68,7 @@ const styles = StyleSheet.create({
     horizontal:{
         marginTop:10,
         flexDirection: 'row',
+        flex:2,
     },
     bell: {
         alignSelf:"flex-end",
@@ -81,8 +91,20 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
         color: '#05375a',
         marginLeft:10,
+        marginTop:10,
+    },
+
+    data:{
+        alignSelf:"center",
+        fontSize:20,
+        fontWeight:"300",
+        color: '#05375a',
+        marginLeft:10,
+        marginTop:10,
     }
 
 
 });
+
+
 

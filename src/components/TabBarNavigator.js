@@ -53,6 +53,8 @@ const Tab = createBottomTabNavigator();
 export const TabBarNavigator= () => {
     return (
         <Tab.Navigator
+            screenOptions={{
+                headerShown: false }}
             tabBar={({ state, descriptors, navigation }) =>
                 <CustomTabBar
                     state={state}
