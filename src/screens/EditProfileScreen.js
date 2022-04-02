@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, Dimensions, Image, Button, TouchableOpacity,StatusBar,Platform,TextInput, ImageBackground} from "react-native";
+import {Modal,View, StyleSheet, Text, Dimensions, Image, Button, TouchableOpacity,StatusBar,Platform,TextInput, ImageBackground,ScrollView} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from 'react-native-animatable';
@@ -13,9 +13,22 @@ export default function EditProfileScreen({navigation}) {
     const [image,setImage]=useState(null);
     const [name,setName]=useState("Alejo Demitropulos");
     const [handicap,setHandicap]=useState(7.2);
+    const [bio,setBio]=useState('Daily golf Argentina');
+    const [email,setEmail]=useState('alejodemitropulos@homail.com');
+    const [password,setPassword]=useState('salta');
+    const [validatePass,setValidatePass]=useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const textInputChange=(val)=>{
+    const changeName=(val)=>{
         if(val.length>0)setName(val);
+    }
+
+    const changeBio=(val)=>{
+        if(val.length>0)setBio(val);
+    }
+
+    const changeEmail=(val)=>{
+        if(val.length>0)setEmail(val);
     }
 
     const returnToProfile=()=>{
@@ -34,11 +47,26 @@ export default function EditProfileScreen({navigation}) {
 
     }
 
+    const validate=(val)=>{
+        if(val===password)setValidatePass(true);
+    }
+    let closeModal=()=>{
+        if (validatePass) setModalVisible(false);
+    };
 
     return(
         <View style={styles.container}>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+            >
+
+            </Modal>
+
               <Animatable.View animation="fadeInRightBig" style={styles.header}/>
-              <Animatable.View animation="fadeInRightBig" style={styles.footer}>
+            <Animatable.View animation="fadeInRightBig" style={styles.footer}>
+              <ScrollView>
                   <Text style={styles.label}> Profile Image</Text>
                       <TouchableOpacity style={styles.card} onPress={openImagePicker}>
                           <Image
@@ -59,8 +87,14 @@ export default function EditProfileScreen({navigation}) {
                   <Text style={styles.label}> Name</Text>
                       <View style={styles.card}>
                               <TextInput style={styles.input}
-                                         onChangeText={(val) => textInputChange(val)}>{name}</TextInput>
+                                         onChangeText={(val) => changeName(val)}>{name}</TextInput>
                       </View>
+
+                  <Text style={styles.label}>Bio</Text>
+                  <View style={styles.card}>
+                      <TextInput style={styles.input}
+                                 onChangeText={(val) => changeBio(val)}>{bio}</TextInput>
+                  </View>
 
                   <Text style={styles.label}> Handicap</Text>
                   <View style={styles.handicap}>
@@ -83,15 +117,35 @@ export default function EditProfileScreen({navigation}) {
                         style={styles.handicap}/>
                   </View>
 
-                  <TouchableOpacity style={styles.save} onPress={returnToProfile}>
-                        <Text style={{
-                            fontSize:20,
-                            fontWeight: "500",
-                            color:"white"
-                        }}>Save</Text>
-                  </TouchableOpacity>
-              </Animatable.View>
+                  <Text style={styles.label}>Email</Text>
+                  <View style={styles.card}>
+                      <TextInput style={styles.input}
+                                 onChangeText={(val) => changeEmail(val)}>{email}</TextInput>
+                  </View>
 
+                  <Text style={styles.label}>Password</Text>
+                  <TouchableOpacity style={styles.card}>
+                      <Text style={styles.tittle}>Change password</Text>
+                      <Feather name="chevron-right"
+                               color="#05375a"
+                               size={30}
+                               style={styles.icon}
+                      />
+                  </TouchableOpacity>
+
+
+              </ScrollView>
+
+                <View style={styles.saveView}>
+                <TouchableOpacity style={styles.save} onPress={returnToProfile}>
+                    <Text style={{
+                        fontSize:20,
+                        fontWeight: "500",
+                        color:"white"
+                    }}>Save</Text>
+                </TouchableOpacity>
+                </View>
+            </Animatable.View>
         </View>
     );
 }
@@ -104,12 +158,17 @@ const styles = StyleSheet.create({
         borderRadius:20,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop:150,
         alignSelf:"center"
     },
 
+    saveView:{
+        flex:1,
+        alignContent:"center",
+        justifyContent: 'center',
+    },
+
     footer:{
-        flex:10,
+        flex:12,
         backgroundColor: "white",
         alignContent:"center",
         flexDirection:"column"
@@ -142,11 +201,12 @@ const styles = StyleSheet.create({
 
     image:{
         borderRadius: 20,
-        height:"70%",
+        height:"85%",
         width:"20%",
         alignSelf:"flex-start",
         marginTop: 8,
         marginLeft: 10,
+
     },
 
     tittle:{
@@ -162,8 +222,8 @@ const styles = StyleSheet.create({
     },
     label:{
         alignSelf:"center",
-        marginBottom:10,
-        marginTop:15,
+        marginBottom:15,
+        marginTop:20,
         fontSize: 18,
         color: '#05375a',
         fontWeight:"bold",
@@ -177,6 +237,12 @@ const styles = StyleSheet.create({
         fontSize:20,
         marginLeft:30,
 
+    },
+    passInput: {
+        flex: 1,
+        marginTop: 10,
+        paddingLeft: 10,
+        color: '#05375a',
     },
 
     handicap:{
