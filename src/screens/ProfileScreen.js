@@ -10,7 +10,6 @@ import * as Haptics from 'expo-haptics';
 export default function ProfileScreen({navigation}) {
 
     let goToEdit=()=>{
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
         navigation.navigate('EditProfile');
     };
     return(

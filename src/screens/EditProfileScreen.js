@@ -6,19 +6,26 @@ import * as Animatable from 'react-native-animatable';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Haptics from "expo-haptics";
 import * as ImagePicker from "expo-image-picker";
+import NumericInput from 'react-native-numeric-input'
 
 
 export default function EditProfileScreen({navigation}) {
     const [image,setImage]=useState(null);
     const [name,setName]=useState("Alejo Demitropulos");
-    const [changeName,setChangeName]=useState(false);
+    const [handicap,setHandicap]=useState(7.2);
 
-    const toggleNameButton=()=>{
-        setChangeName(!changeName);
+    const textInputChange=(val)=>{
+        if(val.length>0)setName(val);
     }
 
+    const returnToProfile=()=>{
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        navigation.navigate("Profile");
+    }
+
+
+
     let openImagePicker=async ()=>{
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
         let permission=await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (permission.granted===false)return;
         const pickerResult=await ImagePicker.launchImageLibraryAsync();
@@ -30,7 +37,7 @@ export default function EditProfileScreen({navigation}) {
 
     return(
         <View style={styles.container}>
-              <Animatable.View animation="fadeInRightBig" style={styles.header}></Animatable.View>
+              <Animatable.View animation="fadeInRightBig" style={styles.header}/>
               <Animatable.View animation="fadeInRightBig" style={styles.footer}>
                   <Text style={styles.label}> Profile Image</Text>
                       <TouchableOpacity style={styles.card} onPress={openImagePicker}>
@@ -50,31 +57,62 @@ export default function EditProfileScreen({navigation}) {
                       </TouchableOpacity>
 
                   <Text style={styles.label}> Name</Text>
-                      <TouchableOpacity style={styles.card} onPress={toggleNameButton}>
-                          {!changeName?
-                              (<Text style={styles.tittle}>{name}</Text>): <Text>TIRAR MODAL</Text>}
-                              <Feather name="chevron-right"
-                                        color="#05375a"
-                                        size={30}
-                                        style={styles.icon}
-                              />
+                      <View style={styles.card}>
+                              <TextInput style={styles.input}
+                                         onChangeText={(val) => textInputChange(val)}>{name}</TextInput>
+                      </View>
 
+                  <Text style={styles.label}> Handicap</Text>
+                  <View style={styles.handicap}>
+                      <NumericInput
+                        value={handicap}
+                        onChange={(val) =>
+                        {Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                            setHandicap(val)}}
+                        onLimitReached={(isMax, msg) => console.log(isMax, msg)}
+                        totalWidth={300}
+                        totalHeight={50}
+                        iconSize={25}
+                        step={0.1}
+                        valueType='real'
+                        rounded
+                        textColor='#05375a'
+                        iconStyle={{color: 'white'}}
+                        rightButtonBackgroundColor='#4a8a3f'
+                        leftButtonBackgroundColor='#4a8a3f'
+                        style={styles.handicap}/>
+                  </View>
 
-                      </TouchableOpacity>
-
-                  <Text style={styles.label}> Hola</Text>
-                      <TouchableOpacity style={styles.card}>
-                          <Text style={{color:"black"}}>chala</Text>
-                      </TouchableOpacity>
+                  <TouchableOpacity style={styles.save} onPress={returnToProfile}>
+                        <Text style={{
+                            fontSize:20,
+                            fontWeight: "500",
+                            color:"white"
+                        }}>Save</Text>
+                  </TouchableOpacity>
               </Animatable.View>
+
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    save:{
+        backgroundColor: '#4a8a3f',
+        height: 50,
+        width:"40%",
+        borderRadius:20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop:150,
+        alignSelf:"center"
+    },
+
     footer:{
         flex:10,
-        backgroundColor: "white"
+        backgroundColor: "white",
+        alignContent:"center",
+        flexDirection:"column"
     },
 
     container:{
@@ -129,5 +167,23 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#05375a',
         fontWeight:"bold",
+    },
+
+    input:{
+
+        color:"#05375a",
+        flex:1,
+        alignSelf: "center",
+        fontSize:20,
+        marginLeft:30,
+
+    },
+
+    handicap:{
+        flexDirection: "row",
+        alignContent:"center",
+        alignSelf:"center",
+        marginTop:5
     }
 });
+

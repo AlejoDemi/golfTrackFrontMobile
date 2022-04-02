@@ -23,7 +23,7 @@ const BubbleTabBar = ({ iconRenderer = constants_1.defaultIconRenderer, activeTa
         }, [name, optionTabBarLabel, optionTitle]);
         const isActive = state.index === index;
         const onPress = react_1.useCallback(() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
             const event = navigation.emit({
                 type: 'tabPress',
                 target: routeKey,

@@ -30,6 +30,7 @@
     "react-native-animation-hooks": "^1.0.1",
     "react-native-gesture-handler": "~2.1.0",
     "react-native-image-picker": "^4.7.3",
+    "react-native-numeric-input": "^1.9.1",
     "react-native-reanimated": "^2.0.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
