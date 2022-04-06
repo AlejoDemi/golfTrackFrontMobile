@@ -135,10 +135,9 @@ export default function EditProfileScreen({navigation}) {
 
 
 
-
               </ScrollView>
+            </Animatable.View>
 
-                <View style={styles.saveView}>
                 <TouchableOpacity style={styles.save} onPress={returnToProfile}>
                     <Text style={{
                         fontSize:20,
@@ -146,8 +145,8 @@ export default function EditProfileScreen({navigation}) {
                         color:"white"
                     }}>Save</Text>
                 </TouchableOpacity>
-                </View>
-            </Animatable.View>
+
+
         </View>
     );
 }
@@ -164,24 +163,25 @@ const styles = StyleSheet.create({
     },
 
     saveView:{
-        flex:1,
+        height:"10%",
         alignContent:"center",
         justifyContent: 'center',
     },
 
     footer:{
-        flex:12,
+        height:"80%",
         backgroundColor: "white",
         alignContent:"center",
-        flexDirection:"column"
+        flexDirection:"column",
     },
+
 
     container:{
         flex:1,
     },
 
     header:{
-        flex:1,
+        height:"10%",
         backgroundColor: "white"
     },
 
