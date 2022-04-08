@@ -253,13 +253,7 @@ const styles = StyleSheet.create({
         color: '#05375a',
         fontSize: 18
     },
-    action: {
-        flexDirection: 'row',
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#f2f2f2',
-        paddingBottom: 5
-    },
+
     actionError: {
         flexDirection: 'row',
         marginTop: 10,

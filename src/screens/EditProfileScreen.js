@@ -187,18 +187,7 @@ const styles = StyleSheet.create({
 
     card:{
         flexDirection:"row",
-        alignContent:"center",
-        borderRadius: 20,
-        width:"90%",
-        height:"10%",
-        alignSelf:"center",
-        backgroundColor: "white",
-        shadowColor:"black",
-        shadowOpacity:0.35,
-        shadowOffset:{
-            width:0,
-            height:2,
-        },
+
     },
 
     image:{
