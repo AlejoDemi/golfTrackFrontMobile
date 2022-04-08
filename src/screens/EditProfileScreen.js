@@ -56,13 +56,6 @@ export default function EditProfileScreen({navigation}) {
 
     return(
         <View style={styles.container}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-            >
-
-            </Modal>
 
               <Animatable.View animation="fadeInRightBig" style={styles.header}/>
             <Animatable.View animation="fadeInRightBig" style={styles.footer}>
@@ -186,8 +179,19 @@ const styles = StyleSheet.create({
     },
 
     card:{
+        alignSelf:"center",
         flexDirection:"row",
-
+        alignContent:"center",
+        borderRadius: 20,
+        width:"90%",
+        height:"15%",
+        backgroundColor: "white",
+        shadowColor:"black",
+        shadowOpacity:0.35,
+        shadowOffset:{
+            width:0,
+            height:2,
+        },
     },
 
     image:{

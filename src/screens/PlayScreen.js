@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet,TouchableOpacity} from 'react-native';
 
 function PlayScreen({navigation}) {
     return (
@@ -10,15 +10,19 @@ function PlayScreen({navigation}) {
 
             <View style={styles.nearbyCourses}>
                 <View style={styles.coursesContainer}>
-                    <View style={styles.courseBox}>
+
+                    <TouchableOpacity style={styles.courseBox}>
                         <Text style={styles.tittle}> Nearby courses</Text>
-                    </View>
-                    <View style={styles.courseBox}>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.courseBox}>
                         <Text style={styles.tittle}> Nearby courses</Text>
-                    </View>
-                    <View style={styles.courseBox}>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.courseBox}>
                         <Text style={styles.tittle}> Nearby courses</Text>
-                    </View>
+                    </TouchableOpacity>
+
                 </View>
             </View>
 
