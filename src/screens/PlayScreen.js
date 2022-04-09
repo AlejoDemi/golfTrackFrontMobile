@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet,TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
@@ -13,51 +13,57 @@ function PlayScreen({navigation}) {
 
     return (
         <View style={styles.container}>
-        <View style={{flex:1}}>
             <View style={styles.header}>
-                <Text style={styles.tittle}> Nearby courses</Text>
+                <ImageBackground
+                    source={require("../assets/fondo.jpg")}
+                    style={styles.image}
+                    resizeMode="cover"/>
             </View>
 
-            <View style={styles.nearbyCourses}>
                 <View style={styles.coursesContainer}>
+                    <View style={{flex:1}}>
 
-                    <TouchableOpacity style={styles.courseBox}>
-                        <MaterialIcons
-                        name="golf-course"
-                        color="#05375a"
-                        size={30}
-                        style={styles.icon}/>
-                        <Text style={styles.cardText}> Pacheco Golf</Text>
-                    </TouchableOpacity>
+                        <Text style={styles.tittle}>Nearby courses</Text>
 
-                    <TouchableOpacity style={styles.courseBox}>
-                        <MaterialIcons
+                    </View>
+
+                    <View style={{flex:3,flexDirection:"row"}}>
+
+                        <TouchableOpacity style={styles.courseBox}>
+                            <MaterialIcons
                             name="golf-course"
                             color="#05375a"
-                            size={30}
+                            size={20}
                             style={styles.icon}/>
-                        <Text style={styles.cardText}> Pilar Golf</Text>
-                    </TouchableOpacity>
+                            <Text style={styles.cardText}> Pacheco Golf</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.courseBox}>
-                        <MaterialIcons
-                            name="golf-course"
-                            color="#05375a"
-                            size={30}
-                            style={styles.icon}/>
-                        <Text style={styles.cardText}> Nordelta Golf Club</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.courseBox}>
+                            <MaterialIcons
+                                name="golf-course"
+                                color="#05375a"
+                                size={20}
+                                style={styles.icon}/>
+                            <Text style={styles.cardText}> Pilar Golf</Text>
+                        </TouchableOpacity>
 
-                    <Searchbar style={styles.searchBar}
-                        placeholder="Search course"
-                        onChangeText={(value) =>onChangeSearch(value)}
-                        value={searchCourse}
-                    />
+                        <TouchableOpacity style={styles.courseBox}>
+                            <MaterialIcons
+                                name="golf-course"
+                                color="#05375a"
+                                size={20}
+                                style={styles.icon}/>
+                            <Text style={styles.cardText}> Nordelta Golf Club</Text>
+                        </TouchableOpacity>
+                    </View>
+
                 </View>
-            </View>
-
+            <Searchbar style={styles.searchBar}
+                       placeholder="Search course"
+                       onChangeText={(value) =>onChangeSearch(value)}
+                       value={searchCourse}
+            />
             <View style={styles.footer}/>
-        </View>
         </View>
     );
 }
@@ -68,18 +74,23 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
     },
 
+    image: {
+        flex: 1,
+        justifyContent: "center"
+    },
+
     tittle:{
-        fontSize:30,
+        fontSize:25,
         color: '#05375a',
         alignSelf: "center",
-        marginTop: 50,
         fontWeight:"bold",
+        marginTop:5
     },
 
     searchBar:{
-        marginTop:40,
+        marginTop:110,
         width:"90%",
-        height:"12%",
+        height:"8%",
         alignSelf:"center",
         borderRadius: 20,
     },
@@ -87,8 +98,8 @@ const styles = StyleSheet.create({
     cardText:{
         color: '#05375a',
         alignSelf: "center",
-        fontSize:25,
-        marginLeft:10,
+        fontSize:20,
+        marginLeft: 5,
     },
 
     header:{
@@ -96,30 +107,42 @@ const styles = StyleSheet.create({
         alignContent:"center",
     },
 
-    nearbyCourses:{
-        flex:10,
-        alignContent:"center",
-    },
-
     footer:{
         flex:3,
+        alignContent:"center",
     },
 
-    coursesContainer:{
-        flex:1,
-        alignContent:"center",
 
+    coursesContainer:{
+        zIndex:1,
+        elevation:1,
+        alignContent:"center",
+        marginTop:200,
+        borderRadius: 20,
+        width:"95%",
+        height:"18%",
+        alignSelf:"center",
+        position:"absolute",
+        backgroundColor:"white",
+        shadowColor:"black",
+        shadowOpacity:0.35,
+        shadowOffset:{
+            width:0,
+            height:2,
+        },
     },
 
     courseBox:{
         flexDirection:"row",
         backgroundColor: 'white',
-        marginTop:15,
+        marginTop:10,
+        marginLeft:10,
+        marginBottom:10,
         alignSelf: "center",
         alignContent:"center",
         borderRadius: 20,
-        width:"90%",
-        height:"15%",
+        width:"30%",
+        height:"70%",
         shadowColor:"black",
         shadowOpacity:0.35,
         shadowOffset:{
@@ -130,7 +153,6 @@ const styles = StyleSheet.create({
 
     icon:{
         alignSelf:"center",
-        marginLeft:10,
     }
 });
 
