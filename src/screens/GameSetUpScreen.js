@@ -4,7 +4,7 @@ import { Searchbar } from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
 import Leaderboard from 'react-native-leaderboard';
-
+//hola
 
 function GameSetUpScreen({navigation}) {
     state = {
