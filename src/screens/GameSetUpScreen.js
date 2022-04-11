@@ -12,6 +12,7 @@ function GameSetUpScreen({navigation}) {
             {userName: 'Fede', highScore: 52},
             {userName: 'TigerWoods', highScore: 120},
             {userName:  'AlejoDemi' , highScore: 67},
+            {userName: 'Chala', highScore:40},
         ]
     }
 
@@ -57,10 +58,12 @@ function GameSetUpScreen({navigation}) {
                     color: '#05375a',
                 }}>Leaderboard</Text>
                 <View style={{flex:1,width:"90%",alignSelf:"center",marginTop:10}}>
+
                 <Leaderboard style={{alignSelf:"center"}}
                     data={state.data}
                     sortBy='highScore'
-                    labelBy='userName'/>
+                    labelBy='userName'
+                    />
                 </View>
             </View>
 
