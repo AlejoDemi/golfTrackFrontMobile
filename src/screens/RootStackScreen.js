@@ -7,6 +7,7 @@ import SignUpScreen from "./SignUpScreen";
 import ForgotPasswordScreen from "./ForgotPasswordScreen";
 import {TabBarNavigator} from "../components/TabBarNavigator";
 import EditProfileScreen from "./EditProfileScreen";
+import GameSetUpScreen from "./GameSetUpScreen";
 
 const RootStack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ const RootStackScreen = () => (
         <RootStack.Screen name="ForgotPass" component={ForgotPasswordScreen}/>
         <RootStack.Screen name="Home" component={TabBarNavigator}/>
         <RootStack.Screen name="EditProfile" component={EditProfileScreen}/>
+        <RootStack.Screen name="GameSetUp" component={GameSetUpScreen}/>
     </RootStack.Navigator>
 )
 

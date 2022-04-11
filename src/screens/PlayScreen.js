@@ -6,9 +6,14 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 function PlayScreen({navigation}) {
     const[searchCourse,setSearchCourse]=useState('');
+    const[selectedCourse,setSelectedCourse]=useState("Pacheco");
 
     let onChangeSearch=(value)=>{
         setSearchCourse(value)
+    };
+
+    const startPlay=()=>{
+        navigation.navigate("GameSetUp");
     };
 
     return (
@@ -20,44 +25,19 @@ function PlayScreen({navigation}) {
                     resizeMode="cover"/>
             </View>
 
-                <View style={styles.coursesContainer}>
-                    <View style={{flex:1}}>
+                <TouchableOpacity style={styles.coursesContainer}
+                onPress={startPlay}>
+                        <Text style={styles.tittle}>Quick Play</Text>
 
-                        <Text style={styles.tittle}>Nearby courses</Text>
-
-                    </View>
-
-                    <View style={{flex:3,flexDirection:"row"}}>
-
-                        <TouchableOpacity style={styles.courseBox}>
+                        <View style={styles.courseBox}>
                             <MaterialIcons
                             name="golf-course"
                             color="#05375a"
-                            size={20}
+                            size={30}
                             style={styles.icon}/>
                             <Text style={styles.cardText}> Pacheco Golf</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.courseBox}>
-                            <MaterialIcons
-                                name="golf-course"
-                                color="#05375a"
-                                size={20}
-                                style={styles.icon}/>
-                            <Text style={styles.cardText}> Pilar Golf</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.courseBox}>
-                            <MaterialIcons
-                                name="golf-course"
-                                color="#05375a"
-                                size={20}
-                                style={styles.icon}/>
-                            <Text style={styles.cardText}> Nordelta Golf Club</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                </View>
+                        </View>
+                </TouchableOpacity>
             <Searchbar style={styles.searchBar}
                        placeholder="Search course"
                        onChangeText={(value) =>onChangeSearch(value)}
@@ -88,7 +68,7 @@ const styles = StyleSheet.create({
     },
 
     searchBar:{
-        marginTop:110,
+        marginTop:100,
         width:"90%",
         height:"8%",
         alignSelf:"center",
@@ -98,7 +78,7 @@ const styles = StyleSheet.create({
     cardText:{
         color: '#05375a',
         alignSelf: "center",
-        fontSize:20,
+        fontSize:25,
         marginLeft: 5,
     },
 
@@ -119,8 +99,8 @@ const styles = StyleSheet.create({
         alignContent:"center",
         marginTop:200,
         borderRadius: 20,
-        width:"95%",
-        height:"18%",
+        width:"80%",
+        height:"15%",
         alignSelf:"center",
         position:"absolute",
         backgroundColor:"white",
@@ -135,20 +115,9 @@ const styles = StyleSheet.create({
     courseBox:{
         flexDirection:"row",
         backgroundColor: 'white',
-        marginTop:10,
-        marginLeft:10,
-        marginBottom:10,
+        marginTop:30,
         alignSelf: "center",
         alignContent:"center",
-        borderRadius: 20,
-        width:"30%",
-        height:"70%",
-        shadowColor:"black",
-        shadowOpacity:0.35,
-        shadowOffset:{
-            width:0,
-            height:2,
-        },
     },
 
     icon:{
