@@ -34,9 +34,6 @@ export default function ProfileScreen({navigation}) {
 
                 <View>
                     <Text style={styles.username}>Alejo Demitropulos</Text>
-                    <View style={{flexShrink:1}}>
-                        <Text style={styles.data}>Daily golf Argentina</Text>
-                    </View>
                     <View style={styles.stat}>
                         <View style={styles.stats}>
                             <View style={styles.statsColumn}>
@@ -72,7 +69,7 @@ const styles = StyleSheet.create({
     },
 
     footer:{
-        flex:3,
+        flex:4,
     },
 
     tittle:{
@@ -88,18 +85,18 @@ const styles = StyleSheet.create({
         //flex:2,
     },
     edit: {
-        marginRight:20
+        marginRight: 10,
     },
 
     card:{
         zIndex:1,
-        elevation:1,
+        elevation:3,
         flexDirection:"row",
         alignContent:"center",
-        marginTop:150,
-        borderRadius: 20,
+        marginTop:120,
+        borderRadius: 30,
         width:"90%",
-        height:"25%",
+        height:"15%",
         alignSelf:"center",
         position:"absolute",
         backgroundColor: "white",
@@ -112,8 +109,8 @@ const styles = StyleSheet.create({
     },
 
     image:{
-        height:200,
-        width:140,
+        height:120,
+        width:100,
         borderRadius:40,
         alignSelf:"flex-start",
         position:"relative",
@@ -143,7 +140,7 @@ const styles = StyleSheet.create({
     stats: {
         flexDirection:"row",
         flexWrap: 'wrap',
-        marginTop:30
+        marginTop:0
     },
 
     statsColumn:{

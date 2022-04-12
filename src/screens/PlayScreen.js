@@ -26,7 +26,7 @@ function PlayScreen({navigation}) {
             </View>
 
                 <TouchableOpacity style={styles.coursesContainer}
-                onPress={startPlay}>
+                        onPress={startPlay}>
                         <Text style={styles.tittle}>Quick Play</Text>
 
                         <View style={styles.courseBox}>
@@ -39,7 +39,7 @@ function PlayScreen({navigation}) {
                         </View>
                 </TouchableOpacity>
             <Searchbar style={styles.searchBar}
-                       placeholder="Search course"
+                       placeholder="Search course..."
                        onChangeText={(value) =>onChangeSearch(value)}
                        value={searchCourse}
             />
@@ -88,16 +88,16 @@ const styles = StyleSheet.create({
     },
 
     footer:{
-        flex:3,
+        flex:5,
         alignContent:"center",
     },
 
 
     coursesContainer:{
         zIndex:1,
-        elevation:1,
+        elevation:3,
         alignContent:"center",
-        marginTop:200,
+        marginTop:120,
         borderRadius: 20,
         width:"80%",
         height:"15%",
@@ -105,17 +105,17 @@ const styles = StyleSheet.create({
         position:"absolute",
         backgroundColor:"white",
         shadowColor:"black",
-        shadowOpacity:0.35,
+        shadowOpacity:0.5,
         shadowOffset:{
             width:0,
-            height:2,
+            height:-2,
         },
     },
 
     courseBox:{
         flexDirection:"row",
         backgroundColor: 'white',
-        marginTop:30,
+        marginTop:10,
         alignSelf: "center",
         alignContent:"center",
     },

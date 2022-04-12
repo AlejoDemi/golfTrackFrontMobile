@@ -56,10 +56,10 @@ export default function EditProfileScreen({navigation}) {
 
     return(
         <View style={styles.container}>
-
-              <Animatable.View animation="fadeInRightBig" style={styles.header}/>
+            <StatusBar backgroundColor="transparent" barStyle='dark-content'/>
+            <Animatable.View animation="fadeInRightBig" style={styles.header}/>
             <Animatable.View animation="fadeInRightBig" style={styles.footer}>
-              <ScrollView>
+              <ScrollView >
                   <Text style={styles.label}> Profile Image</Text>
                       <TouchableOpacity style={styles.card} onPress={openImagePicker}>
                           <Image
@@ -126,20 +126,16 @@ export default function EditProfileScreen({navigation}) {
                       />
                   </TouchableOpacity>
 
-
-
               </ScrollView>
             </Animatable.View>
 
-                <TouchableOpacity style={styles.save} onPress={returnToProfile}>
-                    <Text style={{
-                        fontSize:20,
-                        fontWeight: "500",
-                        color:"white"
-                    }}>Save</Text>
-                </TouchableOpacity>
-
-
+            <TouchableOpacity style={styles.save} onPress={returnToProfile}>
+                <Text style={{
+                    fontSize:20,
+                    fontWeight: "500",
+                    color:"white"
+                }}>Save</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -163,7 +159,7 @@ const styles = StyleSheet.create({
 
     footer:{
         height:"80%",
-        backgroundColor: "white",
+        //backgroundColor: "white",
         alignContent:"center",
         flexDirection:"column",
     },
@@ -174,11 +170,12 @@ const styles = StyleSheet.create({
     },
 
     header:{
-        height:"10%",
-        backgroundColor: "white"
+        height:"5%",
+        //backgroundColor: "white"
     },
 
     card:{
+        elevation: 3,
         alignSelf:"center",
         flexDirection:"row",
         alignContent:"center",

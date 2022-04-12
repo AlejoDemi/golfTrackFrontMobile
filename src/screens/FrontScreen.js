@@ -85,10 +85,12 @@ const styles = StyleSheet.create({
         padding: "3%",
         alignSelf:"flex-end",
         width:"100%",
+        height: 50,
         borderRadius:20,
         flexDirection:"row",
         justifyContent: 'center',
         alignItems: 'center',
+
     },
     signIn: {
         width: 150,
