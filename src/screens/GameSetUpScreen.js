@@ -4,7 +4,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Leaderboard from 'react-native-leaderboard';
 import Feather from "react-native-vector-icons/Feather";
 
-//chala
+
 
 function GameSetUpScreen({navigation}) {
     const state = {
@@ -59,12 +59,13 @@ function GameSetUpScreen({navigation}) {
                         }
                     }>3.5</Text>
                 </View>
+
                 <TouchableOpacity style={styles.playButton}>
                     <Text style={
                         {
                            color:"white",
                            alignSelf:"center",
-                            marginTop:5,
+                            marginTop:10,
                             fontSize: 25,
 
                         }
@@ -85,7 +86,7 @@ function GameSetUpScreen({navigation}) {
                              sortBy='highScore'
                              labelBy='userName'
                              sort={sort}
-                    />
+                />
                 </View>
             </View>
 

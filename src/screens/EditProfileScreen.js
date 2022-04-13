@@ -23,6 +23,10 @@ export default function EditProfileScreen({navigation}) {
         if(val.length>0)setName(val);
     }
 
+    const changeHandicap=(val)=>{
+        if(val.length>0)setHandicap(val);
+    }
+
     const changeBio=(val)=>{
         if(val.length>0)setBio(val);
     }
@@ -69,7 +73,7 @@ export default function EditProfileScreen({navigation}) {
                               style={styles.image}
                               />
 
-                          <Text style={styles.tittle}>Change photo</Text>
+                          <Text style={styles.input}>Change photo</Text>
                           <Feather name="chevron-right"
                                    color="#05375a"
                                    size={30}
@@ -90,24 +94,11 @@ export default function EditProfileScreen({navigation}) {
                   </View>
 
                   <Text style={styles.label}> Handicap</Text>
-                  <View style={styles.handicap}>
-                      <NumericInput
-                        value={handicap}
-                        onChange={(val) =>
-                        {Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                            setHandicap(val)}}
-                        onLimitReached={(isMax, msg) => console.log(isMax, msg)}
-                        totalWidth={300}
-                        totalHeight={50}
-                        iconSize={25}
-                        step={0.1}
-                        valueType='real'
-                        rounded
-                        textColor='#05375a'
-                        iconStyle={{color: 'white'}}
-                        rightButtonBackgroundColor='#4a8a3f'
-                        leftButtonBackgroundColor='#4a8a3f'
-                        style={styles.handicap}/>
+                  <View style={styles.card}>
+                      <TextInput style={styles.input}
+                                 onChangeText={(val) => changeHandicap(val)}
+                                 keyboardType='numeric'
+                      >{handicap}</TextInput>
                   </View>
 
                   <Text style={styles.label}>Email</Text>
@@ -118,7 +109,7 @@ export default function EditProfileScreen({navigation}) {
 
                   <Text style={styles.label}>Password</Text>
                   <TouchableOpacity style={styles.card}>
-                      <Text style={styles.tittle}>Change password</Text>
+                      <Text style={styles.input}>Change password</Text>
                       <Feather name="chevron-right"
                                color="#05375a"
                                size={30}
@@ -201,23 +192,15 @@ const styles = StyleSheet.create({
 
     },
 
-    tittle:{
-        fontSize:20,
-        color: '#05375a',
-        alignSelf: "center",
-        marginLeft:10,
-
-    },
-
     icon:{
         alignSelf:"center",
     },
     label:{
-        alignSelf:"center",
+        marginLeft:30,
         marginBottom:15,
         marginTop:20,
         fontSize: 18,
-        color: '#05375a',
+        color: 'grey',
         fontWeight:"bold",
     },
 
@@ -228,7 +211,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         fontSize:20,
         marginLeft:30,
-
+        fontWeight: "bold"
     },
     passInput: {
         flex: 1,
@@ -237,11 +220,5 @@ const styles = StyleSheet.create({
         color: '#05375a',
     },
 
-    handicap:{
-        flexDirection: "row",
-        alignContent:"center",
-        alignSelf:"center",
-        marginTop:5
-    }
 });
 
