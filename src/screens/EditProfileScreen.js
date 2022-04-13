@@ -7,6 +7,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Haptics from "expo-haptics";
 import * as ImagePicker from "expo-image-picker";
 import NumericInput from 'react-native-numeric-input'
+//chala's code
 
 
 export default function EditProfileScreen({navigation}) {
@@ -61,7 +62,20 @@ export default function EditProfileScreen({navigation}) {
     return(
         <View style={styles.container}>
             <StatusBar backgroundColor="transparent" barStyle='dark-content'/>
-            <Animatable.View animation="fadeInRightBig" style={styles.header}/>
+            <Animatable.View animation="fadeInRightBig" style={styles.header}>
+
+                <Feather name="arrow-left"
+                         size={40}
+                style={
+                    {
+                        marginTop:50,
+                        marginLeft:20,
+                    }
+                }
+                onPress={returnToProfile}/>
+
+            </Animatable.View>
+
             <Animatable.View animation="fadeInRightBig" style={styles.footer}>
               <ScrollView >
                   <Text style={styles.label}> Profile Image</Text>
@@ -120,13 +134,7 @@ export default function EditProfileScreen({navigation}) {
               </ScrollView>
             </Animatable.View>
 
-            <TouchableOpacity style={styles.save} onPress={returnToProfile}>
-                <Text style={{
-                    fontSize:20,
-                    fontWeight: "500",
-                    color:"white"
-                }}>Save</Text>
-            </TouchableOpacity>
+
         </View>
     );
 }
@@ -149,10 +157,11 @@ const styles = StyleSheet.create({
     },
 
     footer:{
-        height:"80%",
+        height:"100%",
         //backgroundColor: "white",
         alignContent:"center",
         flexDirection:"column",
+        flex:9,
     },
 
 
@@ -161,7 +170,9 @@ const styles = StyleSheet.create({
     },
 
     header:{
-        height:"5%",
+        flexDirection:"row",
+        height:"10%",
+        flex:1,
         //backgroundColor: "white"
     },
 

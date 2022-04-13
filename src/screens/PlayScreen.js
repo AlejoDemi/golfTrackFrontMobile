@@ -13,7 +13,7 @@ function PlayScreen({navigation}) {
     };
 
     const startPlay=()=>{
-        navigation.navigate("GameSetUp");
+        navigation.navigate("Course");
     };
 
     return (
