@@ -9,7 +9,7 @@ import React from 'react';
 import FeedScreen from "../screens/FeedScreen";
 import PlayScreen from "../screens/PlayScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import BubbleTabBar from "react-native-bubble-tabbar";
+import BubbleTabBar from "./react-native-bubble-tabbar/lib";
 
 const tabs = [
     {

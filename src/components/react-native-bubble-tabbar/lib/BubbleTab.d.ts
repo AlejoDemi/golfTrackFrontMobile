@@ -1,6 +1,6 @@
-import React from 'react';
 import { GestureResponderEvent } from 'react-native';
 import { IAccessibility, IBubbleTabConfig, TIconRenderer, TBubbleTabBarIcon } from './types';
+import * as React from "react";
 interface IBubbleTabParent extends Omit<IBubbleTabConfig, 'name' | 'activeIcon'>, IAccessibility {
 }
 export interface IBubbleTab extends IBubbleTabParent {
