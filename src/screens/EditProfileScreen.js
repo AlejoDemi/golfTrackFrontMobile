@@ -78,7 +78,7 @@ export default function EditProfileScreen({navigation}) {
 
             <Animatable.View animation="fadeInRightBig" style={styles.footer}>
               <ScrollView >
-                  <Text style={styles.label}> Profile Image</Text>
+                  <Text style={styles.label}>Profile Image</Text>
                       <TouchableOpacity style={styles.card} onPress={openImagePicker}>
                           <Image
                               source={{uri:
@@ -95,7 +95,7 @@ export default function EditProfileScreen({navigation}) {
                           />
                       </TouchableOpacity>
 
-                  <Text style={styles.label}> Name</Text>
+                  <Text style={styles.label}>Name</Text>
                       <View style={styles.card}>
                               <TextInput style={styles.input}
                                          onChangeText={(val) => changeName(val)}>{name}</TextInput>
@@ -107,7 +107,7 @@ export default function EditProfileScreen({navigation}) {
                                  onChangeText={(val) => changeBio(val)}>{bio}</TextInput>
                   </View>
 
-                  <Text style={styles.label}> Handicap</Text>
+                  <Text style={styles.label}>Handicap</Text>
                   <View style={styles.card}>
                       <TextInput style={styles.input}
                                  onChangeText={(val) => changeHandicap(val)}
@@ -140,21 +140,6 @@ export default function EditProfileScreen({navigation}) {
 }
 
 const styles = StyleSheet.create({
-    save:{
-        backgroundColor: '#4a8a3f',
-        height: 50,
-        width:"40%",
-        borderRadius:20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf:"center"
-    },
-
-    saveView:{
-        height:"10%",
-        alignContent:"center",
-        justifyContent: 'center',
-    },
 
     footer:{
         height:"100%",
@@ -195,11 +180,11 @@ const styles = StyleSheet.create({
 
     image:{
         borderRadius: 20,
-        height:"85%",
-        width:"20%",
+        height:"95%",
+        width:"25%",
         alignSelf:"flex-start",
-        marginTop: 8,
-        marginLeft: 10,
+        marginTop: "0.5%",
+        marginLeft: "1%",
 
     },
 
@@ -207,9 +192,9 @@ const styles = StyleSheet.create({
         alignSelf:"center",
     },
     label:{
-        marginLeft:30,
-        marginBottom:15,
-        marginTop:20,
+        marginLeft:"10%",
+        marginBottom:"1%",
+        marginTop:"7%",
         fontSize: 18,
         color: 'grey',
         fontWeight:"bold",
@@ -221,14 +206,8 @@ const styles = StyleSheet.create({
         flex:1,
         alignSelf: "center",
         fontSize:20,
-        marginLeft:30,
+        marginLeft:"10%",
         fontWeight: "bold"
-    },
-    passInput: {
-        flex: 1,
-        marginTop: 10,
-        paddingLeft: 10,
-        color: '#05375a',
     },
 
 });

@@ -5,6 +5,17 @@ import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from 'react-native-animatable';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
+const SIGN_UP=`gql
+mutation AddPlayer($input: AddPlayerInput) {
+  addPlayer(input: $input) {
+    email
+    fullname
+    password
+  }
+}
+
+`
+
 function SignUpScreen({navigation}) {
     const [data, setData] = useState({
         username:'',

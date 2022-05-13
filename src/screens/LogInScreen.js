@@ -4,26 +4,38 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from 'react-native-animatable';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import {gql, useMutation} from "@apollo/client";
+
+const LOGIN = gql`
+    mutation Mutation($input: LoginPlayerInput) {
+  loginPlayer(input: $input) {
+    token
+  }
+}   `
 
 function LogInScreen({navigation}) {
+
+
     const [data, setData] = useState({
-        username:'',
+        email:'',
         password:'',
         check_textInputChange: false,
         secureTextEntry: true,
     });
 
+    const [login] = useMutation(LOGIN);
+
     const textInputChange = (val) => {
         if (val.length !== 0){
             setData({
                 ...data,
-                username:val,
+                email:val,
                 check_textInputChange:true,
             })
         }else{
             setData({
                 ...data,
-                username:val,
+                email:val,
                 check_textInputChange:false,
             })
         }
@@ -42,6 +54,17 @@ function LogInScreen({navigation}) {
             ...data,
             secureTextEntry:!data.secureTextEntry,
         })
+    }
+
+    const loginUser=async () => {
+        let loginData = await login({
+            "input": {
+                "email": data.email ,
+                "password": data.password,
+            }
+        }).catch(e => console.log(e.message));
+
+        navigation.navigate('Home');
     }
 
     return (
@@ -113,7 +136,7 @@ function LogInScreen({navigation}) {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')} >
+                    <TouchableOpacity style={styles.button} onPress={loginUser } >
                         <Text style={styles.textSign}>Log In</Text>
                     </TouchableOpacity>
 
