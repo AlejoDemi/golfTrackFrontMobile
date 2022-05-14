@@ -1,7 +1,10 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, View,TextInput,TouchableOpacity, Pressable } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { StyleSheet, Text, View,TextInput,TouchableOpacity, Pressable } from 'react-native'
+import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
+import RNLocation from 'react-native-location';
 
 export default function Home() {
+
     return(
         <View style={styles.container}
         >

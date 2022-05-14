@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, Dimensions, Image, Button, TouchableOpacity,StatusBar,Platform,TextInput, ImageBackground} from "react-native";
+import {View, StyleSheet, Text, Dimensions, Image, Button, TouchableOpacity,StatusBar,Platform,TextInput, ImageBackground,ActivityIndicator} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from 'react-native-animatable';
@@ -23,10 +23,13 @@ function LogInScreen({navigation}) {
         secureTextEntry: true,
     });
 
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const [login] = useMutation(LOGIN);
 
     const textInputChange = (val) => {
-        if (val.length !== 0){
+        if (/^[a-zA-Z0-9.!#$%&’+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/.test(val)){
             setData({
                 ...data,
                 email:val,
@@ -57,14 +60,21 @@ function LogInScreen({navigation}) {
     }
 
     const loginUser=async () => {
-        let loginData = await login({
-            "input": {
-                "email": data.email ,
-                "password": data.password,
-            }
-        }).catch(e => console.log(e.message));
-
-        navigation.navigate('Home');
+        setError('');
+        setIsLoading(true);
+        await login({
+            variables:{
+                "input": {
+                    "email": data.email ,
+                    "password": data.password,
+                }
+            },
+        }).then(() => {
+            setIsLoading(false)
+        navigation.navigate('Home')}).catch(e =>{
+            setIsLoading(false);
+            setError(e.message);
+        });
     }
 
     return (
@@ -80,15 +90,15 @@ function LogInScreen({navigation}) {
                     style = {styles.footer}
                     animation="fadeInUpBig"
                 >
-                    <Text style={[styles.text_footer,{marginTop:10}]}>Username</Text>
+                    <Text style={[styles.text_footer,{marginTop:10}]}>Email</Text>
                     <View style={styles.action}>
-                        <FontAwesome
-                            name="user-o"
+                        <Feather
+                            name="mail"
                             color="#05375a"
                             size={Platform.OS==='ios'? 30: 20}
                         />
                         <TextInput
-                        placeholder="Enter your username..."
+                        placeholder="Enter your email..."
                         style={styles.textInput}
                         autoCapitalize="none"
                         onChangeText={(val) => textInputChange(val)}
@@ -136,7 +146,7 @@ function LogInScreen({navigation}) {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity style={styles.button} onPress={loginUser } >
+                    <TouchableOpacity style={styles.button} onPress={loginUser} >
                         <Text style={styles.textSign}>Log In</Text>
                     </TouchableOpacity>
 
@@ -150,7 +160,25 @@ function LogInScreen({navigation}) {
 
                     <TouchableOpacity style={styles.forgotPass} onPress={() => navigation.navigate('ForgotPass')}>
                         <Text style={styles.forgotPassText}>Forgot Password?</Text>
+
                     </TouchableOpacity>
+
+                    {
+                        isLoading &&
+                        <View style={styles.loadingContainer}>
+                            <ActivityIndicator
+                                color = '#4a8a3f'
+                                size = "large"
+                                style = {styles.activityIndicator}/>
+                        </View>
+                    }
+
+                    {
+                        error === '' ? (isLoading ? <ActivityIndicator /> : null) :
+                        <View style={styles.errorMsg}>
+                            <Text style={styles.errorText}>{error}</Text>
+                        </View>
+                    }
 
                 </Animatable.View>
             </ImageBackground>
@@ -162,6 +190,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#009387'
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 70
+    },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 80
     },
     header: {
         flex: 1,
@@ -206,13 +246,24 @@ const styles = StyleSheet.create({
     },
     textInput: {
         flex: 1,
-        marginTop: 10,
+        marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
         color: '#05375a',
     },
     errorMsg: {
-        color: '#FF0000',
-        fontSize: 14,
+        backgroundColor: '#a63721',
+        padding: "3%",
+        height: 40,
+        alignSelf:"flex-end",
+        width:"100%",
+        borderRadius:20,
+        flexDirection:"row",
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop:35
+    },
+    errorText: {
+        color: 'white',
     },
     button: {
         backgroundColor: '#4a8a3f',
@@ -243,6 +294,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color:'#4a8a3f'
     },
+
     forgotPass: {
         marginTop:25,
         alignSelf:"flex-end",

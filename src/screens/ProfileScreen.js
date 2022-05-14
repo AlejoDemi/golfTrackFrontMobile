@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, Dimensions, Image, Button, TouchableOpacity,StatusBar,Platform,TextInput, ImageBackground} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
@@ -6,12 +6,26 @@ import * as Animatable from 'react-native-animatable';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as ImagePicker from "expo-image-picker";
 import * as Haptics from 'expo-haptics';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProfileScreen({navigation}) {
+
+    const [name,setName] = useState('');
 
     let goToEdit=()=>{
         navigation.navigate('EditProfile');
     };
+
+    useEffect(() => getFullName, []);
+    const getFullName = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@user_name').then(r => {setName(r)});
+        } catch(e) {
+            // error reading value
+            console.log('Could not get Value!')
+        }
+    }
+
     return(
         <View style={styles.container}>
 
@@ -33,7 +47,7 @@ export default function ProfileScreen({navigation}) {
                         />
 
                 <View>
-                    <Text style={styles.username}>Alejo Demitropulos</Text>
+                    <Text style={styles.username}>{name}</Text>
                     <View style={styles.stat}>
                         <View style={styles.stats}>
                             <View style={styles.statsColumn}>

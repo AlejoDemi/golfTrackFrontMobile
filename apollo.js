@@ -1,7 +1,8 @@
 import {ApolloClient, InMemoryCache, from, HttpLink} from '@apollo/client';
 
+
 const GRAPHQL_ENDPOINT =
-    'https://localhost:4000/player';
+    'https://golf-track.loca.lt/player';
 
 const apolloClient = () => {
     const link = new HttpLink({

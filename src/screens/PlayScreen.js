@@ -1,12 +1,38 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
+import * as Location from 'expo-location';
 
 function PlayScreen({navigation}) {
+
+
+    const [location, setLocation] = useState(null);
+    const [errorMsg, setErrorMsg] = useState(null);
+
     const[searchCourse,setSearchCourse]=useState('');
     const[selectedCourse,setSelectedCourse]=useState("Pacheco");
+
+    useEffect(() => {
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            console.log(location);
+            setLocation(location);
+        })();
+    }, []);
+
+    let text = 'Waiting..';
+    if (errorMsg) {
+        text = errorMsg;
+    } else if (location) {
+        text = location.coords.latitude + " " + location.coords.longitude;
+    }
 
     let onChangeSearch=(value)=>{
         setSearchCourse(value)
@@ -35,7 +61,7 @@ function PlayScreen({navigation}) {
                             color="#05375a"
                             size={30}
                             style={styles.icon}/>
-                            <Text style={styles.cardText}> Pacheco Golf</Text>
+                            <Text style={styles.cardText}>{text}</Text>
                         </View>
                 </TouchableOpacity>
             <Searchbar style={styles.searchBar}

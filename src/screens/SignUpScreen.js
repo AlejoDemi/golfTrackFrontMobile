@@ -1,16 +1,32 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, Dimensions, Image, Button, TouchableOpacity,StatusBar,Platform,TextInput, ImageBackground} from "react-native";
+import {
+    View,
+    StyleSheet,
+    Text,
+    Dimensions,
+    Image,
+    Button,
+    TouchableOpacity,
+    StatusBar,
+    Platform,
+    TextInput,
+    ImageBackground,
+    ActivityIndicator
+} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from 'react-native-animatable';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import {useMutation} from "@apollo/client";
+import {gql, UseMutation} from '@apollo/client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SIGN_UP=`gql
-mutation AddPlayer($input: AddPlayerInput) {
+const SIGN_UP=gql`
+mutation Mutation($input: AddPlayerInput) {
   addPlayer(input: $input) {
+    id
     email
     fullname
-    password
   }
 }
 
@@ -28,8 +44,14 @@ function SignUpScreen({navigation}) {
         secureTextEntryConfirm: true,
     });
 
+    const [id, setId] = useState('');
+    const [signUp] = useMutation(SIGN_UP);
+
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const textInputChange = (val) => {
-        if (val.length !== 0){
+        if (/^[a-zA-Z0-9.!#$%&’+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/.test(val)){
             setData({
                 ...data,
                 email:val,
@@ -90,6 +112,38 @@ function SignUpScreen({navigation}) {
         })
     }
 
+    const signUpPlayer = () => {
+        setError('');
+        setIsLoading(true);
+        signUp({
+            variables: {
+                "input": {
+                    "email": data.email,
+                    "fullname": data.username,
+                    "password": data.password,
+                }
+            },
+            onCompleted: r => {
+                setId(r.addPlayer.id);
+                _storeUser();
+                navigation.navigate('Home');
+            },
+        }).then(r => setIsLoading(false)).catch(e => {
+            setIsLoading(false);
+            setError(e.message);
+        });
+    }
+
+    const _storeUser = async () => {
+        try {
+            await AsyncStorage.setItem('@user_id', id);
+            await AsyncStorage.setItem('@user_name', data.username);
+        } catch (e) {
+            // saving error
+            console.log("Couldn't save id")
+        }
+    };
+
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -128,7 +182,7 @@ function SignUpScreen({navigation}) {
                             : null}
 
                     </View>
-                    <Text style={[styles.text_footer,{marginTop:35}]}>Username</Text>
+                    <Text style={[styles.text_footer,{marginTop:35}]}>Full Name</Text>
                     <View style={styles.action}>
                         <FontAwesome
                             name="user-o"
@@ -138,7 +192,7 @@ function SignUpScreen({navigation}) {
                         <TextInput
                             placeholder="Enter your username..."
                             style={styles.textInput}
-                            autoCapitalize="none"
+                            autoCapitalize="words"
                             onChangeText={(val) => userInputChange(val)}
                         />
                         {data.check_textInputChange ?
@@ -223,9 +277,26 @@ function SignUpScreen({navigation}) {
                         borderColor:'#4a8a3f',
                         borderWidth: 1,
                         marginTop: 15,
-                    }]} onPress={() => navigation.navigate('Home')}>
+                    }]} onPress={signUpPlayer}>
                         <Text style={styles.textSignUp} >Sign Up</Text>
                     </TouchableOpacity>
+
+                    {
+                        isLoading &&
+                        <View style={styles.loadingContainer}>
+                            <ActivityIndicator
+                                color = '#4a8a3f'
+                                size = "large"
+                                style = {styles.activityIndicator}/>
+                        </View>
+                    }
+
+                    {
+                        error === '' ? (isLoading ? <ActivityIndicator /> : null) :
+                            <View style={styles.errorMsg}>
+                                <Text style={styles.errorText}>{error}</Text>
+                            </View>
+                    }
                 </Animatable.View>
             </ImageBackground>
         </View>
@@ -248,7 +319,7 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     footer: {
-        flex: 3,
+        flex: 7,
         backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
@@ -265,6 +336,35 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
 
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 70
+    },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 80
+    },
+
+    errorMsg: {
+        backgroundColor: '#a63721',
+        padding: "3%",
+        height: 40,
+        alignSelf:"flex-end",
+        width:"100%",
+        borderRadius:20,
+        flexDirection:"row",
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop:35
+    },
+    errorText: {
+        color: 'white',
+    },
+
     actionError: {
         flexDirection: 'row',
         marginTop: 10,
@@ -272,15 +372,18 @@ const styles = StyleSheet.create({
         borderBottomColor: '#FF0000',
         paddingBottom: 5
     },
+    action: {
+        flexDirection: 'row',
+        marginTop: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f2f2f2',
+        paddingBottom: 5
+    },
     textInput: {
         flex: 1,
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
         color: '#05375a',
-    },
-    errorMsg: {
-        color: '#FF0000',
-        fontSize: 14,
     },
     button: {
         backgroundColor: '#4a8a3f',
