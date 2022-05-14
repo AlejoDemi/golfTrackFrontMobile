@@ -1,14 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, ActivityIndicator} from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Location from 'expo-location';
+import {gql, useQuery} from "@apollo/client";
+
+const COURSES_DEMO = gql`
+    query GetAllCoursesDemo {
+        getAllCoursesDemo {
+            id
+            name
+            locationLat
+            locationLong
+        }
+}   `
+
 
 function PlayScreen({navigation}) {
 
 
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
+
+    const { loading, error, data } = useQuery(COURSES_DEMO);
 
     const[searchCourse,setSearchCourse]=useState('');
     const[selectedCourse,setSelectedCourse]=useState("Pacheco");
@@ -24,15 +38,10 @@ function PlayScreen({navigation}) {
             let location = await Location.getCurrentPositionAsync({});
             console.log(location);
             setLocation(location);
+            console.log(loading)
+            setTimeout(() => console.log(error),5000);
         })();
     }, []);
-
-    let text = 'Waiting..';
-    if (errorMsg) {
-        text = errorMsg;
-    } else if (location) {
-        text = location.coords.latitude + " " + location.coords.longitude;
-    }
 
     let onChangeSearch=(value)=>{
         setSearchCourse(value)
@@ -56,12 +65,22 @@ function PlayScreen({navigation}) {
                         <Text style={styles.tittle}>Quick Play</Text>
 
                         <View style={styles.courseBox}>
-                            <MaterialIcons
-                            name="golf-course"
-                            color="#05375a"
-                            size={30}
-                            style={styles.icon}/>
-                            <Text style={styles.cardText}>{text}</Text>
+                            {
+                                location ? <>
+                                        <MaterialIcons
+                                            name="golf-course"
+                                            color="#05375a"
+                                            size={30}
+                                            style={styles.icon}/>
+                                        <Text style={styles.cardText}>Course</Text></>
+                                :
+                                    <View style={styles.loadingContainer}>
+                                        <ActivityIndicator
+                                            color = '#4a8a3f'
+                                            size = "large"
+                                            style = {styles.activityIndicator}/>
+                                    </View>
+                            }
                         </View>
                 </TouchableOpacity>
             <Searchbar style={styles.searchBar}
@@ -83,6 +102,19 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         justifyContent: "center"
+    },
+
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 70
+    },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 80
     },
 
     tittle:{
