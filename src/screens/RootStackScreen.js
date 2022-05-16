@@ -16,7 +16,8 @@ const RootStack = createNativeStackNavigator();
 const RootStackScreen = () => (
     <RootStack.Navigator screenOptions={{
         headerShown: false,
-        animation:'slide_from_right'}}>
+        animation:'slide_from_right'}}
+    initialRouteName={'Home'}>
         <RootStack.Screen name="FrontScreen" component={FrontScreen}/>
         <RootStack.Screen name="LogInScreen" component={LogInScreen}/>
         <RootStack.Screen name="SignUpScreen" component={SignUpScreen}/>

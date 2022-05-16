@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, Dimensions, Image, Button, TouchableOpacity,StatusBar,Platform,TextInput, ImageBackground,ActivityIndicator} from "react-native";
+import {View, StyleSheet, Text, Dimensions, Image, Button, TouchableOpacity,StatusBar,Platform,TextInput, ImageBackground,ActivityIndicator,Keyboard} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from 'react-native-animatable';
@@ -60,6 +60,7 @@ function LogInScreen({navigation}) {
     }
 
     const loginUser=async () => {
+        Keyboard.dismiss();
         setError('');
         setIsLoading(true);
         await login({

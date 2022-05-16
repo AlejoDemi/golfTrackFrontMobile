@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, ActivityIndicator} from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import {ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Searchbar} from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Location from 'expo-location';
 import {gql, useQuery} from "@apollo/client";
@@ -19,28 +19,38 @@ const COURSES_DEMO = gql`
 function PlayScreen({navigation}) {
 
 
-    const [location, setLocation] = useState(null);
+    const [location, setLocation] = useState({
+        lat: 0,
+        lng: 0
+    });
+    const [loadingCC, setLoadingCC] = useState(true);
     const [errorMsg, setErrorMsg] = useState(null);
+    const [courses,setCourses] = useState([]);
+    const [closestCourse, setClosestCourse] = useState({
+        course: null,
+        distance: 100000000,
+    });
 
-    const { loading, error, data } = useQuery(COURSES_DEMO);
+    const { loading, error, data } = useQuery(COURSES_DEMO, {
+        onCompleted: r => {
+            setCourses(r.getAllCoursesDemo);
+        },
+    });
 
     const[searchCourse,setSearchCourse]=useState('');
-    const[selectedCourse,setSelectedCourse]=useState("Pacheco");
 
-    useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
-                return;
-            }
+    useEffect(async () => {
+        let {status} = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+        }
 
-            let location = await Location.getCurrentPositionAsync({});
-            console.log(location);
-            setLocation(location);
-            console.log(loading)
-            setTimeout(() => console.log(error),5000);
-        })();
+        const loc = await Location.getCurrentPositionAsync();
+        await setLocation({
+            lat: loc.coords.latitude,
+            lng: loc.coords.longitude,
+        })
     }, []);
 
     let onChangeSearch=(value)=>{
@@ -50,6 +60,42 @@ function PlayScreen({navigation}) {
     const startPlay=()=>{
         navigation.navigate("Course");
     };
+
+    const distanceBetweenCourse = (lat1, lon1, lat2, lon2) => {
+        const dLat = toRad(parseFloat(lat1) - parseFloat(lat2));
+        const dLon = toRad(parseFloat(lon1) - parseFloat(lon2));
+
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRad(parseFloat(lat2))) *
+            Math.cos(toRad(parseFloat(lat1))) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        return 12742 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    const toRad = (x) => {
+        return x * Math.PI / 180;
+    }
+
+
+    const setTheClosestCourse = () => {
+        for (const course of courses) {
+            const distance = distanceBetweenCourse(location.lat, location.lng, course.locationLat, course.locationLong);
+            if (closestCourse.course === null ||  closestCourse.distance > distance) {
+                setClosestCourse({
+                    course: course,
+                    distance: distance,
+                })
+            }
+        }
+        setLoadingCC(false);
+    }
+
+    if (location.lat !== 0 && location.lng !== 0 && courses !== []  && closestCourse.course === null) {
+        console.log(location);
+        console.log(courses)
+        setTheClosestCourse();
+    }
 
     return (
         <View style={styles.container}>
@@ -66,13 +112,14 @@ function PlayScreen({navigation}) {
 
                         <View style={styles.courseBox}>
                             {
-                                location ? <>
+                                !loadingCC ? <>
                                         <MaterialIcons
                                             name="golf-course"
                                             color="#05375a"
                                             size={30}
                                             style={styles.icon}/>
-                                        <Text style={styles.cardText}>Course</Text></>
+                                        <Text style={styles.cardText}>{closestCourse.course.name}</Text>
+                                    </>
                                 :
                                     <View style={styles.loadingContainer}>
                                         <ActivityIndicator
@@ -108,7 +155,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 70
+        marginTop: 20,
     },
     activityIndicator: {
         flex: 1,
