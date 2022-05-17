@@ -92,8 +92,6 @@ function PlayScreen({navigation}) {
     }
 
     if (location.lat !== 0 && location.lng !== 0 && courses !== []  && closestCourse.course === null) {
-        console.log(location);
-        console.log(courses)
         setTheClosestCourse();
     }
 
