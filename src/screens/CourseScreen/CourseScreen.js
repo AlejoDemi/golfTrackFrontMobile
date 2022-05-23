@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View, ScrollView} from 'react-native';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Leaderboard from 'react-native-leaderboard';
 import Feather from "react-native-vector-icons/Feather";
@@ -7,6 +7,7 @@ import {gql, useQuery} from '@apollo/client';
 import {Course, Hole} from "../../models/Course";
 import {useDispatch, useSelector} from "react-redux";
 import {saveCourse} from "./courseSlice";
+import Scorecard from "./Scorecard";
 
 const FULL_COURSE = gql`
     query Query($id: String!) {
@@ -121,7 +122,7 @@ function CourseScreen({navigation}) {
                     </View>
                 </ImageBackground>
             </View>
-            <View style={styles.footer}>
+            <ScrollView vertical={true} style={styles.footer}>
                 <Text style={styles.tittle}>Pacheco Golf</Text>
                 <View style={styles.rate}>
                     <MaterialIcons style={styles.star}
@@ -165,6 +166,15 @@ function CourseScreen({navigation}) {
                              sort={sort}
                 />
                 </View>
+                <Text style={{
+                    fontWeight:"bold",
+                    fontSize:20,
+                    alignSelf:"flex-start",
+                    marginLeft: 30,
+                    marginTop:20,
+                    color: '#05375a',
+                }}>Scorecard</Text>
+                <Scorecard course = {course}/>
                 <TouchableOpacity style={{flexDirection:"row",alignSelf: "center"}} onPress={goToReviews}>
                     <Text
                           style={styles.reviews}>Reviews</Text>
@@ -173,7 +183,7 @@ function CourseScreen({navigation}) {
                              style={{marginTop:20}}
                     />
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
 
         </View>
     );

@@ -4,6 +4,7 @@ import {createRef, useEffect, useState} from "react";
 import PlayingHole from "./PlayingHole";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faAngleRight, faAngleLeft} from "@fortawesome/free-solid-svg-icons";
+import PutScoreScreen from "./PutScoreScreen";
 
 const PlayGameScreen = () => {
     const [holeNum, setHoleNum] = useState(1);
@@ -26,7 +27,7 @@ const PlayGameScreen = () => {
                     />
                 </TouchableOpacity>
             </View>
-            <PlayingHole hole={course.course.holesList[holeNum-1]}/>
+            <PutScoreScreen/>
         </View>
     )
 }
