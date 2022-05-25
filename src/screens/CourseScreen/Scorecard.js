@@ -45,19 +45,21 @@ const Scorecard = (props) => {
 
                 {/* Right Wrapper */}
                 <ScrollView horizontal>
-                    <TableWrapper>
-                        {
-                            data.map((rowData, index) => (
-                                <Row
-                                    key={index}
-                                    data={rowData}
-                                    widthArr={widthArr(40)}
-                                    style={[styles.row, index%2 && {backgroundColor: '#d0e6cf'}]}
-                                    textStyle={styles.text}
-                                />
-                            ))
-                        }
-                    </TableWrapper>
+                    <View>
+                        <TableWrapper>
+                            {
+                                data.map((rowData, index) => (
+                                    <Row
+                                        key={index}
+                                        data={rowData}
+                                        widthArr={widthArr(40)}
+                                        style={[styles.row, index%2 && {backgroundColor: '#d0e6cf'}]}
+                                        textStyle={styles.text}
+                                    />
+                                ))
+                            }
+                        </TableWrapper>
+                    </View>
                 </ScrollView>
             </Table>
         </View>

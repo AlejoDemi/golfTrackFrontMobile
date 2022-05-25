@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import FrontScreen from "./FrontScreen";
-import LogInScreen from "./LogInScreen";
-import SignUpScreen from "./SignUpScreen";
-import ForgotPasswordScreen from "./ForgotPasswordScreen";
+import FrontScreen from "./Login/FrontScreen";
+import LogInScreen from "./Login/LogInScreen";
+import SignUpScreen from "./Login/SignUpScreen";
+import ForgotPasswordScreen from "./Login/ForgotPasswordScreen";
 import {TabBarNavigator} from "../components/TabBarNavigator";
 import EditProfileScreen from "./EditProfileScreen";
 import CourseScreen from "./CourseScreen/CourseScreen";
 import ReviewsScreen from "./ReviewsScreen";
 import GameSetUpScreen from "./GameSetUpScreen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import PlayGameScreen from "./PlayCourse/PlayGameScreen";
 
 const RootStack = createNativeStackNavigator();
@@ -19,7 +18,7 @@ const RootStackScreen = () => (
     <RootStack.Navigator screenOptions={{
         headerShown: false,
         animation:'slide_from_right'}}
-        initialRouteName={'Course'}>
+        initialRouteName={'Home'}>
         <RootStack.Screen name="FrontScreen" component={FrontScreen}/>
         <RootStack.Screen name="LogInScreen" component={LogInScreen}/>
         <RootStack.Screen name="SignUpScreen" component={SignUpScreen}/>

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View, ScrollView} from 'react-native';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Leaderboard from 'react-native-leaderboard';
 import Feather from "react-native-vector-icons/Feather";
 import {gql, useQuery} from '@apollo/client';
 import {Course, Hole} from "../../models/Course";
@@ -41,18 +40,11 @@ const FULL_COURSE = gql`
 
 
 function CourseScreen({navigation}) {
-    const state = {
-        data: [
-            {userName: 'Fede', highScore: 52},
-            {userName: 'TigerWoods', highScore: 120},
-            {userName:  'AlejoDemi' , highScore: 67},
-            {userName: 'Chala', highScore:40},
 
-        ]
-    }
-
+    //Hooks
     const dispatch = useDispatch();
-
+    const courseId = useSelector(state => state.courseId);
+    console.log(courseId)
 
     const [course, setCourse] = useState({});
     const [loadingGolfCourse, setLoadigGolfCourse] = useState(true);
@@ -71,7 +63,7 @@ function CourseScreen({navigation}) {
 
     const {loading, error, data} = useQuery(FULL_COURSE,{
         variables: {
-            id: "dff132e48872d4390b7d",
+            id: courseId.id,
         },
         onCompleted: c => {
             setFullCourse(c.getCourse);
@@ -79,12 +71,8 @@ function CourseScreen({navigation}) {
         onError: e => console.log(e)
     });
 
-    const sort = (data) => {
-        return data && data.sort((item1, item2) => {
-            return item1.highScore - item2.highScore;
-        });
-    }
 
+    //Navigation Methods
     const goBack = () => {
         navigation.goBack();
     }
@@ -122,69 +110,55 @@ function CourseScreen({navigation}) {
                     </View>
                 </ImageBackground>
             </View>
-            <ScrollView vertical={true} style={styles.footer}>
-                <Text style={styles.tittle}>Pacheco Golf</Text>
-                <View style={styles.rate}>
-                    <MaterialIcons style={styles.star}
-                             name="star"
-                             color='#ffd700'
-                             size={35}/>
-                    <Text style={
-                        {
-                            fontSize: 30,
-                            marginLeft:20,
-                            color: '#05375a',
-                        }
-                    }>3.5</Text>
-                </View>
+            <View style={styles.footer}>
+                <ScrollView vertical={true}>
+                    <Text style={styles.tittle}>{course.name}</Text>
+                    <View style={styles.rate}>
+                        <MaterialIcons style={styles.star}
+                                       name="star"
+                                       color='#ffd700'
+                                       size={35}/>
+                        <Text style={
+                            {
+                                fontSize: 30,
+                                marginLeft:20,
+                                color: '#05375a',
+                            }
+                        }>3.5</Text>
+                    </View>
 
-                <TouchableOpacity style={styles.playButton} onPress={goToSetUp}>
-                    <Text style={
-                        {
-                           color:"white",
-                           alignSelf:"center",
-                            marginTop:10,
-                            fontSize: 25,
+                    <TouchableOpacity style={styles.playButton} onPress={goToSetUp}>
+                        <Text style={
+                            {
+                                color:"white",
+                                alignSelf:"center",
+                                marginTop:10,
+                                fontSize: 25,
 
-                        }
-                    }> Play</Text>
-                </TouchableOpacity>
+                            }
+                        }> Play</Text>
+                    </TouchableOpacity>
 
-                <Text style={{
-                    fontWeight:"bold",
-                    fontSize:25,
-                    alignSelf:"center",
-                    marginTop:20,
-                    color: '#05375a',
-                }}>Leaderboard</Text>
-                <View style={{width:"90%",alignSelf:"center",marginTop:10}}>
+                    <Text style={{
+                        fontWeight:"bold",
+                        fontSize:20,
+                        alignSelf:"flex-start",
+                        marginLeft: 30,
+                        marginTop:20,
+                        color: '#05375a',
+                    }}>Scorecard</Text>
+                    <Scorecard course = {course}/>
+                    <TouchableOpacity style={{flexDirection:"row",alignSelf: "center"}} onPress={goToReviews}>
+                        <Text
+                            style={styles.reviews}>Reviews</Text>
+                        <Feather name="chevrons-right"
+                                 size={25}
+                                 style={{marginTop:20}}
+                        />
+                    </TouchableOpacity>
+                </ScrollView>
 
-                <Leaderboard style={{alignSelf:"center"}}
-                             data={state.data}
-                             sortBy='highScore'
-                             labelBy='userName'
-                             sort={sort}
-                />
-                </View>
-                <Text style={{
-                    fontWeight:"bold",
-                    fontSize:20,
-                    alignSelf:"flex-start",
-                    marginLeft: 30,
-                    marginTop:20,
-                    color: '#05375a',
-                }}>Scorecard</Text>
-                <Scorecard course = {course}/>
-                <TouchableOpacity style={{flexDirection:"row",alignSelf: "center"}} onPress={goToReviews}>
-                    <Text
-                          style={styles.reviews}>Reviews</Text>
-                    <Feather name="chevrons-right"
-                             size={25}
-                             style={{marginTop:20}}
-                    />
-                </TouchableOpacity>
-            </ScrollView>
-
+            </View>
         </View>
     );
 }
@@ -225,10 +199,11 @@ const styles=StyleSheet.create({
 
     tittle:{
         fontWeight:"bold",
-        fontSize:30,
+        fontSize:25,
         alignSelf:"center",
         marginTop:20,
         color: '#05375a',
+        textAlign:'center'
     },
 
     horizontal:{
@@ -255,7 +230,7 @@ const styles=StyleSheet.create({
         width:"40%",
         backgroundColor: '#4a8a3f',
         alignSelf:"center",
-        height:"8%",
+        height:50,
         borderRadius:20,
         marginTop: 10,
     },

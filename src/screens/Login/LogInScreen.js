@@ -81,7 +81,7 @@ function LogInScreen({navigation}) {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require("../assets/golfer_bg.jpeg")}
+                source={require("../../assets/golfer_bg.jpeg")}
                 style={styles.image}
                 resizeMode="cover">
                 <View style={{flex:1}}>
@@ -103,6 +103,7 @@ function LogInScreen({navigation}) {
                         style={styles.textInput}
                         autoCapitalize="none"
                         onChangeText={(val) => textInputChange(val)}
+                        keyboardType="email-address"
                         />
                         {data.check_textInputChange ?
                             <Animatable.View

@@ -1,16 +1,24 @@
-import React, {createRef, useEffect, useState} from 'react';
+import React, {createRef, forwardRef, useImperativeHandle, useState} from 'react';
 import {Dimensions, StyleSheet, Text, View} from "react-native";
 import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from "react-native-maps";
 import {faCircleDot, faGolfBallTee, faFlag} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 
-const PlayingHole = (props) => {
+const PlayingHole = forwardRef((props, ref) => {
     const hole = props.hole;
     const mapView = createRef();
+    const movableMarker = createRef();
 
-    useEffect(() => {
-        //mapView.current.fitToSuppliedMarkers(['Teebox','Green'])
-    },[]);
+    const restoreValues = () => {
+        setDraggableLocation({
+            lat: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).latitude,
+            lng: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).longitude
+    })
+    }
+
+    useImperativeHandle(ref, () => ({
+        restoreValues
+    }));
 
     const averageLocation = (loc1, loc2) => {
         return {
@@ -49,6 +57,13 @@ const PlayingHole = (props) => {
         return -dir;
     }
 
+    const moveMarker = (newPos) => {
+        setDraggableLocation({
+            lat: newPos.latitude,
+            lng: newPos.longitude,
+        });
+    }
+
     return (
         <View style={styles.container}>
             <MapView
@@ -57,6 +72,8 @@ const PlayingHole = (props) => {
                 style={styles.map}
                 mapType="satellite"
                 scrollEnabled={false}
+                showsCompass={false}
+                onPress={ev => moveMarker(ev.nativeEvent.coordinate)}
                 camera={{
                     center: { latitude: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).latitude, longitude: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).longitude },
                     pitch: 30,
@@ -67,7 +84,7 @@ const PlayingHole = (props) => {
 
             >
                 <Marker
-                    draggable
+                    ref={movableMarker}
                     identifier={'Movable'}
                     onDrag={(e) => setDraggableLocation({lat: e.nativeEvent.coordinate.latitude, lng: e.nativeEvent.coordinate.longitude})}
                     coordinate={{latitude: draggableLocation.lat, longitude: draggableLocation.lng}}
@@ -141,7 +158,7 @@ const PlayingHole = (props) => {
             </MapView>
         </View>
     );
-}
+});
 
 export default PlayingHole;
 
