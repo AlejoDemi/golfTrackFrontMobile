@@ -118,7 +118,7 @@ function PlayScreen({navigation}) {
                                             color="#05375a"
                                             size={30}
                                             style={styles.icon}/>
-                                        <Text style={styles.cardText}>{closestCourse.course.name}</Text>
+                                        <Text style={styles.cardText}>{closestCourse.course!==null?closestCourse.course.name:null}</Text>
                                     </>
                                 :
                                     <View style={styles.loadingContainer}>
