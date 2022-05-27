@@ -17,7 +17,7 @@ function FrontScreen({navigation}) {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require("../assets/golfer_bg.jpeg")}
+                source={require("../../assets/golfer_bg.jpeg")}
                 style={styles.image}
                 resizeMode="cover">
                 <View style={{flex:3}}>

@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, Dimensions, Image, Button, TouchableOpacity,StatusBar,Platform,TextInput, ImageBackground} from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import {View, StyleSheet, Text, TouchableOpacity,StatusBar,Platform,TextInput, ImageBackground} from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from 'react-native-animatable';
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Haptics from "expo-haptics";
 
 export default function ForgotPasswordScreen() {
@@ -20,7 +18,7 @@ export default function ForgotPasswordScreen() {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require("../assets/golfer_bg.jpeg")}
+                source={require("../../assets/golfer_bg.jpeg")}
                 style={styles.image}
                 resizeMode="cover">
                 <View style={{flex:1}}>

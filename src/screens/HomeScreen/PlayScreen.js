@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Keyboard, ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View,KeyboardAvoidingView} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Location from 'expo-location';
 import {gql, useQuery} from "@apollo/client";
+import {useDispatch} from "react-redux";
+import {setCourseId} from "./PlayScreenSlice";
 
 const COURSES_DEMO = gql`
     query GetAllCoursesDemo {
@@ -18,6 +20,9 @@ const COURSES_DEMO = gql`
 
 function PlayScreen({navigation}) {
 
+
+    //Hooks
+    const dispatch = useDispatch();
 
     const [location, setLocation] = useState({
         lat: 0,
@@ -53,14 +58,20 @@ function PlayScreen({navigation}) {
         })
     }, []);
 
+    //Methods
+
+    //Handles searchbar
     let onChangeSearch=(value)=>{
         setSearchCourse(value)
     };
 
-    const startPlay=()=>{
+    //When a button is clicked redirect
+    const startPlay=(id)=>{
+        dispatch(setCourseId(id));
         navigation.navigate("Course");
     };
 
+    //Gets distance between 2 coords in yards
     const distanceBetweenCourse = (lat1, lon1, lat2, lon2) => {
         const dLat = toRad(parseFloat(lat1) - parseFloat(lat2));
         const dLon = toRad(parseFloat(lon1) - parseFloat(lon2));
@@ -78,36 +89,43 @@ function PlayScreen({navigation}) {
     }
 
 
+    //Set which is the closest course to geolocation
     const setTheClosestCourse = () => {
+        let auxClosestCourse = {
+            course: null,
+            distance: 10000000000000,
+        };
         for (const course of courses) {
             const distance = distanceBetweenCourse(location.lat, location.lng, course.locationLat, course.locationLong);
-            if (closestCourse.course === null ||  closestCourse.distance > distance) {
-                setClosestCourse({
+            if (auxClosestCourse.name === null ||  auxClosestCourse.distance > distance) {
+                auxClosestCourse = {
                     course: course,
                     distance: distance,
-                })
+                }
             }
         }
+        setClosestCourse(auxClosestCourse);
         setLoadingCC(false);
     }
 
     if (location.lat !== 0 && location.lng !== 0 && courses !== []  && closestCourse.course === null) {
-        console.log(location);
-        console.log(courses)
         setTheClosestCourse();
     }
 
     return (
-        <View style={styles.container}>
+        <View
+            style={styles.container}
+        >
             <View style={styles.header}>
                 <ImageBackground
-                    source={require("../assets/fondo.jpg")}
+                    source={require("../../assets/fondo.jpg")}
                     style={styles.image}
                     resizeMode="cover"/>
             </View>
+            <View style={styles.footer}>
 
                 <TouchableOpacity style={styles.coursesContainer}
-                        onPress={startPlay}>
+                        onPress={() => startPlay(closestCourse.course.id)}>
                         <Text style={styles.tittle}>Quick Play</Text>
 
                         <View style={styles.courseBox}>
@@ -118,7 +136,7 @@ function PlayScreen({navigation}) {
                                             color="#05375a"
                                             size={30}
                                             style={styles.icon}/>
-                                        <Text style={styles.cardText}>{closestCourse.course!==null?closestCourse.course.name:null}</Text>
+                                        <Text style={styles.cardText}>{closestCourse.course.name.length < 48 ? closestCourse.course.name : closestCourse.course.name.substring(0, 45) + "..."}</Text>
                                     </>
                                 :
                                     <View style={styles.loadingContainer}>
@@ -135,7 +153,33 @@ function PlayScreen({navigation}) {
                        onChangeText={(value) =>onChangeSearch(value)}
                        value={searchCourse}
             />
-            <View style={styles.footer}/>
+            {
+                loading
+                ? <View style={styles.loadingContainer}>
+                        <ActivityIndicator
+                            color = '#4a8a3f'
+                            size = "large"
+                            style = {styles.activityIndicator}/>
+                    </View>
+                    : courses.filter(c=>c.name.toLowerCase().includes(searchCourse.toLowerCase())).map((c,i) => {
+                        return(
+                            <TouchableOpacity style={styles.courseCard} key={i} onPress={() => startPlay(c.id)}>
+                                <MaterialIcons
+                                    name="golf-course"
+                                    color="#05375a"
+                                    size={30}
+                                    style={styles.icon}/>
+                                <Text style={{
+                                    alignSelf:"center",
+                                    fontWeight: 'bold',
+                                    marginLeft: 10,
+                                }
+                                }>{c.name}</Text>
+                            </TouchableOpacity>
+                        )
+                    })
+            }
+            </View>
         </View>
     );
 }
@@ -183,17 +227,17 @@ const styles = StyleSheet.create({
     cardText:{
         color: '#05375a',
         alignSelf: "center",
-        fontSize:25,
+        fontSize:20,
         marginLeft: 5,
     },
 
     header:{
-        flex:2,
+        flex:1,
         alignContent:"center",
     },
 
     footer:{
-        flex:5,
+        flex:4,
         alignContent:"center",
     },
 
@@ -202,10 +246,12 @@ const styles = StyleSheet.create({
         zIndex:1,
         elevation:3,
         alignContent:"center",
+        paddingHorizontal: 20,
         marginTop:120,
         borderRadius: 20,
         width:"80%",
-        height:"15%",
+        height:"20%",
+        top: '-30%',
         alignSelf:"center",
         position:"absolute",
         backgroundColor:"white",
@@ -223,6 +269,25 @@ const styles = StyleSheet.create({
         marginTop:10,
         alignSelf: "center",
         alignContent:"center",
+    },
+
+    courseCard:{
+        flexDirection:"row",
+        backgroundColor: 'white',
+        zIndex:1,
+        elevation:3,
+        width: '90%',
+        height: 40,
+        borderRadius: 10,
+        marginTop:30,
+        alignSelf: "center",
+        alignContent:"center",
+        shadowColor:"black",
+        shadowOpacity:0.5,
+        shadowOffset:{
+            width:0,
+            height:-2,
+        },
     },
 
     icon:{
