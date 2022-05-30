@@ -8,7 +8,7 @@ import {TabBarNavigator} from "../components/TabBarNavigator";
 import EditProfileScreen from "./EditProfileScreen";
 import CourseScreen from "./CourseScreen/CourseScreen";
 import ReviewsScreen from "./ReviewsScreen";
-import GameSetUpScreen from "./GameSetUpScreen";
+import GameSetUpScreen from "./PlayCourse/GameSetUpScreen";
 import PlayGameScreen from "./PlayCourse/PlayGameScreen";
 
 const RootStack = createNativeStackNavigator();

@@ -1,20 +1,22 @@
-import React, {createRef, forwardRef, useImperativeHandle, useState} from 'react';
+import React, {createRef, forwardRef, useEffect, useImperativeHandle, useRef, useState} from 'react';
 import {Dimensions, StyleSheet, Text, View} from "react-native";
-import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from "react-native-maps";
+import MapView, {AnimatedRegion, Marker, MarkerAnimated, Polyline, PROVIDER_GOOGLE} from "react-native-maps";
 import {faCircleDot, faGolfBallTee, faFlag} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
+import * as Location from "expo-location";
 
 const PlayingHole = forwardRef((props, ref) => {
     const hole = props.hole;
     const mapView = createRef();
-    const movableMarker = createRef();
+    const [myMarker, setMyMarker] = useState(null);
 
     const restoreValues = () => {
         setDraggableLocation({
             lat: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).latitude,
             lng: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).longitude
-    })
+        })
     }
+
 
     useImperativeHandle(ref, () => ({
         restoreValues
@@ -31,6 +33,11 @@ const PlayingHole = forwardRef((props, ref) => {
         lat: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).latitude,
         lng: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).longitude
     })
+
+    const [movable, setMovable] = useState({
+        latitude: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).latitude,
+        longitude: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).longitude,
+    });
 
     const distanceBetweenLocations = (loc1, loc2) => {
         const dLat = toRad(parseFloat(loc1.lat) - parseFloat(loc2.lat));
@@ -57,13 +64,6 @@ const PlayingHole = forwardRef((props, ref) => {
         return -dir;
     }
 
-    const moveMarker = (newPos) => {
-        setDraggableLocation({
-            lat: newPos.latitude,
-            lng: newPos.longitude,
-        });
-    }
-
     return (
         <View style={styles.container}>
             <MapView
@@ -73,7 +73,7 @@ const PlayingHole = forwardRef((props, ref) => {
                 mapType="satellite"
                 scrollEnabled={false}
                 showsCompass={false}
-                onPress={ev => moveMarker(ev.nativeEvent.coordinate)}
+                //onPress={ev => moveMarker(ev.nativeEvent.coordinate)}
                 camera={{
                     center: { latitude: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).latitude, longitude: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).longitude },
                     pitch: 30,
@@ -84,9 +84,12 @@ const PlayingHole = forwardRef((props, ref) => {
 
             >
                 <Marker
-                    ref={movableMarker}
+                    ref={marker => {
+                        setMyMarker(marker);
+                    }}
+                    tappable={false}
                     identifier={'Movable'}
-                    onDrag={(e) => setDraggableLocation({lat: e.nativeEvent.coordinate.latitude, lng: e.nativeEvent.coordinate.longitude})}
+                    //onDrag={(e) => setDraggableLocation({lat: e.nativeEvent.coordinate.latitude, lng: e.nativeEvent.coordinate.longitude})}
                     coordinate={{latitude: draggableLocation.lat, longitude: draggableLocation.lng}}
                     anchor={{x: 0.5, y: 0.5}}
                 >
@@ -100,6 +103,7 @@ const PlayingHole = forwardRef((props, ref) => {
                 </Marker>
                 <Marker
                     identifier={'Teebox'}
+                    tappable={false}
                     coordinate={{ latitude : hole.locationTeebox.lat, longitude : hole.locationTeebox.lng }}>
                     <View>
                         <FontAwesomeIcon
@@ -110,6 +114,7 @@ const PlayingHole = forwardRef((props, ref) => {
                     </View>
                 </Marker>
                 <Marker
+                    tappable={false}
                     identifier={'TeeboxMiddle'}
                     coordinate={{ latitude: averageLocation(hole.locationTeebox, draggableLocation).latitude, longitude: averageLocation(hole.locationTeebox, draggableLocation).longitude}}
                 >
@@ -124,6 +129,7 @@ const PlayingHole = forwardRef((props, ref) => {
                     </View>
                 </Marker>
                 <Marker
+                    tappable={false}
                     identifier={'Green'}
                     coordinate={{ latitude : hole.locationMidOfGreen.lat, longitude : hole.locationMidOfGreen.lng }}
                     anchor={{x: 0, y: 1}}
@@ -137,6 +143,7 @@ const PlayingHole = forwardRef((props, ref) => {
                     </View>
                 </Marker>
                 <Marker
+                    tappable={false}
                     identifier={'MiddleGreen'}
                     coordinate={{ latitude: averageLocation(hole.locationMidOfGreen, draggableLocation).latitude, longitude: averageLocation(hole.locationMidOfGreen, draggableLocation).longitude}}
                 >

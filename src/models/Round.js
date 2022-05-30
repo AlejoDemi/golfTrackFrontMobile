@@ -1,16 +1,20 @@
 export class Round {
-    roundId;
+    options = {
+        mode: 'gross',
+        handicap: 0,
+        options: 'scoring',
+    }
     player;
     courseId;
     playDate;
     holesScore = [];
 
 
-    constructor(roundId, player, courseId, playDate) {
-        this.roundId = roundId;
-        this.player = player;
+    constructor(playerId, courseId, playDate, options) {
+        this.player = playerId;
         this.courseId = courseId;
         this.playDate = playDate;
+        this.options = options;
     }
 
     addPlayedHole = (num,score,putts,fairway) => {
