@@ -7,14 +7,17 @@ const Scorecard = (props) => {
     const fullData = () => {
         const data = [];
         const holes = [];
+        const pars = [];
         const distances = [];
         const handicap = []
         for (const hole of course.holesList) {
             holes.push(hole.num);
+            pars.push(hole.par);
             distances.push(hole.distance);
             handicap.push(hole.scoringIndex);
         }
         data.push(holes);
+        data.push(pars);
         data.push(distances);
         data.push(handicap);
 
@@ -30,7 +33,7 @@ const Scorecard = (props) => {
     }
 
     const course = props.course;
-    const MAIN_COL = ['Hole','Distance', 'Handicap'];
+    const MAIN_COL = ['Hole','Par','Distance', 'Handicap'];
     const data = fullData();
 
 

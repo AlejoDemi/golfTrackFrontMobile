@@ -112,6 +112,13 @@ function PlayScreen({navigation}) {
         setTheClosestCourse();
     }
 
+    if (loadingCC) return <View style={styles.loadingContainer}>
+        <ActivityIndicator
+            color = '#4a8a3f'
+            size = "large"
+            style = {styles.activityIndicator}/>
+    </View>
+
     return (
         <View
             style={styles.container}
@@ -129,23 +136,12 @@ function PlayScreen({navigation}) {
                         <Text style={styles.tittle}>Quick Play</Text>
 
                         <View style={styles.courseBox}>
-                            {
-                                !loadingCC ? <>
-                                        <MaterialIcons
-                                            name="golf-course"
-                                            color="#05375a"
-                                            size={30}
-                                            style={styles.icon}/>
-                                        <Text style={styles.cardText}>{closestCourse.course.name.length < 48 ? closestCourse.course.name : closestCourse.course.name.substring(0, 45) + "..."}</Text>
-                                    </>
-                                :
-                                    <View style={styles.loadingContainer}>
-                                        <ActivityIndicator
-                                            color = '#4a8a3f'
-                                            size = "large"
-                                            style = {styles.activityIndicator}/>
-                                    </View>
-                            }
+                            <MaterialIcons
+                                name="golf-course"
+                                color="#05375a"
+                                size={30}
+                                style={styles.icon}/>
+                            <Text style={styles.cardText}>{closestCourse.course.name.length < 48 ? closestCourse.course.name : closestCourse.course.name.substring(0, 45) + "..."}</Text>
                         </View>
                 </TouchableOpacity>
             <Searchbar style={styles.searchBar}
@@ -154,14 +150,7 @@ function PlayScreen({navigation}) {
                        value={searchCourse}
             />
             {
-                loading
-                ? <View style={styles.loadingContainer}>
-                        <ActivityIndicator
-                            color = '#4a8a3f'
-                            size = "large"
-                            style = {styles.activityIndicator}/>
-                    </View>
-                    : courses.filter(c=>c.name.toLowerCase().includes(searchCourse.toLowerCase())).map((c,i) => {
+                courses.filter(c=>c.name.toLowerCase().includes(searchCourse.toLowerCase())).map((c,i) => {
                         return(
                             <TouchableOpacity style={styles.courseCard} key={i} onPress={() => startPlay(c.id)}>
                                 <MaterialIcons

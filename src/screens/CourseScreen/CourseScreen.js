@@ -83,7 +83,7 @@ function CourseScreen({navigation}) {
 
     let goToSetUp = () =>{
         dispatch(saveCourse(course));
-        navigation.navigate("PlayGame");
+        navigation.navigate("SetUp");
     }
 
     if (loadingGolfCourse) return <View style={styles.loadingContainer}>

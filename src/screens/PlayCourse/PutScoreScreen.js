@@ -8,6 +8,7 @@ import {
     faArrowUpRightFromSquare, faBullseye,
     faSquareArrowUpRight, faXmark, faXmarkCircle
 } from "@fortawesome/free-solid-svg-icons";
+import {useSelector} from "react-redux";
 
 const COLORS = {
     selected: '#4a8a3f',
@@ -22,6 +23,8 @@ const PutScoreScreen = forwardRef((props, ref) => {
     const [putts, setPutts] = useState(0);
     const [fairway, setFairway] = useState('');
 
+    const round = useSelector(state => state.round);
+
     const restoreValues = () => {
         setScore(0);
         setPutts(0);
@@ -29,8 +32,27 @@ const PutScoreScreen = forwardRef((props, ref) => {
     }
 
     useImperativeHandle(ref, () => ({
-      restoreValues
+        restoreValues,
+        addPlayedHole,
+        editHole,
     }));
+
+    const editHole = (num) => {
+        console.log(round.round.holesScore[0]);
+        let index = 0
+        for (let i = 0; i < round.round.holesScore; i++) {
+            if (num === round.round.holesScore[i].num){
+                index = i;
+            }
+        }
+        setScore(round.round.holesScore[index].score);
+        setPutts(round.round.holesScore[index].putts);
+        setFairway(round.round.holesScore[index].fairway);
+    }
+
+    const addPlayedHole = (num) => {
+        round.round.addPlayedHole(num,score,putts,fairway);
+    }
 
     return (
         <View style={styles.container}>

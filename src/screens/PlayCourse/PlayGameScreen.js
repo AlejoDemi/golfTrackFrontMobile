@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import {StyleSheet, Text, View, Dimensions, TouchableOpacity, StatusBar} from 'react-native';
 import {useSelector} from "react-redux";
-import {createRef, useEffect, useRef, useState} from "react";
+import React, {createRef, useEffect, useRef, useState} from "react";
 import PlayingHole from "./PlayingHole";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faAngleRight, faAngleLeft} from "@fortawesome/free-solid-svg-icons";
@@ -11,33 +11,49 @@ const PlayGameScreen = () => {
 
     const [holeNum, setHoleNum] = useState(1);
     const course = useSelector(state => state.course);
+    const round = useSelector(state => state.round);
 
     const putScore = useRef();
     const playScreen = useRef();
 
     const forwardPress = () => {
-        setCounter(counter+1);
-        if (counter % 2 !== 0) {
-            setHoleNum(holeNum + 1);
+        if (round.round.options.options === 'scoring'){
+            setCounter(counter+1);
+            if (counter % 2 !== 0) {
+                putScore.current?.addPlayedHole(holeNum);
+                console.log(round.round);
+                setHoleNum(holeNum + 1);
+                playScreen.current?.restoreValues();
+            } else {
+                putScore.current?.restoreValues();
+            }
+        }else{
+            setCounter(counter + 1);
             playScreen.current?.restoreValues();
-        } else {
-            putScore.current?.restoreValues();
+            setHoleNum(holeNum + 1);
         }
     }
 
     const backwardPress = () => {
-        setCounter(counter-1);
-        if (counter % 2 !== 0) {
-            playScreen.current?.restoreValues();
-        } else {
+        if (round.round.options.options === 'scoring'){
+            setCounter(counter-1);
+            if (counter % 2 !== 0) {
+                playScreen.current?.restoreValues();
+            } else {
+                putScore.current?.editHole(holeNum);
+                setHoleNum(holeNum - 1);
+                putScore.current?.restoreValues();
+            }
+        }else{
             setHoleNum(holeNum - 1);
-            putScore.current?.restoreValues();
+            playScreen.current?.restoreValues();
         }
     }
 
     return(
         <View style={styles.container}>
             <View style={styles.header}>
+                <StatusBar backgroundColor="transparent" translucent barStyle='dark-content'/>
                 <TouchableOpacity disabled={counter === 0 } onPress={backwardPress}>
                     <FontAwesomeIcon
                         icon={faAngleLeft}
