@@ -13,20 +13,32 @@ import {gql} from "@apollo/client";
 
 export default function EditProfileScreen({navigation}) {
 
-    const[name , setName] = useState("");
-    const[email , setEmail] = useState("");
-    const[password , setPass] = useState("");
+    const[name , setName] = useState("Alejo");
+    const[email , setEmail] = useState("alejo@alejo");
+    const[password , setPass] = useState("password");
 
 
 
     return(
-        <View>
+
+        <View style={styles.globalContainer}>
             <View style={styles.header}>
             </View>
             <View style={styles.container}>
-                <TextInput style={styles.card}></TextInput>
-                <TextInput style={styles.card}></TextInput>
-                <TextInput style={styles.card}></TextInput>
+                <View style={{height:"33%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                    <Text style={styles.label}>USERNAME</Text>
+                    <TextInput style={styles.card} >{name}</TextInput>
+                </View>
+                <View style={{height:"33%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                    <Text style={styles.label}>EMAIL</Text>
+                    <TextInput style={styles.card}>{email}</TextInput>
+                </View>
+                <View style={{height:"33%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                    <Text style={styles.label}>PASSWORD</Text>
+                    <TextInput style={styles.card}  secureTextEntry={true}>{password}</TextInput>
+                </View>
+
+
             </View>
 
             <View style={styles.footer}>
@@ -43,11 +55,17 @@ export default function EditProfileScreen({navigation}) {
 
 const styles = StyleSheet.create({
 
+    globalContainer:{
+        height:"100%",
+        backgroundColor:"#4a8a3f",
+    },
+
     header:{
-        height:"10%",
+        height:"16%",
         display:"flex",
         justifyContent:"center",
-        alignItems:"flex-start"
+        alignItems:"flex-start",
+        backgroundColor:"#4a8a3f",
     },
 
     container:{
@@ -55,7 +73,10 @@ const styles = StyleSheet.create({
         display:"flex",
         flexDirection:"column",
         justifyContent:"space-around",
-        alignItems:"center"
+        alignItems:"center",
+        borderTopLeftRadius:20,
+        borderTopRightRadius:20,
+        backgroundColor:"white"
     },
 
     footer:{
@@ -63,16 +84,25 @@ const styles = StyleSheet.create({
         display:"flex",
         justifyContent:"flex-start",
         alignItems:"center",
+        backgroundColor:"white"
+    },
+
+    label:{
+       fontSize:20,
+        alignSelf:"flex-start",
+        marginLeft:"10%",
+        fontWeight:"bold"
     },
 
     card:{
         width:"80%",
-        height:"12%",
+        height:"40%",
         backgroundColor:"white",
         borderRadius:10,
         borderStyle:"solid",
         borderWidth:2,
-        borderColor:"#4a8a3f"
+        borderColor:"#4a8a3f",
+        fontSize:25
     },
 
     button:{
