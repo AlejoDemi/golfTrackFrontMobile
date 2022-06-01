@@ -8,8 +8,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import FeedScreen from "../screens/FeedScreen";
 import PlayScreen from "../screens/HomeScreen/PlayScreen";
-import ProfileScreen from "../screens/ProfileScreen";
 import BubbleTabBar from "./react-native-bubble-tabbar/lib";
+import EditProfileScreen from "../screens/EditProfileScreen";
 
 const tabs = [
     {
@@ -65,7 +65,7 @@ export const TabBarNavigator= () => {
         >
             <Tab.Screen name="Feed" component={FeedScreen} />
             <Tab.Screen name="Play" component={PlayScreen} />
-            <Tab.Screen name="Profile" component={ProfileScreen} />
+            <Tab.Screen name="Profile" component={EditProfileScreen} />
         </Tab.Navigator>
     );
 };
