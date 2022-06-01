@@ -11,16 +11,6 @@ import {gql} from "@apollo/client";
 //chala's code
 
 
-const EDIT_PROFILE = gql`
-   mutation EditPlayer ($input: LoginPlayerInput){
-  editPlayer {
-    email
-    fullname
-    password
-  }
-}  `
-
-
 export default function EditProfileScreen({navigation}) {
 
     const[name , setName] = useState("");
