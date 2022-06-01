@@ -5,6 +5,7 @@ import PlayingHole from "./PlayingHole";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import {faAngleRight, faAngleLeft} from "@fortawesome/free-solid-svg-icons";
 import PutScoreScreen from "./PutScoreScreen";
+import FinishRoundScreen from "./FinishRoundScreen";
 
 const PlayGameScreen = () => {
     const [counter, setCounter] = useState(0);
@@ -40,9 +41,13 @@ const PlayGameScreen = () => {
             if (counter % 2 !== 0) {
                 playScreen.current?.restoreValues();
             } else {
-                putScore.current?.editHole(holeNum);
+                console.log(holeNum + "R")
+                //putScore.current?.restoreValues();
+                putScore.current?.addPlayedHole(holeNum);
+                console.log('A')
+                putScore.current?.editHole(holeNum -1);
                 setHoleNum(holeNum - 1);
-                putScore.current?.restoreValues();
+                //console.log(round.round)
             }
         }else{
             setHoleNum(holeNum - 1);
@@ -62,20 +67,26 @@ const PlayGameScreen = () => {
                         color={counter === 0? '#a19f9c' : 'black'}
                     />
                 </TouchableOpacity>
-                <Text style={styles.holeText}>Hole {holeNum}</Text>
-                <TouchableOpacity onPress={forwardPress}>
-                    <FontAwesomeIcon
-                        icon={faAngleRight}
-                        size={30}
-                        style={styles.holeText}
-                    />
-                </TouchableOpacity>
+                <Text style={styles.holeText}>{counter >= course.course.holesList.length*2 ? 'Finish Round' : 'Hole ' + holeNum}</Text>
+
+                {
+                    counter >= course.course.holesList.length*2 ? <View></View> :
+                        <TouchableOpacity onPress={forwardPress}>
+                            <FontAwesomeIcon
+                                icon={faAngleRight}
+                                size={30}
+                                style={styles.holeText}
+                            />
+                        </TouchableOpacity>
+                }
 
             </View>
             {
-                counter % 2 === 0
-                    ? <PlayingHole ref={playScreen} hole={course.course.holesList[holeNum-1]}/>
-                    : <PutScoreScreen ref={putScore} par={course.course.holesList[holeNum - 1].par}/>
+                counter >= course.course.holesList.length*2 ?
+                    <FinishRoundScreen/>
+                    : counter % 2 === 0
+                        ? <PlayingHole ref={playScreen} hole={course.course.holesList[holeNum-1]}/>
+                        : <PutScoreScreen ref={putScore} par={course.course.holesList[holeNum - 1].par}/>
             }
         </View>
     )

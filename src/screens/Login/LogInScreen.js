@@ -8,9 +8,7 @@ import {gql, useMutation} from "@apollo/client";
 
 const LOGIN = gql`
     mutation Mutation($input: LoginPlayerInput) {
-  loginPlayer(input: $input) {
-    token
-  }
+  loginPlayer(input: $input)
 }   `
 
 function LogInScreen({navigation}) {

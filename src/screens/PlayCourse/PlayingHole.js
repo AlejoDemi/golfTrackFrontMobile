@@ -60,7 +60,6 @@ const PlayingHole = forwardRef((props, ref) => {
         const dLong = loc2.lng - loc1.lng;
 
         const dir = Math.atan(dLong/dLat)*180;
-        console.log(-dir)
         return -dir;
     }
 

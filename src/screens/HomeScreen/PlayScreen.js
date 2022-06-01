@@ -97,6 +97,7 @@ function PlayScreen({navigation}) {
         };
         for (const course of courses) {
             const distance = distanceBetweenCourse(location.lat, location.lng, course.locationLat, course.locationLong);
+            console.log(course.name + distance)
             if (auxClosestCourse.name === null ||  auxClosestCourse.distance > distance) {
                 auxClosestCourse = {
                     course: course,
@@ -137,11 +138,14 @@ function PlayScreen({navigation}) {
 
                         <View style={styles.courseBox}>
                             <MaterialIcons
-                                name="golf-course"
+                                name="sports-golf"
                                 color="#05375a"
                                 size={30}
                                 style={styles.icon}/>
-                            <Text style={styles.cardText}>{closestCourse.course.name.length < 48 ? closestCourse.course.name : closestCourse.course.name.substring(0, 45) + "..."}</Text>
+                            {
+                                closestCourse.course === null ? <Text style={styles.cardText}>Couldn't load closest course</Text>
+                                : <Text style={styles.cardText}>{closestCourse.course.name.length < 48 ? closestCourse.course.name : closestCourse.course.name.substring(0, 45) + "..."}</Text>
+                            }
                         </View>
                 </TouchableOpacity>
             <Searchbar style={styles.searchBar}

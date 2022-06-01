@@ -31,14 +31,9 @@ const PutScoreScreen = forwardRef((props, ref) => {
         setFairway('');
     }
 
-    useImperativeHandle(ref, () => ({
-        restoreValues,
-        addPlayedHole,
-        editHole,
-    }));
 
     const editHole = (num) => {
-        console.log(round.round.holesScore[0]);
+        console.log('hola');
         let index = 0
         for (let i = 0; i < round.round.holesScore; i++) {
             if (num === round.round.holesScore[i].num){
@@ -51,8 +46,15 @@ const PutScoreScreen = forwardRef((props, ref) => {
     }
 
     const addPlayedHole = (num) => {
+        console.log('hola')
         round.round.addPlayedHole(num,score,putts,fairway);
     }
+
+    useImperativeHandle(ref, () => ({
+        restoreValues,
+        editHole,
+        addPlayedHole,
+    }));
 
     return (
         <View style={styles.container}>
@@ -66,11 +68,11 @@ const PutScoreScreen = forwardRef((props, ref) => {
                                 setPutts(putts -1);
                             }
                         }}>
-                            <Text>-</Text>
+                            <Text style={{fontWeight: 'bold'}}>-</Text>
                         </TouchableOpacity>
                         <Text style={styles.input}>{score}</Text>
                         <TouchableOpacity title={'+'}  style={styles.button} onPress={() => setScore(score+1)}>
-                            <Text>+</Text>
+                            <Text style={{fontWeight: 'bold'}}>+</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -81,7 +83,7 @@ const PutScoreScreen = forwardRef((props, ref) => {
                         <TouchableOpacity title={'-'} style={styles.button} onPress={() => {
                             if(putts !== 0){ setPutts(putts-1)}
                         }}>
-                            <Text>-</Text>
+                            <Text style={{fontWeight: 'bold'}}>-</Text>
                         </TouchableOpacity>
                         <Text style={styles.input}>{putts}</Text>
                         <TouchableOpacity title={'+'}  style={styles.button} onPress={() => {
@@ -90,7 +92,7 @@ const PutScoreScreen = forwardRef((props, ref) => {
                             }
                             setPutts(putts+1)
                         }}>
-                            <Text>+</Text>
+                            <Text style={{fontWeight: 'bold'}}>+</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

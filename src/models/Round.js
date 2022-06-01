@@ -25,6 +25,34 @@ export class Round {
             this.holesScore.push(new PlayedHole(num,score,putts,fairway));
         }
     }
+
+    getScore = (holeNum) => {
+        let counter = 0;
+        for (let i = 0; i < holeNum; i++) {
+            counter += this.holesScore[holeNum-9+i].score;
+        }
+        return counter
+    }
+
+    getPutts = (holeNum ) => {
+        let counter = 0;
+        for (let i = 0; i < holeNum; i++) {
+            counter += this.holesScore[holeNum-9+1].putts;
+        }
+        return counter
+    }
+
+    getPercentageFairways = (holeNum) => {
+        let counter = 0;
+        for (let i = 0; i < holeNum; i++) {
+            if (this.holesScore[holeNum-9+1].fairway === 'middle'){
+                counter++;
+            }
+        }
+        const percentage = counter/9;
+        console.log(percentage);
+        return (percentage).toFixed(2);
+    }
 }
 
 export class PlayedHole {
