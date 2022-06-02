@@ -1,12 +1,13 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, { Component } from 'react';
+import { WebView } from 'react-native-webview';
 
-function FeedScreen(props) {
-    return (
-        <View>
-            <Text>Feed</Text>
-        </View>
-    );
+export default function FeedScreen({navigation}) {
+        return (
+            <WebView
+                source={{
+                    uri: 'https://www.golfdigest.com/'
+                }}
+                style={{ marginTop: 20 }}
+            />
+        );
 }
-
-export default FeedScreen;
