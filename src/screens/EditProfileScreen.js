@@ -8,6 +8,7 @@ import * as Haptics from "expo-haptics";
 import * as ImagePicker from "expo-image-picker";
 import NumericInput from 'react-native-numeric-input'
 import {gql} from "@apollo/client";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 //chala's code
 
 
@@ -17,37 +18,45 @@ export default function EditProfileScreen({navigation}) {
     const[email , setEmail] = useState("alejo@alejo");
     const[password , setPass] = useState("password");
 
-
+    const logOut = async() => {
+        await AsyncStorage.clear();
+        navigation.navigate('FrontScreen');
+    }
 
     return(
 
         <View style={styles.globalContainer}>
-            <View style={styles.header}>
-            </View>
-            <View style={styles.container}>
-                <View style={{height:"33%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
-                    <Text style={styles.label}>USERNAME</Text>
-                    <TextInput style={styles.card} >{name}</TextInput>
+            <ImageBackground
+                source={require("../assets/golfer_bg.jpeg")}
+                style={styles.image}
+                resizeMode="cover">
+                <View style={{flex:1}}>
+                    <StatusBar backgroundColor="transparent" translucent barStyle='light-content'/>
                 </View>
-                <View style={{height:"33%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
-                    <Text style={styles.label}>EMAIL</Text>
-                    <TextInput style={styles.card}>{email}</TextInput>
-                </View>
-                <View style={{height:"33%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
-                    <Text style={styles.label}>PASSWORD</Text>
-                    <TextInput style={styles.card}  secureTextEntry={true}>{password}</TextInput>
-                </View>
+                <Animatable.View style={styles.container} animation='fadeInUpBig'>
+                    <View style={{height:"33%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                        <Text style={styles.label}>USERNAME</Text>
+                        <TextInput style={styles.card} >{name}</TextInput>
+                    </View>
+                    <View style={{height:"33%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                        <Text style={styles.label}>EMAIL</Text>
+                        <TextInput style={styles.card}>{email}</TextInput>
+                    </View>
+                    <View style={{height:"33%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                        <Text style={styles.label}>PASSWORD</Text>
+                        <TextInput style={styles.card}  secureTextEntry={true}>{password}</TextInput>
+                    </View>
 
-
-            </View>
-
-            <View style={styles.footer}>
-                    <TouchableOpacity style={styles.button}>
-                            <Text style={styles.buttonText}>
-                                SAVE
-                            </Text>
-                    </TouchableOpacity>
-            </View>
+                    <View style={styles.buttons}>
+                        <TouchableOpacity style={[styles.button,{backgroundColor:"firebrick",}]} onPress={logOut}>
+                            <Text style={styles.buttonText}>Log Out</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.button, {backgroundColor:"#4a8a3f"}]}>
+                            <Text style={styles.buttonText}>Save</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Animatable.View>
+            </ImageBackground>
         </View>
 
     );
@@ -56,12 +65,12 @@ export default function EditProfileScreen({navigation}) {
 const styles = StyleSheet.create({
 
     globalContainer:{
-        height:"100%",
+        flex: 1,
         backgroundColor:"#4a8a3f",
     },
 
     header:{
-        height:"16%",
+        flex: 1,
         display:"flex",
         justifyContent:"center",
         alignItems:"flex-start",
@@ -69,6 +78,7 @@ const styles = StyleSheet.create({
     },
 
     container:{
+        flex: 4,
         height:"60%",
         display:"flex",
         flexDirection:"column",
@@ -76,44 +86,47 @@ const styles = StyleSheet.create({
         alignItems:"center",
         borderTopLeftRadius:20,
         borderTopRightRadius:20,
-        backgroundColor:"white"
+        backgroundColor:"whitesmoke"
     },
-
-    footer:{
-        height:"30%",
-        display:"flex",
-        justifyContent:"flex-start",
-        alignItems:"center",
-        backgroundColor:"white"
+    image: {
+        flex: 1,
+        justifyContent: "center"
     },
-
     label:{
-       fontSize:20,
+       fontSize:15,
         alignSelf:"flex-start",
         marginLeft:"10%",
-        fontWeight:"bold"
+        marginBottom: 5,
+        fontWeight:"bold",
+        color: 'dimgray'
     },
 
     card:{
+        elevation: 3,
+        paddingLeft: 10,
+        zIndex: 1,
         width:"80%",
-        height:"40%",
+        height:"25%",
         backgroundColor:"white",
-        borderRadius:10,
-        borderStyle:"solid",
-        borderWidth:2,
-        borderColor:"#4a8a3f",
-        fontSize:25
+        borderRadius:15,
+        fontSize:15
+    },
+
+    buttons: {
+        flexDirection: 'row',
+        width: "75%",
+        height:"10%",
+        marginTop:"10%",
+        marginBottom: "20%",
     },
 
     button:{
-        backgroundColor:"#4a8a3f",
-        height:"20%",
-        width:"25%",
+        flex: 1,
         borderRadius:10,
         display:"flex",
         justifyContent:"center",
         alignItems:"center",
-        marginTop:"10%",
+        margin: 7,
     },
 
     buttonText:{

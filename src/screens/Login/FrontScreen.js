@@ -12,8 +12,18 @@ import {
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Animatable from 'react-native-animatable';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function FrontScreen({navigation}) {
+
+    const goToLogin = async () => {
+        if (await AsyncStorage.getItem('TOKEN')){
+            navigation.navigate('Home');
+        }else{
+            navigation.navigate('LogInScreen');
+        }
+    }
+
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -28,7 +38,7 @@ function FrontScreen({navigation}) {
                     animation="fadeInUpBig"
                 >
                     <Text style={styles.title}>Sign in with your account</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('LogInScreen')} style={styles.button}>
+                    <TouchableOpacity onPress={goToLogin} style={styles.button}>
                         <Text style={styles.textSign}>Login</Text>
                         <MaterialIcons
                             name="navigate-next"

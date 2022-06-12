@@ -44,22 +44,6 @@ function PlayScreen({navigation}) {
 
     const[searchCourse,setSearchCourse]=useState('');
 
-    useEffect(async () => {
-        let {status} = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
-        }
-
-        const loc = await Location.getCurrentPositionAsync();
-        await setLocation({
-            lat: loc.coords.latitude,
-            lng: loc.coords.longitude,
-        })
-    }, []);
-
-    //Methods
-
     //Handles searchbar
     let onChangeSearch=(value)=>{
         setSearchCourse(value)
@@ -70,6 +54,27 @@ function PlayScreen({navigation}) {
         dispatch(setCourseId(id));
         navigation.navigate("Course");
     };
+/*
+    useEffect(() => {
+        (async () => {
+            let {status} = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+
+            let loc = await Location.getCurrentPositionAsync();
+            console.log(loc);
+            await setLocation({
+                lat: loc.coords.latitude,
+                lng: loc.coords.longitude
+            })
+        })();
+    }, []);
+
+    //Methods
+
+
 
     //Gets distance between 2 coords in yards
     const distanceBetweenCourse = (lat1, lon1, lat2, lon2) => {
@@ -97,7 +102,6 @@ function PlayScreen({navigation}) {
         };
         for (const course of courses) {
             const distance = distanceBetweenCourse(location.lat, location.lng, course.locationLat, course.locationLong);
-            console.log(course.name + distance)
             if (auxClosestCourse.name === null ||  auxClosestCourse.distance > distance) {
                 auxClosestCourse = {
                     course: course,
@@ -112,14 +116,13 @@ function PlayScreen({navigation}) {
     if (location.lat !== 0 && location.lng !== 0 && courses !== []  && closestCourse.course === null) {
         setTheClosestCourse();
     }
-
-    if (loadingCC) return <View style={styles.loadingContainer}>
+*/
+    if (loading) return <View style={styles.loadingContainer}>
         <ActivityIndicator
             color = '#4a8a3f'
             size = "large"
             style = {styles.activityIndicator}/>
     </View>
-
     return (
         <View
             style={styles.container}
@@ -131,8 +134,9 @@ function PlayScreen({navigation}) {
                     resizeMode="cover"/>
             </View>
             <View style={styles.footer}>
-
-                <TouchableOpacity style={styles.coursesContainer}
+                {
+                    /*
+                    <TouchableOpacity style={styles.coursesContainer}
                         onPress={() => startPlay(closestCourse.course.id)}>
                         <Text style={styles.tittle}>Quick Play</Text>
 
@@ -148,6 +152,8 @@ function PlayScreen({navigation}) {
                             }
                         </View>
                 </TouchableOpacity>
+                     */
+                }
             <Searchbar style={styles.searchBar}
                        placeholder="Search course..."
                        onChangeText={(value) =>onChangeSearch(value)}

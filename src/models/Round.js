@@ -42,6 +42,18 @@ export class Round {
         return counter
     }
 
+    getPercentagePutts = (holeNum) => {
+        let counter = 0;
+        for (let i = 0; i < holeNum; i++) {
+            if (this.holesScore[holeNum-9+1].fairway === 'middle'){
+                counter++;
+            }
+        }
+        const percentage = counter/18;
+        console.log(percentage);
+        return (percentage).toFixed(2);
+    }
+
     getPercentageFairways = (holeNum) => {
         let counter = 0;
         for (let i = 0; i < holeNum; i++) {
@@ -49,7 +61,7 @@ export class Round {
                 counter++;
             }
         }
-        const percentage = counter/9;
+        const percentage = counter/18;
         console.log(percentage);
         return (percentage).toFixed(2);
     }
