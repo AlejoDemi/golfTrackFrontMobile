@@ -5,18 +5,19 @@ import Feather from "react-native-vector-icons/Feather";
 import * as Animatable from 'react-native-animatable';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {gql, useMutation} from "@apollo/client";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LOGIN = gql`
     mutation Mutation($input: LoginPlayerInput) {
   loginPlayer(input: $input){
-  id
+  token
   }
 }   `
 
 function LogInScreen({navigation}) {
 
 
-    const [data, setData] = useState({
+    const [dataInputed, setData] = useState({
         email:'',
         password:'',
         check_textInputChange: false,
@@ -26,18 +27,18 @@ function LogInScreen({navigation}) {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const [login] = useMutation(LOGIN);
+    const [login, {data,loading}] = useMutation(LOGIN);
 
     const textInputChange = (val) => {
         if (/^[a-zA-Z0-9.!#$%&’+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/.test(val)){
             setData({
-                ...data,
+                ...dataInputed,
                 email:val,
                 check_textInputChange:true,
             })
         }else{
             setData({
-                ...data,
+                ...dataInputed,
                 email:val,
                 check_textInputChange:false,
             })
@@ -47,15 +48,15 @@ function LogInScreen({navigation}) {
 
     const handlePassword = (val) => {
         setData({
-            ...data,
+            ...dataInputed,
             password:val,
         })
     }
 
     const toggleSecureTextEntry = () => {
         setData({
-            ...data,
-            secureTextEntry:!data.secureTextEntry,
+            ...dataInputed,
+            secureTextEntry:!dataInputed.secureTextEntry,
         })
     }
 
@@ -66,12 +67,13 @@ function LogInScreen({navigation}) {
         await login({
             variables:{
                 "input": {
-                    "email": data.email ,
-                    "password": data.password,
+                    "email": dataInputed.email ,
+                    "password": dataInputed.password,
                 }
             },
-        }).then(() => {
-            setIsLoading(false)
+        }).then(r => {
+            AsyncStorage.setItem('TOKEN',r.data.loginPlayer.token);
+            setIsLoading(false);
             navigation.navigate('Home')}
         ).catch(e =>{
             setIsLoading(false);
@@ -107,7 +109,7 @@ function LogInScreen({navigation}) {
                         onChangeText={(val) => textInputChange(val)}
                         keyboardType="email-address"
                         />
-                        {data.check_textInputChange ?
+                        {dataInputed.check_textInputChange ?
                             <Animatable.View
                                 animation="bounceIn">
                                 <Feather
@@ -128,13 +130,13 @@ function LogInScreen({navigation}) {
                         />
                         <TextInput
                             placeholder="Enter your password..."
-                            secureTextEntry={data.secureTextEntry}
+                            secureTextEntry={dataInputed.secureTextEntry}
                             style={styles.textInput}
                             autoCapitalize="none"
                             onChangeText={(val) => handlePassword(val)}
                         />
                         <TouchableOpacity onPress={toggleSecureTextEntry}>
-                            {data.secureTextEntry ?
+                            {dataInputed.secureTextEntry ?
                                 <Feather
                                     name="eye-off"
                                     color="grey"
