@@ -26,12 +26,14 @@ export default function GameSetUpScreen({navigation}){
         <View style={styles.container}>
             <Text style={styles.mainTitle}>Game Options</Text>
             <View style={styles.data}>
-                <Text style={styles.dataText}>{course.course.name}</Text>
-                <Text style={styles.dataSubtitle}>{course.course.holesList.length} holes - Par {course.course.getPar()}</Text>
-                <Text style={styles.dataSubtitle}>{course.course.getDistance()} yards</Text>
-                <Text style={[styles.dataText, {marginTop: 30}]}>Alejo Demit</Text>
+                <View>
+                    <Text style={styles.dataText}>{course.course.name}</Text>
+                    <Text style={styles.dataSubtitle}>{course.course.holesList.length} holes - Par {course.course.getPar(course.course.holesList.length)}</Text>
+                    <Text style={styles.dataSubtitle}>{course.course.getDistance(course.course.holesList.length)} yards</Text>
+                </View>
+                <Text style={[styles.dataText]}>Alejo Demit</Text>
             </View>
-            <View style={{flex:8}}>
+            <View style={{flex:6}}>
                 <View style={styles.input}>
                     <Text style={styles.mainLabel}>Options</Text>
                     <View style={[styles.inputContainer, {flexDirection: 'row'}]}>
@@ -47,37 +49,39 @@ export default function GameSetUpScreen({navigation}){
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.input}>
-                    <Text style={styles.mainLabel}>Scoring Mode</Text>
-                    <View style={[styles.inputContainer, scoring === 'net' ? styles.withInput: null]}>
-                        <View style={{flexDirection: 'row', flex: 2}}>
-                            <TouchableOpacity
-                                style={[styles.button, scoring === 'gross' ? styles.buttonChecked : null]}
-                                onPress={() => setScoring('gross')}>
-                                <Text style={styles.label}>Gross</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.button, scoring === 'net' ? styles.buttonChecked : null]}
-                                onPress={() => setScoring('net')}>
-                                <Text style={ styles.label}>Net</Text>
-                            </TouchableOpacity>
+                {
+                    options === 'scoring' && <View style={styles.input}>
+                        <Text style={styles.mainLabel}>Scoring Mode</Text>
+                        <View style={[styles.inputContainer, scoring === 'net' ? styles.withInput: null]}>
+                            <View style={{flexDirection: 'row', flex: 2}}>
+                                <TouchableOpacity
+                                    style={[styles.button, scoring === 'gross' ? styles.buttonChecked : null]}
+                                    onPress={() => setScoring('gross')}>
+                                    <Text style={styles.label}>Gross</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.button, scoring === 'net' ? styles.buttonChecked : null]}
+                                    onPress={() => setScoring('net')}>
+                                    <Text style={ styles.label}>Net</Text>
+                                </TouchableOpacity>
+                            </View>
+                            {
+                                scoring === 'net' ? <View style={styles.handicapInputContainer}>
+                                    <TextInput
+                                        style={styles.handicapInput}
+                                        onChangeText={setHandicap}
+                                        placeholder="Playing handicap..."
+                                        keyboardType="numeric"
+                                        maxLength={2}
+                                        selectionColor={'#4a8a3f'}
+                                    />
+                                </View> : null
+                            }
                         </View>
-                        {
-                            scoring === 'net' ? <View style={styles.handicapInputContainer}>
-                                <TextInput
-                                    style={styles.handicapInput}
-                                    onChangeText={setHandicap}
-                                    placeholder="Playing handicap..."
-                                    keyboardType="numeric"
-                                    maxLength={2}
-                                    selectionColor={'#4a8a3f'}
-                                />
-                            </View> : null
-                        }
                     </View>
-                </View>
+                }
             </View>
-            <View style={{flex: 3}}>
+            <View style={{flex: 1}}>
                 <AnimatableTouchableOpacity
                     animation="pulse"
                     iterationCount="infinite"
@@ -113,11 +117,12 @@ const styles = StyleSheet.create({
     data: {
         zIndex:1,
         elevation:3,
-        flex:3,
+        flex:2,
         backgroundColor: '#e4e4e4',
         borderRadius: 20,
         margin: 30,
         padding: 20,
+        justifyContent: 'space-around'
     },
     dataText: {
         color: '#696969',
@@ -181,7 +186,6 @@ const styles = StyleSheet.create({
         alignSelf:"center",
         height:50,
         borderRadius:15,
-        marginTop: 10,
     },
 
 })

@@ -17,7 +17,6 @@ const PlayingHole = forwardRef((props, ref) => {
         })
     }
 
-
     useImperativeHandle(ref, () => ({
         restoreValues
     }));

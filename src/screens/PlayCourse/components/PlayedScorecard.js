@@ -11,37 +11,47 @@ const PlayedScorecard = (props) => {
         const data = [];
         const holes = [];
         const pars = [];
-        const distances = [];
-        const handicap = [];
         const score = [];
         const putts = [];
+        const gir = [];
         const fairways = [];
 
         for (const hole of course.holesList) {
             holes.push(hole.num);
             pars.push(hole.par);
-            distances.push(hole.distance);
-            handicap.push(hole.scoringIndex);
             score.push(round.holesScore[hole.num-1].score);
+            if (round.holesScore[hole.num-1].gir){
+                gir.push("\u2713");
+            }else{
+                gir.push('X');
+            }
             putts.push(round.holesScore[hole.num-1].putts);
-            fairways.push(round.holesScore[hole.num-1].fairway);
+            if (round.holesScore[hole.num-1].fairway === 'middle'){
+                fairways.push("\u2713");
+            }else if (round.holesScore[hole.num-1].fairway === 'right'){
+                fairways.push('→');
+            }else if(round.holesScore[hole.num-1].fairway === 'left'){
+                fairways.push('←');
+            }else if(round.holesScore[hole.num-1].fairway === 'cross'){
+                fairways.push('X');
+            }else{
+                fairways.push(' ');
+            }
 
             if (hole.num === 9|| hole.num === 18){
                 holes.push('');
                 pars.push(course.getPar(hole.num));
-                distances.push(course.getDistance(hole.num));
-                handicap.push('');
                 score.push(round.getScore(hole.num));
                 putts.push(round.getPutts(hole.num));
-                fairways.push(round.getPercentageFairways(hole.num));
+                gir.push(Math.round(round.getPercentageGIR(hole.num)*100) + "%")
+                fairways.push(Math.round(round.getPercentageFairways(hole.num)*100) + "%");
             }
         }
         data.push(holes);
         data.push(pars);
-        data.push(distances);
-        data.push(handicap);
         data.push(score);
         data.push(putts);
+        data.push(gir);
         data.push(fairways);
         return data;
     }
@@ -54,7 +64,7 @@ const PlayedScorecard = (props) => {
         return aux
     }
 
-    const MAIN_COL = ['Hole','Par','Distance', 'Handicap', 'Score', 'Putts', 'Fairways'];
+    const MAIN_COL = ['Hole','Par', 'Score', 'Putts','GIR', 'Fairways'];
     const data = fullData();
 
     return (
@@ -63,7 +73,7 @@ const PlayedScorecard = (props) => {
             <Table style={{flexDirection: 'row'}}>
                 {/* Left Wrapper */}
                 <TableWrapper style={{width: 80, flexDirection: 'row'}}>
-                    <Col data={MAIN_COL} style={styles.title} heightArr={[40, 40, 40,40,40,40,40]} textStyle={styles.titleText}/>
+                    <Col data={MAIN_COL} style={styles.title} heightArr={[40, 40, 40,40,40,40]} textStyle={styles.titleText}/>
                 </TableWrapper>
 
                 {/* Right Wrapper */}

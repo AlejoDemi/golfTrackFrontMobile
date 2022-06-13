@@ -17,12 +17,12 @@ export class Round {
         this.options = options;
     }
 
-    addPlayedHole = (num,score,putts,fairway) => {
+    addPlayedHole = (num,score,putts,gir,fairway) => {
         const aux = this.holesScore.filter(h => h.num === num);
         if (aux.length > 0){
-            this.holesScore[0] = new PlayedHole(num,score,putts,fairway);
+            this.holesScore[num - 1] = new PlayedHole(num,score,putts,gir,fairway);
         }else{
-            this.holesScore.push(new PlayedHole(num,score,putts,fairway));
+            this.holesScore.push(new PlayedHole(num,score,putts,gir,fairway));
         }
     }
 
@@ -37,33 +37,65 @@ export class Round {
     getPutts = (holeNum ) => {
         let counter = 0;
         for (let i = 0; i < holeNum; i++) {
-            counter += this.holesScore[holeNum-9+1].putts;
+            counter += this.holesScore[holeNum-9+i].putts;
         }
+        console.log(counter)
+
         return counter
+    }
+
+    getRoundPutts = (num ) => {
+        if (num === 9){
+            return this.getPercentagePutts(9);
+        }else{
+            return this.getPercentagePutts(9) + this.getPercentagePutts(18);
+        }
     }
 
     getPercentagePutts = (holeNum) => {
         let counter = 0;
         for (let i = 0; i < holeNum; i++) {
-            if (this.holesScore[holeNum-9+1].fairway === 'middle'){
+            if (this.holesScore[holeNum-9+i].putts <= 2){
                 counter++;
             }
         }
-        const percentage = counter/18;
-        console.log(percentage);
-        return (percentage).toFixed(2);
+        return counter/9;
+    }
+
+    getRoundFW = (num ) => {
+        if (num === 9){
+            return this.getPercentageFairways(9);
+        }else{
+            return this.getPercentageFairways(9) + this.getPercentageFairways(18);
+        }
     }
 
     getPercentageFairways = (holeNum) => {
         let counter = 0;
         for (let i = 0; i < holeNum; i++) {
-            if (this.holesScore[holeNum-9+1].fairway === 'middle'){
+            if (this.holesScore[holeNum-9+i].fairway === 'middle'){
                 counter++;
             }
         }
-        const percentage = counter/18;
-        console.log(percentage);
-        return (percentage).toFixed(2);
+        return counter/9;
+    }
+
+    getRoundGIR = (num ) => {
+        if (num === 9){
+            return this.getPercentageGIR(9);
+        }else{
+            return this.getPercentageGIR(9) + this.getPercentageGIR(18);
+        }
+    }
+
+    getPercentageGIR = (holeNum) => {
+        let counter = 0;
+        for (let i = 0; i < holeNum; i++) {
+            if (this.holesScore[holeNum-9+i].gir){
+                counter++;
+            }
+        }
+        return counter/9;
     }
 }
 
@@ -72,11 +104,13 @@ export class PlayedHole {
     score;
     putts;
     fairway;
+    gir;
 
-    constructor(num, score, putts, fairway) {
+    constructor(num, score, putts, gir, fairway) {
         this.num = num;
         this.score = score;
         this.putts = putts;
+        this.gir = gir;
         this.fairway = fairway;
     }
 }

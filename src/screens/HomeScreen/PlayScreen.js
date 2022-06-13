@@ -134,6 +134,9 @@ function PlayScreen({navigation}) {
                     resizeMode="cover"/>
             </View>
             <View style={styles.footer}>
+                <View style={styles.coursesContainer}>
+                    <Text style={styles.tittle}>Play Golf</Text>
+                </View>
                 {
                     /*
                     <TouchableOpacity style={styles.coursesContainer}
@@ -208,11 +211,11 @@ const styles = StyleSheet.create({
     },
 
     tittle:{
-        fontSize:25,
+        fontSize:40,
         color: '#05375a',
         alignSelf: "center",
         fontWeight:"bold",
-        marginTop:5
+        //marginTop:5
     },
 
     searchBar:{
@@ -238,6 +241,9 @@ const styles = StyleSheet.create({
     footer:{
         flex:4,
         alignContent:"center",
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+
     },
 
 
@@ -260,6 +266,7 @@ const styles = StyleSheet.create({
             width:0,
             height:-2,
         },
+        justifyContent: 'center'
     },
 
     courseBox:{

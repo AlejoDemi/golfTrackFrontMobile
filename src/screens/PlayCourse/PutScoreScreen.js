@@ -18,41 +18,66 @@ const COLORS = {
 }
 
 const PutScoreScreen = forwardRef((props, ref) => {
+    const holeNumber = props.num;
     const par = props.par;
+    const si = props.si;
     const [score, setScore] = useState(0);
     const [putts, setPutts] = useState(0);
     const [fairway, setFairway] = useState('');
 
+    const course = useSelector(state => state.course);
     const round = useSelector(state => state.round);
 
     const restoreValues = () => {
         setScore(0);
         setPutts(0);
-        setFairway('');
+        setFairway(' ');
     }
 
 
-    const editHole = (num) => {
-        console.log('hola');
-        let index = 0
-        for (let i = 0; i < round.round.holesScore; i++) {
-            if (num === round.round.holesScore[i].num){
+    useEffect(() => {
+        let index = -1;
+        for (let i = 0; i < round.round.holesScore.length; i++) {
+            if (holeNumber === round.round.holesScore[i].num){
                 index = i;
             }
         }
-        setScore(round.round.holesScore[index].score);
-        setPutts(round.round.holesScore[index].putts);
-        setFairway(round.round.holesScore[index].fairway);
-    }
+        if (index !== -1){
+            setScore(round.round.holesScore[index].score);
+            setPutts(round.round.holesScore[index].putts);
+            setFairway(round.round.holesScore[index].fairway);
+        }
+    },[])
 
     const addPlayedHole = (num) => {
-        console.log('hola')
-        round.round.addPlayedHole(num,score,putts,fairway);
+        round.round.addPlayedHole(num,netScore(score),putts,score - putts  <= (par - 2),fairway);
+    }
+
+    const netScore = (score) => {
+        if (round.round.options.mode === 'gross'){
+            return score;
+        }
+        let handicap = 0;
+        if (course.course.holesList.length === 18){
+            const someStrokes = Math.floor(round.round.options.handicap/18);
+            handicap += Math.floor(round.round.options.handicap/18);
+            if (handicap - someStrokes*18 <= si){
+                handicap += 1;
+            }
+        }else{
+            const someStrokes = Math.floor(round.round.options.handicap/9);
+            console.log(si)
+            handicap += someStrokes
+            if (round.round.options.handicap - someStrokes*9 >= si){
+                handicap += 1;
+            }
+            console.log(handicap)
+        }
+        return score - handicap;
     }
 
     useImperativeHandle(ref, () => ({
         restoreValues,
-        editHole,
         addPlayedHole,
     }));
 
@@ -96,35 +121,39 @@ const PutScoreScreen = forwardRef((props, ref) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.card}>
-                    <Text style={styles.label}>Fairway: </Text>
-                    <View style={styles.fairwayOptions}>
-                        <TouchableOpacity onPress={() => setFairway('left')}>
-                            <FontAwesomeIcon
-                                color={fairway === 'left' ? COLORS.selectedSide : COLORS.notSelected}
-                                icon={faArrowCircleLeft}
-                                size={40}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setFairway('middle')}>
-                            <FontAwesomeIcon
-                                color={fairway === 'middle' ? COLORS.selected : COLORS.notSelected}
-                                icon={faBullseye}
-                                size={40}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setFairway('right')}>
-                            <FontAwesomeIcon
-                                color={fairway === 'right' ? COLORS.selectedSide : COLORS.notSelected}
-                                icon={faArrowCircleRight}
-                                size={40}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setFairway('cross')}>
-                            <FontAwesomeIcon
-                                color={fairway === 'cross' ? COLORS.selectedBad : COLORS.notSelected}
-                                icon={faXmarkCircle}
-                                size={40}/>
-                        </TouchableOpacity>
+                {
+                    par !== 3 ?
+                    <View style={styles.card}>
+                        <Text style={styles.label}>Fairway: </Text>
+                        <View style={styles.fairwayOptions}>
+                            <TouchableOpacity onPress={() => setFairway('left')}>
+                                <FontAwesomeIcon
+                                    color={fairway === 'left' ? COLORS.selectedSide : COLORS.notSelected}
+                                    icon={faArrowCircleLeft}
+                                    size={40}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setFairway('middle')}>
+                                <FontAwesomeIcon
+                                    color={fairway === 'middle' ? COLORS.selected : COLORS.notSelected}
+                                    icon={faBullseye}
+                                    size={40}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setFairway('right')}>
+                                <FontAwesomeIcon
+                                    color={fairway === 'right' ? COLORS.selectedSide : COLORS.notSelected}
+                                    icon={faArrowCircleRight}
+                                    size={40}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setFairway('cross')}>
+                                <FontAwesomeIcon
+                                    color={fairway === 'cross' ? COLORS.selectedBad : COLORS.notSelected}
+                                    icon={faXmarkCircle}
+                                    size={40}/>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
+                        : <View style={{flex: 1}}/>
+                }
             </View>
             <View style={styles.footerCards}>
                 <View style={(score - putts) <=  (par-2) && score > 0 ? styles.autocardSuccess : styles.autocard}>

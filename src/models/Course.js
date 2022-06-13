@@ -15,12 +15,12 @@ export class Course {
         this.holesList[number-1] = hole;
     }
 
-    getPar = (holeNum ) => {
+    getPar = (holeNum) => {
         let counter = 0;
         for (let i = 0; i < holeNum; i++) {
             counter += this.holesList[holeNum-9+i].par;
         }
-        console.log(counter)
+        console.log(counter);
         return counter
     }
 

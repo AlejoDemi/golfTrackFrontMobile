@@ -11,7 +11,7 @@ const FinishRoundScreen = (props) => {
 
     const data = {
         labels: ["GIR", "FIR", "2-Putts"],
-        data: [0.4, 0.2, 0.9]
+        data: [round.round.getRoundGIR(round.round.holesScore.length), round.round.getRoundFW(round.round.holesScore.length), round.round.getRoundPutts(round.round.holesScore.length)]
     };
 
     return (
@@ -46,9 +46,9 @@ const FinishRoundScreen = (props) => {
 export default FinishRoundScreen;
 
 const chartConfig = {
-    backgroundColor: 'white',
-    backgroundGradientFrom: 'white',
-    backgroundGradientTo: 'white',
+    backgroundColor: '#F2F2F2',
+    backgroundGradientFrom: '#F2F2F2',
+    backgroundGradientTo: '#F2F2F2',
     color: (opacity = 1) => `rgba(74, 138, 63, ${opacity})`,
     strokeWidth: 2, // optional, default 3
     barPercentage: 0.5,
@@ -58,6 +58,7 @@ const chartConfig = {
 const styles = StyleSheet.create({
     scorecard: {
         marginTop: 5,
+        marginBottom: 20,
     },
     label: {
         fontWeight: "bold",

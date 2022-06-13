@@ -6,7 +6,7 @@ import SignUpScreen from "./Login/SignUpScreen";
 import {TabBarNavigator} from "../components/TabBarNavigator";
 import EditProfileScreen from "./EditProfileScreen";
 import CourseScreen from "./CourseScreen/CourseScreen";
-import ReviewsScreen from "./ReviewsScreen";
+import ReviewsScreen from "./CourseScreen/ReviewsScreen";
 import GameSetUpScreen from "./PlayCourse/GameSetUpScreen";
 import PlayGameScreen from "./PlayCourse/PlayGameScreen";
 

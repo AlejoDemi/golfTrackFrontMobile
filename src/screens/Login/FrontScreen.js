@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
     View,
     StyleSheet,
@@ -16,40 +16,43 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function FrontScreen({navigation}) {
 
-    const goToLogin = async () => {
-        if (await AsyncStorage.getItem('TOKEN')){
-            navigation.navigate('Home');
-        }else{
+    useEffect(async () => {
+            if (await AsyncStorage.getItem('TOKEN')) {
+                navigation.navigate('Home');
+            }
+        }
+    )
+
+        const goToLogin = async () => {
             navigation.navigate('LogInScreen');
         }
-    }
 
-    return (
-        <View style={styles.container}>
-            <ImageBackground
-                source={require("../../assets/golfer_bg.jpeg")}
-                style={styles.image}
-                resizeMode="cover">
-                <View style={{flex:3}}>
-                    <StatusBar backgroundColor="transparent" translucent barStyle='light-content'/>
-                </View>
-                <Animatable.View
-                    style = {styles.footer}
-                    animation="fadeInUpBig"
-                >
-                    <Text style={styles.title}>Sign in with your account</Text>
-                    <TouchableOpacity onPress={goToLogin} style={styles.button}>
-                        <Text style={styles.textSign}>Login</Text>
-                        <MaterialIcons
-                            name="navigate-next"
-                            color="#fff"
-                            size={20}/>
-                    </TouchableOpacity>
-                </Animatable.View>
-            </ImageBackground>
-        </View>
-    );
-}
+        return (
+            <View style={styles.container}>
+                <ImageBackground
+                    source={require("../../assets/golfer_bg.jpeg")}
+                    style={styles.image}
+                    resizeMode="cover">
+                    <View style={{flex: 3}}>
+                        <StatusBar backgroundColor="transparent" translucent barStyle='light-content'/>
+                    </View>
+                    <Animatable.View
+                        style={styles.footer}
+                        animation="fadeInUpBig"
+                    >
+                        <Text style={styles.title}>Sign in with your account</Text>
+                        <TouchableOpacity onPress={goToLogin} style={styles.button}>
+                            <Text style={styles.textSign}>Login</Text>
+                            <MaterialIcons
+                                name="navigate-next"
+                                color="#fff"
+                                size={20}/>
+                        </TouchableOpacity>
+                    </Animatable.View>
+                </ImageBackground>
+            </View>
+        );
+    }
 
 const {height} = Dimensions.get("screen");
 const height_logo = height * 0.28;

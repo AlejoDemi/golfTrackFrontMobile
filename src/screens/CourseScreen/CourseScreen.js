@@ -113,6 +113,7 @@ function CourseScreen({navigation}) {
             <View style={styles.footer}>
                 <ScrollView vertical={true}>
                     <Text style={styles.tittle}>{course.name}</Text>
+
                     <View style={styles.rate}>
                         <MaterialIcons style={styles.star}
                                        name="star"
@@ -126,7 +127,7 @@ function CourseScreen({navigation}) {
                             }
                         }>3.5</Text>
                     </View>
-
+                    <Text style={styles.description}>{course.description}</Text>
                     <TouchableOpacity style={styles.playButton} onPress={goToSetUp}>
                         <Text style={
                             {
@@ -196,7 +197,13 @@ const styles=StyleSheet.create({
         marginTop:20,
         fontSize: 20
     },
-
+    description: {
+        color: '#696969',
+         marginTop: 20,
+        marginLeft: 30,
+        marginRight: 30,
+        marginBottom: 20,
+    },
     tittle:{
         fontWeight:"bold",
         fontSize:25,

@@ -22,15 +22,12 @@ const PlayGameScreen = () => {
             setCounter(counter+1);
             if (counter % 2 !== 0) {
                 putScore.current?.addPlayedHole(holeNum);
-                console.log(round.round);
                 setHoleNum(holeNum + 1);
                 playScreen.current?.restoreValues();
             } else {
                 putScore.current?.restoreValues();
             }
         }else{
-            setCounter(counter + 1);
-            playScreen.current?.restoreValues();
             setHoleNum(holeNum + 1);
         }
     }
@@ -41,17 +38,13 @@ const PlayGameScreen = () => {
             if (counter % 2 !== 0) {
                 playScreen.current?.restoreValues();
             } else {
-                console.log(holeNum + "R")
                 //putScore.current?.restoreValues();
                 putScore.current?.addPlayedHole(holeNum);
-                console.log('A')
-                putScore.current?.editHole(holeNum -1);
                 setHoleNum(holeNum - 1);
                 //console.log(round.round)
             }
         }else{
             setHoleNum(holeNum - 1);
-            playScreen.current?.restoreValues();
         }
     }
 
@@ -86,7 +79,7 @@ const PlayGameScreen = () => {
                     <FinishRoundScreen/>
                     : counter % 2 === 0
                         ? <PlayingHole ref={playScreen} hole={course.course.holesList[holeNum-1]}/>
-                        : <PutScoreScreen ref={putScore} par={course.course.holesList[holeNum - 1].par}/>
+                        : <PutScoreScreen ref={putScore} num = {holeNum} si = {course.course.holesList[holeNum-1].scoringIndex} par={course.course.holesList[holeNum - 1].par}/>
             }
         </View>
     )
