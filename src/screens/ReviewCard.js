@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet} from "react-native";
 import {View,Text} from "react-native";
-import {Star} from "@mui/icons-material";
 
 const Stars=(props) =>{
 

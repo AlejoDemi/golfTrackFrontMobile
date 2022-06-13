@@ -12,14 +12,41 @@ const PlayingHole = forwardRef((props, ref) => {
 
     const restoreValues = () => {
         setDraggableLocation({
-            lat: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).latitude,
-            lng: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).longitude
+            lat: averageLocation({
+                lat:geoLocation.latitude,
+                lng:geoLocation.latitude
+            }, hole.locationMidOfGreen).latitude,
+            lng: averageLocation({
+                lat:geoLocation.latitude,
+                lng:geoLocation.latitude
+            }, hole.locationMidOfGreen).longitude
         })
     }
 
     useImperativeHandle(ref, () => ({
         restoreValues
     }));
+
+    const [geoLocation, setGeoLocation] = useState({
+        latitude: hole.locationTeebox.lat,
+        longitude: hole.locationTeebox.lng,
+    })
+/*
+    useEffect(async () => {
+        let {status} = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            return;
+        }
+
+        setInterval(async () => {
+            let loc = await Location.getCurrentPositionAsync();
+            await setGeoLocation({
+                latitude: loc.coords.latitude,
+                longitude: loc.coords.longitude
+            })
+            return () => clearInterval(id);
+        }, 1000);
+    });*/
 
     const averageLocation = (loc1, loc2) => {
         return {
@@ -29,8 +56,14 @@ const PlayingHole = forwardRef((props, ref) => {
     }
 
     const [draggableLocation, setDraggableLocation] = useState({
-        lat: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).latitude,
-        lng: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).longitude
+        lat: averageLocation({
+            lat:geoLocation.latitude,
+            lng:geoLocation.latitude
+        }, hole.locationMidOfGreen).latitude,
+        lng: averageLocation({
+            lat:geoLocation.latitude,
+            lng:geoLocation.latitude
+        }, hole.locationMidOfGreen).longitude
     })
 
     const [movable, setMovable] = useState({
@@ -50,6 +83,22 @@ const PlayingHole = forwardRef((props, ref) => {
         return Math.round(13928280.2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
     }
 
+    const angleFromCoordinate = (lat1, long1, lat2, long2) => {
+
+        const dLon = (long2 - long1);
+
+        const y = Math.sin(dLon) * Math.cos(lat2);
+        const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+
+        let brng = Math.atan2(y, x);
+
+        brng = brng*(180/Math.PI);
+        brng = (brng + 360) % 360;
+        brng = 360 - brng; // count degrees counter-clockwise - remove to make clockwise
+
+        return brng;
+    }
+
     const toRad = (x) => {
         return x * Math.PI / 180;
     }
@@ -62,22 +111,48 @@ const PlayingHole = forwardRef((props, ref) => {
         return -dir;
     }
 
+    const moveMarker = (loc) => {
+        setDraggableLocation({
+            lat: loc.latitude,
+            lng: loc.longitude,
+        })
+    }
+
     return (
         <View style={styles.container}>
             <MapView
                 provider={PROVIDER_GOOGLE}
+                moveOnMarkerPress={false}
                 ref={mapView}
                 style={styles.map}
                 mapType="satellite"
-                scrollEnabled={false}
+                pitchEnabled={false}
+                rotateEnabled={false}
                 showsCompass={false}
-                //onPress={ev => moveMarker(ev.nativeEvent.coordinate)}
+                showsUserLocation={true}
+                showsMyLocationButton={false}
+                onUserLocationChange={e => {
+                    if (distanceBetweenLocations({lat: e.nativeEvent.coordinate.latitude, lng: e.nativeEvent.coordinate.longitude},
+                        hole.locationTeebox) > 500){
+                        setGeoLocation({latitude: hole.locationTeebox.lat,longitude: hole.locationTeebox.lng})
+                    }else{
+                        setGeoLocation(e.nativeEvent.coordinate)
+                    }
+                }}
+                onMapReady={() => {
+                    setDraggableLocation({
+                        lat: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).latitude,
+                        lng: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).longitude
+                    })
+                }}
+                minZoomLevel={17.9 + (344-distanceBetweenLocations(hole.locationTeebox, hole.locationMidOfGreen))/172}
+                onPress={ev => moveMarker(ev.nativeEvent.coordinate)}
                 camera={{
                     center: { latitude: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).latitude, longitude: averageLocation(hole.locationTeebox, hole.locationMidOfGreen).longitude },
                     pitch: 30,
-                    zoom: 17.9,
-                    heading: getDirection(hole.locationTeebox, hole.locationMidOfGreen),
-                    altitude:0,
+                    zoom:17.9 + (344-distanceBetweenLocations(hole.locationTeebox, hole.locationMidOfGreen))/172,
+                    heading: angleFromCoordinate(hole.locationTeebox.lat,hole.locationTeebox.lng, hole.locationMidOfGreen.lat, hole.locationMidOfGreen.lng),
+                    altitude: 0,
                 }}
 
             >
@@ -102,19 +177,17 @@ const PlayingHole = forwardRef((props, ref) => {
                 <Marker
                     identifier={'Teebox'}
                     tappable={false}
-                    coordinate={{ latitude : hole.locationTeebox.lat, longitude : hole.locationTeebox.lng }}>
+                    coordinate={geoLocation}>
                     <View>
-                        <FontAwesomeIcon
-                            icon={faGolfBallTee}
-                            color={'white'}
-                            size={30}
-                        />
+                        <Text> </Text>
                     </View>
                 </Marker>
                 <Marker
                     tappable={false}
                     identifier={'TeeboxMiddle'}
-                    coordinate={{ latitude: averageLocation(hole.locationTeebox, draggableLocation).latitude, longitude: averageLocation(hole.locationTeebox, draggableLocation).longitude}}
+                    coordinate={averageLocation({
+                        lat:geoLocation.latitude,
+                        lng: geoLocation.longitude}, draggableLocation)}
                 >
                     <View>
                         <Text
@@ -123,7 +196,10 @@ const PlayingHole = forwardRef((props, ref) => {
                                 color: "white",
                                 textAlign: "center",
                                 fontWeight: "bold"
-                            }}>{distanceBetweenLocations(hole.locationTeebox, draggableLocation)}</Text>
+                            }}>{distanceBetweenLocations({
+                            lat:geoLocation.latitude,
+                            lng: geoLocation.longitude,
+                        }, draggableLocation)}</Text>
                     </View>
                 </Marker>
                 <Marker
@@ -156,7 +232,7 @@ const PlayingHole = forwardRef((props, ref) => {
                     </View>
                 </Marker>
                 <Polyline
-                    coordinates={[{ latitude : hole.locationTeebox.lat, longitude : hole.locationTeebox.lng},{latitude: draggableLocation.lat, longitude: draggableLocation.lng}, { latitude : hole.locationMidOfGreen.lat, longitude : hole.locationMidOfGreen.lng}]}
+                    coordinates={[geoLocation,{latitude: draggableLocation.lat, longitude: draggableLocation.lng}, { latitude : hole.locationMidOfGreen.lat, longitude : hole.locationMidOfGreen.lng}]}
                     strokeColor={'white'}
                     strokeWidth={3}
                 />
