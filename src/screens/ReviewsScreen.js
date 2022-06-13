@@ -3,9 +3,12 @@ import {ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-n
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Leaderboard from 'react-native-leaderboard';
 import Feather from "react-native-vector-icons/Feather";
+import ReviewCard from "../ReviewCard";
 
 export default function ReviewsScreen({navigation}) {
     return(
-        <View></View>
+
+            <ReviewCard></ReviewCard>
+
     );
 }
