@@ -6,21 +6,43 @@ import Feather from "react-native-vector-icons/Feather";
 import ReviewCard from "./ReviewCard";
 import {ScrollView} from "react-native";
 import StarRating from 'react-native-star-rating';
+import {gql, useMutation} from "@apollo/client";
+import {useSelector} from "react-redux";
 
+const SAVE_REVIEW = gql`
+mutation Mutation($input: ReviewInput) {
+    addReview(input: $input){
+        id
+    }
+}
+`
 
 export default function ReviewsScreen({navigation}) {
 
-    const [starCount,setStarCount]=useState(2.5);
+
+    const course = useSelector(state => state.course);
+    const playerId = useSelector(state => state.playerId);
+
+    const [starCount,setStarCount]=useState(5);
     const [comment,setComment]=useState("");
-    const [reviews,setReviews]=useState([{user:"Alejo",rate:2,comment:"hola hola hola"},
-                                                    {user:"Fede",rate:5,comment: "cacacacaca"} ,
-                                                    {user:"Fede",rate:5,comment: "cacacacaca"} ,
-                                                    {user:"Fede",rate:5,comment: "cacacacaca"} ,
-                                                    {user:"Fede",rate:5,comment: "cacacacaca"} ])
+    const [reviews,setReviews]=useState(course.course.reviews);
 
+    const [saveReview] = useMutation(SAVE_REVIEW,{
+        onCompleted: r => navigation.navigate('Home'),
+        onError: e => console.log(e),
+    });
 
-    const submitRate=()=>{
-        //mutation para review
+    const submitRate = () => {
+        saveReview({
+            variables: {
+                    input: {
+                        ratingNumber: starCount,
+                        ratingText: comment,
+                        courseId: course.course.id,
+                        userId: playerId.playerId,
+                    }
+            }
+        })
     }
 
 
@@ -52,8 +74,8 @@ export default function ReviewsScreen({navigation}) {
                     />
                 </View>
                 <View style={styles.rateButtonContainer}>
-                    <TouchableOpacity style={styles.rateButton} onClick={submitRate}>
-                        <Text style={styles.buttonText}>RATE</Text>
+                    <TouchableOpacity style={styles.rateButton} onPress={submitRate}>
+                        <Text style={styles.buttonText}>Rate</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -62,7 +84,7 @@ export default function ReviewsScreen({navigation}) {
             <View style={styles.reviews}>
                 <Text style={styles.reviewsTitle}>Other players opinions</Text>
                 {reviews.map((review,index)=>
-                <ReviewCard user={review.user} rate={review.rate} comment={review.comment}></ReviewCard>)}
+                    <ReviewCard rate={review.rating} comment={review.description}/>)}
             </View>
         </ScrollView>
 

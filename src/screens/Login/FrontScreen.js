@@ -13,11 +13,18 @@ import {
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useDispatch} from "react-redux";
+import {saveId} from "./UserSlice";
 
 function FrontScreen({navigation}) {
 
+    const dispatch = useDispatch();
     useEffect(async () => {
-            if (await AsyncStorage.getItem('TOKEN')) {
+        const token = await AsyncStorage.getItem('TOKEN');
+        const id = await AsyncStorage.getItem('PLAYER_ID');
+            if (token) {
+                dispatch(saveId(id));
+                console.log(id);
                 navigation.navigate('Home');
             }
         }

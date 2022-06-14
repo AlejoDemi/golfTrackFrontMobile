@@ -1,18 +1,71 @@
-import React from 'react';
-import {View, StyleSheet, Text, TouchableOpacity, Dimensions} from 'react-native';
+import React, {useState} from 'react';
+import {View, StyleSheet, Text, TouchableOpacity, Dimensions, ActivityIndicator} from 'react-native';
 import PlayedScorecard from "./components/PlayedScorecard";
 import {useSelector} from "react-redux";
 import {ProgressChart} from "react-native-chart-kit";
+import {gql, useMutation} from "@apollo/client";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const FinishRoundScreen = (props) => {
+const ROUND = gql`
+mutation Mutation($input: RoundInput) {
+  saveRound(input: $input) {
+    id
+  }
+}
+`
+
+const FinishRoundScreen = ({navigation}) => {
 
     const round = useSelector(state => state.round);
     const course = useSelector(state => state.course);
+    const playerId = useSelector(state => state.playerId);
+
+    const [savePlayedRound] = useMutation(ROUND);
+
+    const [loading, setLoading] = useState(false);
 
     const data = {
         labels: ["GIR", "FIR", "2-Putts"],
         data: [round.round.getRoundGIR(round.round.holesScore.length), round.round.getRoundFW(round.round.holesScore.length), round.round.getRoundPutts(round.round.holesScore.length)]
     };
+
+    const goToHome = () => {
+        navigation.navigate('Home');
+    }
+
+    const saveRound = () => {
+        const holes = [];
+        setLoading(true);
+        round.round.holesScore.map(h => {
+            holes.push({
+                num: h.num,
+                score: h.score,
+                putts: h.putts,
+                fairway: h.fairway,
+            });
+        })
+        savePlayedRound({
+            variables: {
+                input: {
+                    playerId: playerId.playerId,
+                    courseId: course.course.id,
+                    playedHoles: holes,
+                }
+            }
+        }).then(r => {
+            setLoading(false);
+            navigation.navigate('Home');
+        }).catch(e => {
+            setLoading(false);
+        });
+    }
+
+    if (loading) return <View style={styles.loadingContainer}>
+                            <ActivityIndicator
+                                color = '#4a8a3f'
+                                size = "large"
+                                style = {styles.activityIndicator}/>
+                        </View>
 
     return (
         <View>
@@ -32,10 +85,10 @@ const FinishRoundScreen = (props) => {
             />
 
             <View style={styles.buttons}>
-                <TouchableOpacity style={[styles.button,{backgroundColor:"firebrick",}]}>
+                <TouchableOpacity style={[styles.button,{backgroundColor:"firebrick"}]} onPress={goToHome}>
                     <Text style={styles.buttonText}>Delete</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, {backgroundColor:"#4a8a3f"}]}>
+                <TouchableOpacity style={[styles.button, {backgroundColor:"#4a8a3f"}]} onPress={saveRound}>
                     <Text style={styles.buttonText}>Save</Text>
                 </TouchableOpacity>
             </View>
@@ -73,6 +126,19 @@ const styles = StyleSheet.create({
         height:"8%",
         marginTop:"10%",
         marginBottom: "30%",
+    },
+
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 80
     },
 
     button:{

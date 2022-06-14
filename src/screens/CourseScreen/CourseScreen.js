@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View, ScrollView} from 'react-native';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
-import {gql, useQuery} from '@apollo/client';
-import {Course, Hole} from "../../models/Course";
+import {gql, useLazyQuery, useQuery} from '@apollo/client';
+import {Course, Hole, Review} from "../../models/Course";
 import {useDispatch, useSelector} from "react-redux";
 import {saveCourse} from "./courseSlice";
 import Scorecard from "./Scorecard";
@@ -39,18 +39,29 @@ const FULL_COURSE = gql`
 `;
 
 
+const GET_REVIEWS = gql`
+query Query($id: String!) {
+        getReviewsByCourse(id: $id) {
+            ratingNumber
+            ratingText
+            userId
+        }
+}
+`
+
+
 function CourseScreen({navigation}) {
 
     //Hooks
     const dispatch = useDispatch();
     const courseId = useSelector(state => state.courseId);
-    console.log(courseId)
 
     const [course, setCourse] = useState({});
     const [loadingGolfCourse, setLoadigGolfCourse] = useState(true);
+    const [average, setAverage] = useState(0);
 
     const setFullCourse = (c) => {
-        const fullCourse = new Course(c.name, c.description, {lat: parseFloat(c.location.lat), lng: parseFloat(c.location.long)});
+        const fullCourse = new Course(c.id,c.name, c.description, {lat: parseFloat(c.location.lat), lng: parseFloat(c.location.long)});
         for (let i = 0; i < c.holes.length; i++) {
             let auxHolesList = [...c.holes];
             auxHolesList = auxHolesList.sort((a,b) => {return a.num - b.num});
@@ -58,18 +69,33 @@ function CourseScreen({navigation}) {
             fullCourse.addHole(i+1,newHole);
         }
         setCourse(fullCourse);
-        setLoadigGolfCourse(false);
     }
 
-    const {loading, error, data} = useQuery(FULL_COURSE,{
+    const {error, data} = useQuery(FULL_COURSE,{
         variables: {
             id: courseId.id,
         },
         onCompleted: c => {
             setFullCourse(c.getCourse);
+            reviews();
         },
         onError: e => console.log(e)
     });
+
+    const [reviews] = useLazyQuery(GET_REVIEWS, {
+        variables: {
+            id: courseId.id,
+        },
+        onCompleted: r=> {
+            let counter = 0;
+            r.getReviewsByCourse.map(re => {
+                counter += re.ratingNumber;
+                course.addReview(new Review(re.ratingNumber, re.ratingText, re.userId));
+            });
+            setAverage(counter/course.reviews.length);
+            setLoadigGolfCourse(false);
+        }
+    })
 
 
     //Navigation Methods
@@ -78,6 +104,7 @@ function CourseScreen({navigation}) {
     }
 
     let goToReviews = () =>{
+        dispatch(saveCourse(course));
         navigation.navigate("Reviews");
     }
 
@@ -122,10 +149,10 @@ function CourseScreen({navigation}) {
                         <Text style={
                             {
                                 fontSize: 30,
-                                marginLeft:20,
+                                marginLeft:10,
                                 color: '#05375a',
                             }
-                        }>3.5</Text>
+                        }>{average}</Text>
                     </View>
                     <Text style={styles.description}>{course.description}</Text>
                     <TouchableOpacity style={styles.playButton} onPress={goToSetUp}>

@@ -3,17 +3,11 @@ import {StyleSheet} from "react-native";
 import {View,Text} from "react-native";
 import StarRating from "react-native-star-rating";
 
-
-
-
 const ReviewCard = (props) => {
-
-
 
     return (
         <View style={styles.body}>
             <View style={styles.card}>
-                <Text>{props.user}</Text>
                 <View style={styles.stars}>
                     <StarRating
                         disabled={true}

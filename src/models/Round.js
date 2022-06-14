@@ -1,3 +1,4 @@
+
 export class Round {
     options = {
         mode: 'gross',
@@ -8,7 +9,6 @@ export class Round {
     courseId;
     playDate;
     holesScore = [];
-
 
     constructor(playerId, courseId, playDate, options) {
         this.player = playerId;
@@ -96,6 +96,10 @@ export class Round {
             }
         }
         return counter/9;
+    }
+
+    saveRound = () => {
+
     }
 }
 

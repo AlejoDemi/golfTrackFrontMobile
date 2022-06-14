@@ -7,7 +7,7 @@ import {faAngleRight, faAngleLeft} from "@fortawesome/free-solid-svg-icons";
 import PutScoreScreen from "./PutScoreScreen";
 import FinishRoundScreen from "./FinishRoundScreen";
 
-const PlayGameScreen = () => {
+const PlayGameScreen = ({navigation}) => {
     const [counter, setCounter] = useState(0);
 
     const [holeNum, setHoleNum] = useState(1);
@@ -76,7 +76,7 @@ const PlayGameScreen = () => {
             </View>
             {
                 counter >= course.course.holesList.length*2 ?
-                    <FinishRoundScreen/>
+                    <FinishRoundScreen navigation={navigation}/>
                     : counter % 2 === 0
                         ? <PlayingHole ref={playScreen} hole={course.course.holesList[holeNum-1]}/>
                         : <PutScoreScreen ref={putScore} num = {holeNum} si = {course.course.holesList[holeNum-1].scoringIndex} par={course.course.holesList[holeNum - 1].par}/>

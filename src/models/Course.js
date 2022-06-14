@@ -4,8 +4,10 @@ export class Course {
     description;
     clubHouseLocation;
     holesList = [];
+    reviews = [];
 
-    constructor(name, description, clubHouseLocation) {
+    constructor(id,name, description, clubHouseLocation) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.clubHouseLocation = clubHouseLocation;
@@ -31,6 +33,10 @@ export class Course {
         }
         return counter
     }
+
+    addReview = (review) => {
+        this.reviews.push(review);
+    }
 }
 
 
@@ -53,5 +59,18 @@ export class Hole {
         this.distance = distance;
         this.locationMidOfGreen = locationMidOfGreen;
         this.locationTeebox = locationTeebox;
+    }
+}
+
+export class Review{
+    rating;
+    description;
+    userId;
+
+
+    constructor(rating, description, userId) {
+        this.rating = rating;
+        this.description = description;
+        this.userId = userId;
     }
 }

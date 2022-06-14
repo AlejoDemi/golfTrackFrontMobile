@@ -6,17 +6,20 @@ import * as Animatable from 'react-native-animatable';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {gql, useMutation} from "@apollo/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useDispatch} from "react-redux";
+import {saveId} from "./UserSlice";
 
 const LOGIN = gql`
-    mutation Mutation($input: LoginPlayerInput) {
+mutation Mutation($input: LoginPlayerInput) {
   loginPlayer(input: $input){
-  token
+      id
+      token
   }
 }   `
 
 function LogInScreen({navigation}) {
 
-
+    const dispatch = useDispatch();
     const [dataInputed, setData] = useState({
         email:'',
         password:'',
@@ -27,7 +30,11 @@ function LogInScreen({navigation}) {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const [login, {data,loading}] = useMutation(LOGIN);
+    const [login, {data,loading}] = useMutation(LOGIN, {
+        onCompleted: r => {
+            dispatch(saveId(r.loginPlayer.id));
+        }
+    });
 
     const textInputChange = (val) => {
         if (/^[a-zA-Z0-9.!#$%&’+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/.test(val)){
@@ -73,6 +80,7 @@ function LogInScreen({navigation}) {
             },
         }).then(r => {
             AsyncStorage.setItem('TOKEN',r.data.loginPlayer.token);
+            AsyncStorage.setItem('PLAYER_ID',r.data.loginPlayer.id);
             setIsLoading(false);
             navigation.navigate('Home')}
         ).catch(e =>{
