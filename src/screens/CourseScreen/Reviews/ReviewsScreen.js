@@ -57,9 +57,7 @@ export default function ReviewsScreen({navigation}) {
                         rating={starCount}
                         selectedStar={setStarCount}
                         fullStarColor={"gold"}
-                        halfStarEnabled
                     />
-                    <Text style={styles.number}>{starCount}</Text>
                 </View>
                 <View style={styles.comment}>
                     <TextInput
@@ -82,7 +80,6 @@ export default function ReviewsScreen({navigation}) {
 
             </View>
             <View style={styles.reviews}>
-                <Text style={styles.reviewsTitle}>Other players opinions</Text>
                 {reviews.map((review,index)=>
                     <ReviewCard rate={review.rating} comment={review.description}/>)}
             </View>
@@ -99,16 +96,20 @@ const styles=StyleSheet.create({
 
     header:{
         height:100,
-        backgroundColor:"green"
     },
 
     rate:{
-        height:400,
-        backgroundColor:"white"
+        height:300,
+        backgroundColor:"white",
+        width:"95%",
+        alignSelf:"center",
+        borderRadius:20,
+        marginBottom:15,
     },
 
     reviews:{
-        display:"flex"
+        display:"flex",
+        width:"100%",
     },
 
     reviewsTitle:{
@@ -121,7 +122,7 @@ const styles=StyleSheet.create({
         width:"80%",
         marginTop:10,
         alignSelf:"center",
-        height:"30%"
+        height:"20%"
     },
 
     number:{
@@ -140,21 +141,21 @@ const styles=StyleSheet.create({
         color:"grey",
         borderWidth:2,
         alignSelf:"center",
-        height:"100%",
+        height:"80%",
         fontSize:20,
         borderColor:"grey",
         borderRadius:15
     },
 
     rateButtonContainer:{
-        height:"20%",
+        height:"30%",
         display:"flex",
         justifyContent:"center"
     },
 
 
     rateButton:{
-        height:"70%",
+        height:"50%",
         width:"30%",
         alignSelf:"center",
         backgroundColor:"green",
