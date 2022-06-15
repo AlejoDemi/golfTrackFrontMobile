@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import * as Animatable from 'react-native-animatable';
 import {Round} from "../../models/Round";
 import {saveRound} from "./RoundSlice";
@@ -10,7 +10,15 @@ export default function GameSetUpScreen({navigation}){
 
     const AnimatableTouchableOpacity = Animatable.createAnimatableComponent(TouchableOpacity);
     const dispatch = useDispatch();
+    const unit = useSelector(state => state.unit)
     const course = useSelector(state => state.course);
+    const [multiplier, setMultiplier] = useState(1);
+
+    useEffect(() => {
+        if (unit.unit === 'meters'){
+            setMultiplier(0.9144);
+        }
+    })
 
     const [scoring, setScoring] = useState('gross');
     const [options, setOptions] = useState('scoring');
@@ -29,9 +37,8 @@ export default function GameSetUpScreen({navigation}){
                 <View>
                     <Text style={styles.dataText}>{course.course.name}</Text>
                     <Text style={styles.dataSubtitle}>{course.course.holesList.length} holes - Par {course.course.getPar(course.course.holesList.length)}</Text>
-                    <Text style={styles.dataSubtitle}>{course.course.getDistance(course.course.holesList.length)} yards</Text>
+                    <Text style={styles.dataSubtitle}>{Math.round(course.course.getDistance(course.course.holesList.length)*multiplier) + " " + unit.unit}</Text>
                 </View>
-                <Text style={[styles.dataText]}>Alejo Demit</Text>
             </View>
             <View style={{flex:6}}>
                 <View style={styles.input}>

@@ -1,10 +1,17 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
+import {useDispatch, useSelector} from "react-redux";
 
 
 const Scorecard = (props) => {
+    const unit = useSelector(state => state.unit);
+
     const fullData = () => {
+        let multipier = 1;
+        if (unit.unit === 'meters'){
+            multipier = 0.9144;
+        }
         const data = [];
         const holes = [];
         const pars = [];
@@ -13,7 +20,7 @@ const Scorecard = (props) => {
         for (const hole of course.holesList) {
             holes.push(hole.num);
             pars.push(hole.par);
-            distances.push(hole.distance);
+            distances.push(Math.round(hole.distance*multipier));
             handicap.push(hole.scoringIndex);
         }
         data.push(holes);

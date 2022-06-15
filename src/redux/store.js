@@ -11,6 +11,7 @@ export default configureStore({
         round: roundReducer,
         user: userReducer,
         playerId: userReducer,
+        unit: courseIdReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false

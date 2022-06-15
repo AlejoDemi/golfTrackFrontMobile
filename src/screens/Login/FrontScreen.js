@@ -15,6 +15,7 @@ import * as Animatable from 'react-native-animatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useDispatch} from "react-redux";
 import {saveId} from "./UserSlice";
+import {setUnit} from "../HomeScreen/PlayScreenSlice";
 
 function FrontScreen({navigation}) {
 
@@ -22,10 +23,17 @@ function FrontScreen({navigation}) {
     useEffect(async () => {
         const token = await AsyncStorage.getItem('TOKEN');
         const id = await AsyncStorage.getItem('PLAYER_ID');
+        const unit = await AsyncStorage.getItem('UNIT');
             if (token) {
                 dispatch(saveId(id));
                 console.log(id);
                 navigation.navigate('Home');
+            }
+            if (unit){
+                console.log(unit)
+                dispatch(setUnit(unit));
+            }else{
+                await AsyncStorage.setItem('UNIT', 'yards');
             }
         }
     )

@@ -54,26 +54,16 @@ function PlayScreen({navigation}) {
         dispatch(setCourseId(id));
         navigation.navigate("Course");
     };
-/*
-    useEffect(() => {
-        (async () => {
-            let {status} = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
-                return;
-            }
 
-            let loc = await Location.getCurrentPositionAsync();
-            console.log(loc);
-            await setLocation({
-                lat: loc.coords.latitude,
-                lng: loc.coords.longitude
-            })
-        })();
+    useEffect(async () => {
+        let {status} = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+        }
     }, []);
 
     //Methods
-
+/*
 
 
     //Gets distance between 2 coords in yards

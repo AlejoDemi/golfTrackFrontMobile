@@ -8,12 +8,14 @@ import {
     Platform,
     TextInput,
     ImageBackground,
-    ActivityIndicator
+    ActivityIndicator,
+    Switch
 } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import {gql, useMutation, useQuery} from "@apollo/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {setUnit} from "./HomeScreen/PlayScreenSlice";
 
 const USER_DATA = gql`
 query Query($id: String!){
@@ -35,6 +37,9 @@ mutation Mutation($input: EditPlayerInput){
 
 export default function EditProfileScreen({navigation}) {
 
+    const playerId = useSelector(state => state.playerId);
+    const unit = useSelector(state => state.unit);
+    const dispatch = useDispatch();
     const [name, setName] = useState("Alejo");
     const [email, setEmail] = useState("alejo@alejo");
     const [password, setPass] = useState("");
@@ -42,11 +47,24 @@ export default function EditProfileScreen({navigation}) {
     const [errorMsg, setErrorMsg] = useState("");
     const [isLoading, setLoading] = useState(false);
 
-    const playerId = useSelector(state => state.playerId);
+    const [isEnabled, setEnabled] = useState(unit.unit === 'meters');
 
     const logOut = async () => {
         await AsyncStorage.clear();
         navigation.navigate('FrontScreen');
+    }
+
+    const toggleSwitch = async () => {
+        if (isEnabled){
+            await AsyncStorage.setItem('UNIT', 'yards');
+            dispatch(setUnit('yards'));
+            setEnabled(!isEnabled);
+        }else{
+            await AsyncStorage.setItem('UNIT', 'meters');
+            dispatch(setUnit('meters'));
+            setEnabled(!isEnabled);
+        }
+        setEnabled(!isEnabled);
     }
 
     const {data, loading, error} = useQuery(USER_DATA, {
@@ -131,6 +149,19 @@ export default function EditProfileScreen({navigation}) {
                         <TextInput style={styles.card} secureTextEntry={true} onChangeText={(val) => setPass(val)}>{password}</TextInput>
                     </View>
 
+                    <View style={styles.switch}>
+                        <Text style={styles.switchText}>Yards</Text>
+                        <Switch
+                            trackColor={{ false: "#81b0ff", true: "#81b0ff" }}
+                            style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+                            thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={isEnabled}
+                        />
+                        <Text style={styles.switchText}>Meters</Text>
+                    </View>
+
                     <View style={styles.buttons}>
                         <TouchableOpacity style={[styles.button, {backgroundColor: "firebrick",}]} onPress={logOut}>
                             <Text style={styles.buttonText}>Log Out</Text>
@@ -153,7 +184,17 @@ export default function EditProfileScreen({navigation}) {
 }
 
 const styles = StyleSheet.create({
-
+    switch: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 20
+    },
+    switchText: {
+        fontSize: 20,
+        fontWeight: "bold",
+        margin: 20,
+        color: 'dimgray'
+    },
     globalContainer:{
         flex: 1,
         backgroundColor:"#4a8a3f",

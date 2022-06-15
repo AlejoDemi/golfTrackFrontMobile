@@ -1,14 +1,17 @@
 import React, {createRef, forwardRef, useEffect, useImperativeHandle, useRef, useState} from 'react';
-import {Dimensions, StyleSheet, Text, View} from "react-native";
+import {Dimensions, PermissionsAndroid, StyleSheet, Text, View} from "react-native";
 import MapView, {AnimatedRegion, Marker, MarkerAnimated, Polyline, PROVIDER_GOOGLE} from "react-native-maps";
 import {faCircleDot, faGolfBallTee, faFlag} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
 import * as Location from "expo-location";
+import {useSelector} from "react-redux";
 
 const PlayingHole = forwardRef((props, ref) => {
     const hole = props.hole;
     const mapView = createRef();
     const [myMarker, setMyMarker] = useState(null);
+    const unit = useSelector(state => state.unit);
+
 
     const restoreValues = () => {
         setDraggableLocation({
@@ -79,8 +82,11 @@ const PlayingHole = forwardRef((props, ref) => {
             Math.cos(toRad(parseFloat(loc2.lat))) *
             Math.cos(toRad(parseFloat(loc1.lat))) *
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-        return Math.round(13928280.2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+        let multiplier = 1;
+        if (unit.unit === 'meters'){
+            multiplier = 0.9144;
+        }
+        return Math.round(13928280.2 * multiplier * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
     }
 
     const angleFromCoordinate = (lat1, long1, lat2, long2) => {
