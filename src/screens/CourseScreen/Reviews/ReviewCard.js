@@ -45,14 +45,18 @@ const styles = StyleSheet.create({
         display:"flex",
         width:"90%",
         height:"100%",
-        borderWidth:1,
         borderRadius:10,
+        padding:10,
+        zIndex:2,
+        elevation:2,
+
     },
 
 
     stars:{
         width:"20%",
         marginLeft:10,
+        marginBottom:10,
     },
 
     text:{

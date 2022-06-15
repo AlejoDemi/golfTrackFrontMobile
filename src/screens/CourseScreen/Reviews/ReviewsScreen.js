@@ -32,6 +32,10 @@ export default function ReviewsScreen({navigation}) {
         onError: e => console.log(e),
     });
 
+    const goBack = () => {
+        navigation.goBack();
+    }
+
     const submitRate = () => {
         saveReview({
             variables: {
@@ -48,7 +52,15 @@ export default function ReviewsScreen({navigation}) {
 
     return(
         <ScrollView style={styles.body}>
-            <View style={styles.header}/>
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.back} onPress={goBack}>
+                    <Feather
+                        name="arrow-left"
+                        color="grey"
+                        size={40}
+                    />
+                </TouchableOpacity>
+            </View>
             <View style={styles.rate}>
                 <View style={styles.stars}>
                     <StarRating
@@ -141,27 +153,30 @@ const styles=StyleSheet.create({
         color:"grey",
         borderWidth:2,
         alignSelf:"center",
-        height:"80%",
+        height:"100%",
         fontSize:20,
         borderColor:"grey",
-        borderRadius:15
+        borderRadius:15,
+        padding:10
     },
 
     rateButtonContainer:{
         height:"30%",
         display:"flex",
-        justifyContent:"center"
+        justifyContent:"center",
+
     },
 
 
     rateButton:{
         height:"50%",
         width:"30%",
-        alignSelf:"center",
+        alignSelf:"flex-end",
         backgroundColor:"green",
-        borderRadius:15,
+        borderRadius:10,
         display:"flex",
-        justifyContent:"center"
+        justifyContent:"center",
+        marginRight:20,
     },
 
     buttonText:{
@@ -170,6 +185,12 @@ const styles=StyleSheet.create({
         alignSelf:"center",
         fontSize:20,
 
+    },
+
+    back:{
+        display:"flex",
+        marginTop:50,
+        marginLeft:15
     }
 
 
