@@ -152,7 +152,7 @@ function CourseScreen({navigation}) {
                                 marginLeft:10,
                                 color: '#05375a',
                             }
-                        }>{average}</Text>
+                        }>{average.toFixed(1)}</Text>
                     </View>
                     <Text style={styles.description}>{course.description}</Text>
                     <TouchableOpacity style={styles.playButton} onPress={goToSetUp}>

@@ -6,7 +6,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
-import FeedScreen from "../screens/FeedScreen";
+import FeedScreen from "../screens/FeedScreen/FeedScreen";
 import PlayScreen from "../screens/HomeScreen/PlayScreen";
 import BubbleTabBar from "./react-native-bubble-tabbar/lib";
 import EditProfileScreen from "../screens/EditProfileScreen";
