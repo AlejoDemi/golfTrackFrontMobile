@@ -32,6 +32,10 @@ export default function ReviewsScreen({navigation}) {
         onError: e => console.log(e),
     });
 
+    const goBack = () => {
+        navigation.goBack();
+    }
+
     const submitRate = () => {
         saveReview({
             variables: {
@@ -48,7 +52,15 @@ export default function ReviewsScreen({navigation}) {
 
     return(
         <ScrollView style={styles.body}>
-            <View style={styles.header}/>
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.back} onPress={goBack}>
+                    <Feather
+                        name="arrow-left"
+                        color="grey"
+                        size={40}
+                    />
+                </TouchableOpacity>
+            </View>
             <View style={styles.rate}>
                 <View style={styles.stars}>
                     <StarRating
@@ -57,9 +69,7 @@ export default function ReviewsScreen({navigation}) {
                         rating={starCount}
                         selectedStar={setStarCount}
                         fullStarColor={"gold"}
-                        halfStarEnabled
                     />
-                    <Text style={styles.number}>{starCount}</Text>
                 </View>
                 <View style={styles.comment}>
                     <TextInput
@@ -82,7 +92,6 @@ export default function ReviewsScreen({navigation}) {
 
             </View>
             <View style={styles.reviews}>
-                <Text style={styles.reviewsTitle}>Other players opinions</Text>
                 {reviews.map((review,index)=>
                     <ReviewCard rate={review.rating} comment={review.description}/>)}
             </View>
@@ -99,16 +108,20 @@ const styles=StyleSheet.create({
 
     header:{
         height:100,
-        backgroundColor:"green"
     },
 
     rate:{
-        height:400,
-        backgroundColor:"white"
+        height:300,
+        backgroundColor:"white",
+        width:"95%",
+        alignSelf:"center",
+        borderRadius:20,
+        marginBottom:15,
     },
 
     reviews:{
-        display:"flex"
+        display:"flex",
+        width:"100%",
     },
 
     reviewsTitle:{
@@ -121,7 +134,7 @@ const styles=StyleSheet.create({
         width:"80%",
         marginTop:10,
         alignSelf:"center",
-        height:"30%"
+        height:"20%"
     },
 
     number:{
@@ -143,24 +156,27 @@ const styles=StyleSheet.create({
         height:"100%",
         fontSize:20,
         borderColor:"grey",
-        borderRadius:15
+        borderRadius:15,
+        padding:10
     },
 
     rateButtonContainer:{
-        height:"20%",
+        height:"30%",
         display:"flex",
-        justifyContent:"center"
+        justifyContent:"center",
+
     },
 
 
     rateButton:{
-        height:"70%",
+        height:"50%",
         width:"30%",
-        alignSelf:"center",
+        alignSelf:"flex-end",
         backgroundColor:"green",
-        borderRadius:15,
+        borderRadius:10,
         display:"flex",
-        justifyContent:"center"
+        justifyContent:"center",
+        marginRight:20,
     },
 
     buttonText:{
@@ -169,6 +185,12 @@ const styles=StyleSheet.create({
         alignSelf:"center",
         fontSize:20,
 
+    },
+
+    back:{
+        display:"flex",
+        marginTop:50,
+        marginLeft:15
     }
 
 

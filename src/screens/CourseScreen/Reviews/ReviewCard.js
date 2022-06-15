@@ -15,10 +15,11 @@ const ReviewCard = (props) => {
                         rating={props.rate}
                         fullStarColor={"gold"}
                         halfStarEnabled
+                        starSize={30}
                     />
                 </View>
 
-                <Text>{props.comment}</Text>
+                <Text style={styles.text}>{props.comment}</Text>
             </View>
         </View>
     );
@@ -34,19 +35,32 @@ const styles = StyleSheet.create({
         display:"flex",
         alignItems:"center",
         justifyContent:"center",
-        marginBottom:10
+        marginBottom:10,
+
     },
 
     card:{
-       display:"flex",
+        marginTop:10,
+        backgroundColor:"white",
+        display:"flex",
         width:"90%",
         height:"100%",
-        borderBottomWidth:2,
-        borderBottomColor:"grey"
+        borderRadius:10,
+        padding:10,
+        zIndex:2,
+        elevation:2,
+
     },
 
 
     stars:{
-        width:"40%",
+        width:"20%",
+        marginLeft:10,
+        marginBottom:10,
+    },
+
+    text:{
+        marginLeft:10,
+        justifyContent:"center",
     }
 })
