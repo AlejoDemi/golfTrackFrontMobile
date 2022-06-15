@@ -172,6 +172,11 @@ function LogInScreen({navigation}) {
                         <Text style={styles.textSignUp}>Sign Up</Text>
                     </TouchableOpacity>
 
+                    <TouchableOpacity style={styles.forgotPass} onPress={() => navigation.navigate('ForgotPass')}>
+                        <Text style={styles.forgotPassText}>Forgot Password?</Text>
+
+                    </TouchableOpacity>
+
                     {
                         isLoading &&
                         <View style={styles.loadingContainer}>

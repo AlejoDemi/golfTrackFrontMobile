@@ -20,8 +20,6 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {useMutation} from "@apollo/client";
 import {gql, UseMutation} from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {saveId} from "./UserSlice";
-import {useDispatch} from "react-redux";
 
 const SIGN_UP=gql`
 mutation Mutation($input: AddPlayerInput) {
@@ -35,7 +33,6 @@ mutation Mutation($input: AddPlayerInput) {
 `
 
 function SignUpScreen({navigation}) {
-    const dispatch = useDispatch();
     const [data, setData] = useState({
         username:'',
         email:'',
@@ -127,13 +124,25 @@ function SignUpScreen({navigation}) {
                 }
             },
             onCompleted: r => {
-                navigation.navigate('LogInScreen');
+                setId(r.addPlayer.id);
+                _storeUser();
+                navigation.navigate('Home');
             },
         }).then(r => setIsLoading(false)).catch(e => {
             setIsLoading(false);
             setError(e.message);
         });
     }
+
+    const _storeUser = async () => {
+        try {
+            await AsyncStorage.setItem('@user_id', id);
+            await AsyncStorage.setItem('@user_name', data.username);
+        } catch (e) {
+            // saving error
+            console.log("Couldn't save id")
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -260,16 +269,16 @@ function SignUpScreen({navigation}) {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={signUpPlayer} style={styles.button}>
-                        <Text style={styles.textSign}>Sign Up</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('LogInScreen')} style={styles.button}>
+                        <Text style={styles.textSign}>Log In</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={[styles.signIn,{
                         borderColor:'#4a8a3f',
                         borderWidth: 1,
                         marginTop: 15,
-                    }]} onPress={() => navigation.navigate('LogInScreen')}>
-                        <Text style={styles.textSignUp} >Log In</Text>
+                    }]} onPress={signUpPlayer}>
+                        <Text style={styles.textSignUp} >Sign Up</Text>
                     </TouchableOpacity>
 
                     {

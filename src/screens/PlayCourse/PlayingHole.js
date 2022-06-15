@@ -131,7 +131,6 @@ const PlayingHole = forwardRef((props, ref) => {
                 showsCompass={false}
                 showsUserLocation={true}
                 showsMyLocationButton={false}
-                userLocationUpdateInterval={1000}
                 onUserLocationChange={e => {
                     if (distanceBetweenLocations({lat: e.nativeEvent.coordinate.latitude, lng: e.nativeEvent.coordinate.longitude},
                         hole.locationTeebox) > 500){

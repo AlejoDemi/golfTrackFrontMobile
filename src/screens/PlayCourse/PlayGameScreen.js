@@ -75,10 +75,8 @@ const PlayGameScreen = ({navigation}) => {
 
             </View>
             {
-                round.round.options.options === 'gps' && holeNum > course.course.holesList.length ?
-                    navigation.navigate('Home') :
-
-                counter >= course.course.holesList.length*2 ? <FinishRoundScreen navigation={navigation}/>
+                counter >= course.course.holesList.length*2 ?
+                    <FinishRoundScreen navigation={navigation}/>
                     : counter % 2 === 0
                         ? <PlayingHole ref={playScreen} hole={course.course.holesList[holeNum-1]}/>
                         : <PutScoreScreen ref={putScore} num = {holeNum} si = {course.course.holesList[holeNum-1].scoringIndex} par={course.course.holesList[holeNum - 1].par}/>

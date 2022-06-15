@@ -92,7 +92,6 @@ function CourseScreen({navigation}) {
                 counter += re.ratingNumber;
                 course.addReview(new Review(re.ratingNumber, re.ratingText, re.userId));
             });
-
             setAverage(counter/course.reviews.length);
             setLoadigGolfCourse(false);
         }
