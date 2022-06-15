@@ -93,7 +93,7 @@ export default function ReviewsScreen({navigation}) {
             </View>
             <View style={styles.reviews}>
                 {reviews.map((review,index)=>
-                    <ReviewCard rate={review.rating} comment={review.description}/>)}
+                    <ReviewCard key={index} rate={review.rating} comment={review.description}/>)}
             </View>
         </ScrollView>
 
@@ -112,10 +112,11 @@ const styles=StyleSheet.create({
 
     rate:{
         height:300,
+        borderColor: '#696969',
         backgroundColor:"white",
         width:"95%",
         alignSelf:"center",
-        borderRadius:20,
+        borderRadius:15,
         marginBottom:15,
     },
 
