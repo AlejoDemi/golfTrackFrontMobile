@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View,KeyboardAvoidingView} from 'react-native';
+import {Keyboard, ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View,KeyboardAvoidingView, Modal, Pressable} from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Location from 'expo-location';
@@ -28,6 +28,7 @@ function PlayScreen({navigation}) {
         lat: 0,
         lng: 0
     });
+    const [modalVisible, setModalVisible] = useState(false);
     const [loadingCC, setLoadingCC] = useState(true);
     const [errorMsg, setErrorMsg] = useState(null);
     const [courses,setCourses] = useState([]);
@@ -39,6 +40,7 @@ function PlayScreen({navigation}) {
     const { loading, error, data } = useQuery(COURSES_DEMO, {
         onCompleted: r => {
             setCourses(r.getAllCoursesDemo);
+            setModalVisible(true);
         },
     });
 
@@ -117,6 +119,34 @@ function PlayScreen({navigation}) {
         <View
             style={styles.container}
         >
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>You have an ongoing round. Would you like to continue?</Text>
+                        <View style={{flexDirection: 'row'}}>
+                            <Pressable
+                                style={[styles.buttonModal, styles.buttonClose, {backgroundColor: '#4a8a3f'}]}
+                                onPress={() => setModalVisible(!modalVisible)}
+                            >
+                                    <Text style={styles.textButton}>Yes</Text>
+                            </Pressable>
+                            <Pressable
+                                style={[styles.buttonModal, styles.buttonClose, {backgroundColor: 'firebrick'}]}
+                                onPress={() => setModalVisible(!modalVisible)}
+                            >
+                                <Text style={styles.textButton}>No</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
             <View style={styles.header}>
                 <ImageBackground
                     source={require("../../assets/fondo.jpg")}
@@ -231,9 +261,6 @@ const styles = StyleSheet.create({
     footer:{
         flex:4,
         alignContent:"center",
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-
     },
 
 
@@ -245,7 +272,7 @@ const styles = StyleSheet.create({
         marginTop:120,
         borderRadius: 20,
         width:"80%",
-        height:"20%",
+        height:"15%",
         top: '-30%',
         alignSelf:"center",
         position:"absolute",
@@ -258,7 +285,30 @@ const styles = StyleSheet.create({
         },
         justifyContent: 'center'
     },
-
+    buttonClose: {
+        backgroundColor: "#2196F3",
+    },
+    buttonModal: {
+        margin: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    textButton: {
+        margin: 5,
+        marginLeft: 10,
+        marginRight: 10,
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+        fontWeight: 'bold',
+    },
     courseBox:{
         flexDirection:"row",
         backgroundColor: 'white',
@@ -288,7 +338,29 @@ const styles = StyleSheet.create({
 
     icon:{
         alignSelf:"center",
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 25,
+        padding: 20,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 2,
+            height: 6
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 12,
+        zIndex: 10
+    },
 });
 
 export default PlayScreen;

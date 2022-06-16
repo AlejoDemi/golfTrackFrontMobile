@@ -82,13 +82,12 @@ export default function FeedScreen({navigation}) {
                 )
             })
             Promise.all(promises).then(() => {
-                console.log(roundList);
                 setRounds(roundList);
                 setLoading(false);
             });
 
         },
-        onError: e => console.log(""),
+        onError: e => console.log(e.message),
     });
 
     if (loading) return <View style={styles.loadingContainer}>
