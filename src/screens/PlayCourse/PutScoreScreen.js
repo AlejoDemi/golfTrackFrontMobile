@@ -9,6 +9,7 @@ import {
     faSquareArrowUpRight, faXmark, faXmarkCircle
 } from "@fortawesome/free-solid-svg-icons";
 import {useSelector} from "react-redux";
+import {gql, useMutation} from "@apollo/client";
 
 const COLORS = {
     selected: '#4a8a3f',
@@ -16,6 +17,14 @@ const COLORS = {
     selectedSide: '#1b8ecc',
     notSelected: '#a19f9c'
 }
+
+const ADD_HOLE = gql`
+    mutation Mutation($input: PlayedHoleInput){
+        addHole(input:$input){
+            num
+        }
+    }
+`
 
 const PutScoreScreen = forwardRef((props, ref) => {
     const holeNumber = props.num;
@@ -35,6 +44,7 @@ const PutScoreScreen = forwardRef((props, ref) => {
     }
 
 
+    const [addHole] = useMutation(ADD_HOLE);
     useEffect(() => {
         let index = -1;
         for (let i = 0; i < round.round.holesScore.length; i++) {
@@ -50,6 +60,20 @@ const PutScoreScreen = forwardRef((props, ref) => {
     },[])
 
     const addPlayedHole = (num) => {
+        addHole({
+            variables: {
+                input: {
+                    playerId: round.round.player,
+                    courseId: course.course.id,
+                    num: num,
+                    score: score,
+                    putts: putts,
+                    fairway: fairway,
+                }
+            }
+        }).then(r => {
+            console.log('Ok')
+        })
         round.round.addPlayedHole(num,netScore(score),putts,score - putts  <= (par - 2),fairway);
     }
 

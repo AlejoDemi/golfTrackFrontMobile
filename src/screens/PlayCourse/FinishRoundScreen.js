@@ -7,8 +7,8 @@ import {gql, useMutation} from "@apollo/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ROUND = gql`
-mutation Mutation($input: RoundInput) {
-  saveRound(input: $input) {
+mutation Mutation($playerId: String!) {
+  saveRound(playerId: $playerId) {
     id
   }
 }
@@ -34,28 +34,16 @@ const FinishRoundScreen = ({navigation}) => {
     }
 
     const saveRound = () => {
-        const holes = [];
         setLoading(true);
-        round.round.holesScore.map(h => {
-            holes.push({
-                num: h.num,
-                score: h.score,
-                putts: h.putts,
-                fairway: h.fairway,
-            });
-        })
         savePlayedRound({
             variables: {
-                input: {
-                    playerId: playerId.playerId,
-                    courseId: course.course.id,
-                    playedHoles: holes,
-                }
+                playerId: round.round.player,
             }
         }).then(r => {
             setLoading(false);
             navigation.navigate('Home');
         }).catch(e => {
+            console.log(e)
             setLoading(false);
         });
     }

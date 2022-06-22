@@ -3,12 +3,12 @@ import { WebView } from 'react-native-webview';
 import {ActivityIndicator, Platform, View, StyleSheet, StatusBar, Text, ScrollView, RefreshControl} from "react-native";
 import {gql, useLazyQuery, useQuery} from "@apollo/client";
 import {useDispatch, useSelector} from "react-redux";
-import FeedCard from "./FeedCard";
+import RoundCard from "./RoundCard";
 
 const ROUNDS_DATA = gql`
 query Query($id: String!){
-    getRoundsByPlayer(id: $id){
-        courseId
+    getRoundsByCourse(id: $id){
+        playerId
         playDate
         playedHoles {
             score
@@ -17,20 +17,20 @@ query Query($id: String!){
 }
 `
 
-const COURSE_DATA = gql`
+const PLAYER_DATA = gql`
 query QueryC($id: String!){
-    getCourse(id: $id){
-        name
+    getPlayerInfo(id: $id){
+        fullname
     }
 }
 `
 
-export default function FeedScreen({navigation}) {
+export default function RoundScreen({navigation}) {
 
-    const playerId = useSelector(state => state.playerId);
+    const course = useSelector(state => state.course);
 
     const [rounds, setRounds] = useState([]);
-    const [courseName] = useLazyQuery(COURSE_DATA);
+    const [playerName] = useLazyQuery(PLAYER_DATA);
     const [loading, setLoading] = useState(true);
 
     const [refreshing, setRefreshing] = useState(false);
@@ -53,15 +53,15 @@ export default function FeedScreen({navigation}) {
 
     const [get,{error, data}] = useLazyQuery(ROUNDS_DATA,{
         variables: {
-            id: playerId.playerId,
+            id: course.course.id,
         },
         onCompleted: r => {
             let roundList = [];
-            r.getRoundsByPlayer.map(round => {
+            r.getRoundsByCourse.map(round => {
                 roundList.push({
-                    courseId: round.courseId,
+                    playerId: round.playerId,
                     date: round.playDate,
-                    courseName : "",
+                    playerName : "",
                     score: fullScore(round.playedHoles),
                 });
             });
@@ -69,14 +69,14 @@ export default function FeedScreen({navigation}) {
             const promises = [];
             roundList.forEach((r,i) => {
                 promises.push(
-                    courseName({
+                    playerName({
                         variables: {
-                            id: r.courseId,
+                            id: r.playerId,
                         },
                     }).then(res => {
                         roundList[i] = {
                             ...roundList[i],
-                            courseName: res.data.getCourse.name,
+                            playerName: res.data.getPlayerInfo.fullname,
                         }
                     })
                 )
@@ -99,22 +99,21 @@ export default function FeedScreen({navigation}) {
 
     return (
         <View>
-            <StatusBar backgroundColor="transparent" translucent barStyle='dark-content'/>
             <ScrollView
                 style={{marginTop: 20}}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
             >
-                <Text style = {styles.title}>My Rounds</Text>
+                <Text style = {styles.title}>Course Rounds</Text>
                 {
                     rounds.sort((a,b) => {
                         return b.date - a.date;
                     }).map((r,i) => {
                         return (
-                            <FeedCard key={i} course={r.courseName} date={new Date(parseInt(r.date)).getDate()}
-                                      month = {new Date(parseInt(r.date)).getMonth()}
-                                      year={new Date(parseInt(r.date)).getFullYear()} score={r.score}/>
+                            <RoundCard key={i} player={r.playerName} date={new Date(parseInt(r.date)).getDate()}
+                                       month = {new Date(parseInt(r.date)).getMonth()}
+                                       year={new Date(parseInt(r.date)).getFullYear()} score={r.score}/>
                         )
                     })
                 }

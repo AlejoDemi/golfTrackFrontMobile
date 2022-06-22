@@ -4,13 +4,22 @@ import React, {useEffect, useState} from "react";
 import * as Animatable from 'react-native-animatable';
 import {Round} from "../../models/Round";
 import {saveRound} from "./RoundSlice";
+import {gql, useMutation} from "@apollo/client";
 
+const NEW_ROUND = gql`
+mutation Mutation($input: RoundInput){
+newRound(input: $input){
+    id
+    }
+}
+`
 
 export default function GameSetUpScreen({navigation}){
 
     const AnimatableTouchableOpacity = Animatable.createAnimatableComponent(TouchableOpacity);
     const dispatch = useDispatch();
-    const unit = useSelector(state => state.unit)
+    const unit = useSelector(state => state.unit);
+    const playerId = useSelector(state => state.playerId);
     const course = useSelector(state => state.course);
     const [multiplier, setMultiplier] = useState(1);
 
@@ -20,13 +29,26 @@ export default function GameSetUpScreen({navigation}){
         }
     })
 
+    const [newRound] = useMutation(NEW_ROUND);
+
     const [scoring, setScoring] = useState('gross');
     const [options, setOptions] = useState('scoring');
     const [handicap, setHandicap] = useState(0);
 
     const playButton = () => {
-        dispatch(saveRound(new Round('1234',course.course.id,new Date(Date.now()),{mode:scoring, handicap: handicap, options:options})));
-        navigation.navigate("PlayGame");
+        dispatch(saveRound(new Round(playerId.playerId,course.course.id,new Date(Date.now()),{mode:scoring, handicap: handicap, options:options})));
+        newRound({
+            variables: {
+                input:{
+                    playerId: playerId.playerId,
+                    courseId: course.course.id
+                }
+            },
+            onCompleted: r => {
+                navigation.navigate("PlayGame");
+                console.log('Ok')
+            }
+        })
     }
 
 

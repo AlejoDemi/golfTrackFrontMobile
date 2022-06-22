@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Dimensions, TouchableOpacity, StatusBar} from 'react-native';
+import {StyleSheet, Text, View, Dimensions, TouchableOpacity, StatusBar, BackHandler} from 'react-native';
 import {useSelector} from "react-redux";
 import React, {createRef, useEffect, useRef, useState} from "react";
 import PlayingHole from "./PlayingHole";
@@ -16,6 +16,11 @@ const PlayGameScreen = ({navigation}) => {
 
     const putScore = useRef();
     const playScreen = useRef();
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () => backHandler.remove()
+    }, [])
 
     const forwardPress = () => {
         if (round.round.options.options === 'scoring'){

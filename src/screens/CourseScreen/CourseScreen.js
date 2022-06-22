@@ -108,6 +108,11 @@ function CourseScreen({navigation}) {
         navigation.navigate("Reviews");
     }
 
+    let goToRounds = () => {
+        dispatch(saveCourse(course));
+        navigation.navigate("Rounds");
+    }
+
     let goToSetUp = () =>{
         dispatch(saveCourse(course));
         navigation.navigate("SetUp");
@@ -166,7 +171,16 @@ function CourseScreen({navigation}) {
                             }
                         }> Play</Text>
                     </TouchableOpacity>
-
+                    <TouchableOpacity style={styles.roundsButton} onPress={goToRounds}>
+                        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                            <Text
+                                style={styles.reviews}>Rounds</Text>
+                            <Feather name="chevrons-right"
+                                     size={25}
+                                     style={{marginTop:20}}
+                            />
+                        </View>
+                    </TouchableOpacity>
                     <Text style={{
                         fontWeight:"bold",
                         fontSize:20,
@@ -261,11 +275,20 @@ const styles=StyleSheet.create({
     },
 
     playButton:{
+        flex: 1,
         width:"40%",
         backgroundColor: '#4a8a3f',
         alignSelf:"center",
         height:50,
         borderRadius:20,
+        marginTop: 10,
+    },
+
+    roundsButton:{
+        flex: 1,
+        width:"25%",
+        alignSelf:"center",
+        height:50,
         marginTop: 10,
     },
 
