@@ -269,16 +269,16 @@ function SignUpScreen({navigation}) {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('LogInScreen')} style={styles.button}>
-                        <Text style={styles.textSign}>Log In</Text>
+                    <TouchableOpacity onPress={signUpPlayer} style={styles.button}>
+                        <Text style={styles.textSign}>Sign Up</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={[styles.signIn,{
                         borderColor:'#4a8a3f',
                         borderWidth: 1,
                         marginTop: 15,
-                    }]} onPress={signUpPlayer}>
-                        <Text style={styles.textSignUp} >Sign Up</Text>
+                    }]} onPress={() => navigation.navigate('LogInScreen')}>
+                        <Text style={styles.textSignUp} >Log in</Text>
                     </TouchableOpacity>
 
                     {

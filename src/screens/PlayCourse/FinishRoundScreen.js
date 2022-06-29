@@ -14,6 +14,14 @@ mutation Mutation($playerId: String!) {
 }
 `
 
+const DELETE_ROUND = gql`
+mutation Mutation($playerId: String!) {
+  deleteRound(playerId: $playerId) {
+    id
+  }
+}
+`
+
 const FinishRoundScreen = ({navigation}) => {
 
     const round = useSelector(state => state.round);
@@ -21,6 +29,7 @@ const FinishRoundScreen = ({navigation}) => {
     const playerId = useSelector(state => state.playerId);
 
     const [savePlayedRound] = useMutation(ROUND);
+    const [deletePlayedRound] = useMutation(DELETE_ROUND);
 
     const [loading, setLoading] = useState(false);
 
@@ -30,7 +39,17 @@ const FinishRoundScreen = ({navigation}) => {
     };
 
     const goToHome = () => {
-        navigation.navigate('Home');
+        deletePlayedRound({
+            variables: {
+                playerId: round.round.player,
+            }
+        }).then(r => {
+            setLoading(false);
+            navigation.navigate('Home');
+        }).catch(e => {
+            console.log(e)
+            setLoading(false);
+        });
     }
 
     const saveRound = () => {

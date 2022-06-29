@@ -55,7 +55,7 @@ function FrontScreen({navigation}) {
                         style={styles.footer}
                         animation="fadeInUpBig"
                     >
-                        <Text style={styles.title}>Sign in with your account</Text>
+                        <Text style={styles.title}>Sign in with your mail</Text>
                         <TouchableOpacity onPress={goToLogin} style={styles.button}>
                             <Text style={styles.textSign}>Login</Text>
                             <MaterialIcons
@@ -63,6 +63,7 @@ function FrontScreen({navigation}) {
                                 color="#fff"
                                 size={20}/>
                         </TouchableOpacity>
+                        <Text style={styles.title}>Sign in with another account</Text>
                     </Animatable.View>
                 </ImageBackground>
             </View>
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         height:'35%',
-        flex: 1,
+        flex: 3,
         backgroundColor: '#fff',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
         color: '#05375a',
         fontSize: 30,
         fontWeight: 'bold',
-        marginBottom:50
+        marginBottom:30
     },
     text: {
         color: 'grey',
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         justifyContent: 'center',
         alignItems: 'center',
-
+        marginBottom: 30,
     },
     signIn: {
         width: 150,

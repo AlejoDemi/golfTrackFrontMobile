@@ -3,8 +3,8 @@ import {Keyboard, ActivityIndicator, ImageBackground, StyleSheet, Text, Touchabl
 import {Searchbar} from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Location from 'expo-location';
-import {gql, useQuery} from "@apollo/client";
-import {useDispatch} from "react-redux";
+import {gql, useMutation, useQuery} from "@apollo/client";
+import {useDispatch, useSelector} from "react-redux";
 import {setCourseId} from "./PlayScreenSlice";
 
 const COURSES_DEMO = gql`
@@ -17,12 +17,36 @@ const COURSES_DEMO = gql`
         }
 }   `
 
+const ONGOING_ROUND = gql`
+query Query($id: String!){
+    getOngoingRound(id: $id){
+        id
+        courseId
+        playedHoles{
+            num
+            score
+        }
+    }
+}
+`
+
+
+const DELETE_ROUND = gql`
+mutation Mutation($playerId: String!){
+    deleteRound(playerId: $playerId){
+        id
+    }
+}
+`
+
 
 function PlayScreen({navigation}) {
 
 
     //Hooks
     const dispatch = useDispatch();
+
+    const playerId = useSelector(state => state.playerId);
 
     const [location, setLocation] = useState({
         lat: 0,
@@ -37,12 +61,24 @@ function PlayScreen({navigation}) {
         distance: 100000000,
     });
 
-    const { loading, error, data } = useQuery(COURSES_DEMO, {
+    const { loading, error } = useQuery(COURSES_DEMO, {
         onCompleted: r => {
             setCourses(r.getAllCoursesDemo);
-            setModalVisible(true);
         },
     });
+
+    const {data} = useQuery(ONGOING_ROUND,{
+        variables: {
+            id: playerId.playerId,
+        },
+        onCompleted: r => {
+            console.log(r);
+            setModalVisible(true)
+        },
+        onError: e => console.log(e),
+    });
+
+    const [deleteR] = useMutation(DELETE_ROUND);
 
     const[searchCourse,setSearchCourse]=useState('');
 
@@ -56,6 +92,15 @@ function PlayScreen({navigation}) {
         dispatch(setCourseId(id));
         navigation.navigate("Course");
     };
+
+    const deleteRound = () =>{
+        setModalVisible(false)
+        deleteR({
+            variables: {
+                playerId: playerId.playerId,
+            },
+        })
+    }
 
     useEffect(async () => {
         let {status} = await Location.requestForegroundPermissionsAsync();
@@ -139,7 +184,7 @@ function PlayScreen({navigation}) {
                             </Pressable>
                             <Pressable
                                 style={[styles.buttonModal, styles.buttonClose, {backgroundColor: 'firebrick'}]}
-                                onPress={() => setModalVisible(!modalVisible)}
+                                onPress={deleteRound}
                             >
                                 <Text style={styles.textButton}>No</Text>
                             </Pressable>
