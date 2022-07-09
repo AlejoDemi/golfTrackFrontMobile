@@ -39,7 +39,6 @@ export class Round {
         for (let i = 0; i < holeNum; i++) {
             counter += this.holesScore[holeNum-9+i].putts;
         }
-        console.log(counter)
 
         return counter
     }

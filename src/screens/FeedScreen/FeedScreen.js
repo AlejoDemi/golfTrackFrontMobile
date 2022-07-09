@@ -1,6 +1,16 @@
 import React, {Component, useCallback, useEffect, useState} from 'react';
 import { WebView } from 'react-native-webview';
-import {ActivityIndicator, Platform, View, StyleSheet, StatusBar, Text, ScrollView, RefreshControl} from "react-native";
+import {
+    ActivityIndicator,
+    Platform,
+    View,
+    StyleSheet,
+    StatusBar,
+    Text,
+    ScrollView,
+    RefreshControl,
+    BackHandler
+} from "react-native";
 import {gql, useLazyQuery, useQuery} from "@apollo/client";
 import {useDispatch, useSelector} from "react-redux";
 import FeedCard from "./FeedCard";
@@ -8,6 +18,7 @@ import FeedCard from "./FeedCard";
 const ROUNDS_DATA = gql`
 query Query($id: String!){
     getRoundsByPlayer(id: $id){
+        id
         courseId
         playDate
         playedHoles {
@@ -39,6 +50,11 @@ export default function FeedScreen({navigation}) {
        get();
     },[loading]);
 
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+        return () => backHandler.remove()
+    }, [])
+
     const onRefresh = useCallback(() => {
         setLoading(true);
     },[]);
@@ -59,6 +75,7 @@ export default function FeedScreen({navigation}) {
             let roundList = [];
             r.getRoundsByPlayer.map(round => {
                 roundList.push({
+                    id: round.id,
                     courseId: round.courseId,
                     date: round.playDate,
                     courseName : "",
@@ -114,7 +131,9 @@ export default function FeedScreen({navigation}) {
                         return (
                             <FeedCard key={i} course={r.courseName} date={new Date(parseInt(r.date)).getDate()}
                                       month = {new Date(parseInt(r.date)).getMonth()}
-                                      year={new Date(parseInt(r.date)).getFullYear()} score={r.score}/>
+                                      year={new Date(parseInt(r.date)).getFullYear()} score={r.score}
+                                      navigation={navigation} roundId={r.id}
+                            />
                         )
                     })
                 }

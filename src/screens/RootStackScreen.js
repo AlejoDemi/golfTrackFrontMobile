@@ -13,6 +13,7 @@ import {useDispatch} from "react-redux";
 import apolloClient from "../../apollo";
 import {ApolloProvider} from "@apollo/client";
 import RoundScreen from "./CourseScreen/Rounds/RoundScreen";
+import FullRoundScreen from "./FeedScreen/FullRoundScreen";
 
 const RootStack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ const RootStackScreen = () => (
                     <RootStack.Screen name="Course" component={CourseScreen}/>
                     <RootStack.Screen name="Reviews" component={ReviewsScreen}/>
                     <RootStack.Screen name="Rounds" component={RoundScreen}/>
+                    <RootStack.Screen name="FullRound" component={FullRoundScreen}/>
                     <RootStack.Screen name="SetUp" component={GameSetUpScreen}/>
                     <RootStack.Screen name="PlayGame" component={PlayGameScreen} />
             </RootStack.Navigator>

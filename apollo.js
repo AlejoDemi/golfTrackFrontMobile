@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 
 
 const GRAPHQL_ENDPOINT =
-    'https://golftrackapi.azurewebsites.net/player';
+    'https://golf-track.loca.lt/player';
 
 
 const apolloClient = () => {
