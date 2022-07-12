@@ -1,6 +1,16 @@
 import React, {Component, useCallback, useEffect, useState} from 'react';
 import { WebView } from 'react-native-webview';
-import {ActivityIndicator, Platform, View, StyleSheet, StatusBar, Text, ScrollView, RefreshControl} from "react-native";
+import {
+    ActivityIndicator,
+    Platform,
+    View,
+    StyleSheet,
+    StatusBar,
+    Text,
+    ScrollView,
+    RefreshControl,
+    BackHandler
+} from "react-native";
 import {gql, useLazyQuery, useQuery} from "@apollo/client";
 import {useDispatch, useSelector} from "react-redux";
 import RoundCard from "./RoundCard";
@@ -8,6 +18,7 @@ import RoundCard from "./RoundCard";
 const ROUNDS_DATA = gql`
 query Query($id: String!){
     getRoundsByCourse(id: $id){
+        id
         playerId
         playDate
         playedHoles {
@@ -59,6 +70,7 @@ export default function RoundScreen({navigation}) {
             let roundList = [];
             r.getRoundsByCourse.map(round => {
                 roundList.push({
+                    id: round.id,
                     playerId: round.playerId,
                     date: round.playDate,
                     playerName : "",
@@ -113,7 +125,7 @@ export default function RoundScreen({navigation}) {
                         return (
                             <RoundCard key={i} player={r.playerName} date={new Date(parseInt(r.date)).getDate()}
                                        month = {new Date(parseInt(r.date)).getMonth()}
-                                       year={new Date(parseInt(r.date)).getFullYear()} score={r.score}/>
+                                       year={new Date(parseInt(r.date)).getFullYear()} score={r.score} navigation={navigation} roundId={r.id}/>
                         )
                     })
                 }

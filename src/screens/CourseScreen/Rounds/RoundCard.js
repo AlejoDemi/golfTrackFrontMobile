@@ -1,16 +1,18 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 const RoundCard = (props) => {
     return (
-        <View style={styles.card}>
-            <View style={{flexDirection: 'row', justifyContent:'space-around'}}>
-                <View>
-                    <Text style={styles.course}>{props.player}</Text>
-                    <Text style={styles.course}>{props.date + "/" + props.month + "/" + props.year }</Text>
+        <View>
+            <TouchableOpacity style={styles.card} onPress={() => props.navigation.navigate('FullRound',{roundId: props.roundId})}>
+                <View style={{flexDirection: 'row', justifyContent:'space-around'}}>
+                    <View>
+                        <Text style={styles.course}>{props.player}</Text>
+                        <Text style={styles.course}>{props.date + "/" + props.month + "/" + props.year }</Text>
+                    </View>
+                    <Text style={styles.score}>{props.score}</Text>
                 </View>
-                <Text style={styles.score}>{props.score}</Text>
-            </View>
+            </TouchableOpacity>
         </View>
     );
 }

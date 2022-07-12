@@ -8,7 +8,7 @@ export const roundSlice = createSlice({
     reducers: {
         saveRound: (state, action) => {
             state.round = action.payload
-        }
+        },
     }
 })
 

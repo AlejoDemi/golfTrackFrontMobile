@@ -3,9 +3,13 @@ import {Keyboard, ActivityIndicator, ImageBackground, StyleSheet, Text, Touchabl
 import {Searchbar} from 'react-native-paper';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Location from 'expo-location';
-import {gql, useMutation, useQuery} from "@apollo/client";
+import {gql, useLazyQuery, useMutation, useQuery} from "@apollo/client";
 import {useDispatch, useSelector} from "react-redux";
 import {setCourseId} from "./PlayScreenSlice";
+import {saveRound} from "../PlayCourse/RoundSlice";
+import {Round} from "../../models/Round";
+import {Course, Hole} from "../../models/Course";
+import {saveCourse} from "../CourseScreen/courseSlice";
 
 const COURSES_DEMO = gql`
     query GetAllCoursesDemo {
@@ -17,14 +21,48 @@ const COURSES_DEMO = gql`
         }
 }   `
 
+const FULL_COURSE = gql`
+    query Quer($id: String!) {
+        getCourse(id: $id) {
+            id
+            name
+            creator
+            description
+            location {
+                lat
+                long
+            }
+            holes {
+                id
+                num
+                par
+                distance
+                scoringIndex
+                locationTeebox {
+                    lat
+                    long
+                }
+                locationMiddleOfGreen {
+                    lat
+                    long
+                }
+            }
+        }
+    }
+`;
+
+
 const ONGOING_ROUND = gql`
 query Query($id: String!){
     getOngoingRound(id: $id){
         id
         courseId
+        playDate
         playedHoles{
             num
             score
+            putts
+            fairway
         }
     }
 }
@@ -53,7 +91,9 @@ function PlayScreen({navigation}) {
         lng: 0
     });
     const [modalVisible, setModalVisible] = useState(false);
-    const [loadingCC, setLoadingCC] = useState(true);
+    const [ongoingRound, setOngoingRound] = useState({});
+    const [loadingOngoing, setLoadingOngoing] = useState(true);
+    const [course, setCourse] = useState({});
     const [errorMsg, setErrorMsg] = useState(null);
     const [courses,setCourses] = useState([]);
     const [closestCourse, setClosestCourse] = useState({
@@ -67,15 +107,29 @@ function PlayScreen({navigation}) {
         },
     });
 
+    const [getCourse] = useLazyQuery(FULL_COURSE,{
+        variables: {
+            id: ongoingRound.courseId,
+        },
+        onCompleted: c => {
+            setFullCourse(c.getCourse);
+        },
+        onError: e => console.log(e)
+    });
+
     const {data} = useQuery(ONGOING_ROUND,{
         variables: {
             id: playerId.playerId,
         },
         onCompleted: r => {
-            console.log(r);
-            setModalVisible(true)
+            setLoadingOngoing(false)
+            setModalVisible(true);
+            setOngoingRound(r.getOngoingRound);
         },
-        onError: e => console.log(e),
+        onError: e => {
+            setLoadingOngoing(false)
+            console.log(e)
+        },
     });
 
     const [deleteR] = useMutation(DELETE_ROUND);
@@ -92,6 +146,33 @@ function PlayScreen({navigation}) {
         dispatch(setCourseId(id));
         navigation.navigate("Course");
     };
+
+    const setFullCourse = (c) => {
+        const fullCourse = new Course(c.id,c.name, c.description, {lat: parseFloat(c.location.lat), lng: parseFloat(c.location.long)});
+        for (let i = 0; i < c.holes.length; i++) {
+            let auxHolesList = [...c.holes];
+            auxHolesList = auxHolesList.sort((a,b) => {return a.num - b.num});
+            const newHole = new Hole(auxHolesList[i].id, auxHolesList[i].num, auxHolesList[i].par, auxHolesList[i].scoringIndex, auxHolesList[i].distance, {lat: parseFloat(auxHolesList[i].locationMiddleOfGreen.lat), lng: parseFloat(auxHolesList[i].locationMiddleOfGreen.long)}, {lat: parseFloat(auxHolesList[i].locationTeebox.lat), lng: parseFloat(auxHolesList[i].locationTeebox.long)});
+            fullCourse.addHole(i+1,newHole);
+        }
+        setCourse(fullCourse);
+        dispatch(saveCourse(fullCourse));
+        //Navigate to playscreen
+        navigation.navigate('PlayGame');
+        setLoadingOngoing(false);
+
+    }
+
+    const loadOngoingRound = () => {
+        const round = new Round(playerId.playerId, ongoingRound.courseId,ongoingRound.playDate, {mode: 'gross',handicap: 0,options:'scoring'});
+        ongoingRound.playedHoles.map(hole => {
+            round.addPlayedHole(hole.num,hole.score,hole.putts,hole.fairway);
+        });
+        dispatch(saveRound(round));
+
+        setLoadingOngoing(true);
+        getCourse();
+    }
 
     const deleteRound = () =>{
         setModalVisible(false)
@@ -154,7 +235,7 @@ function PlayScreen({navigation}) {
         setTheClosestCourse();
     }
 */
-    if (loading) return <View style={styles.loadingContainer}>
+    if (loading || loadingOngoing) return <View style={styles.loadingContainer}>
         <ActivityIndicator
             color = '#4a8a3f'
             size = "large"
@@ -178,7 +259,7 @@ function PlayScreen({navigation}) {
                         <View style={{flexDirection: 'row'}}>
                             <Pressable
                                 style={[styles.buttonModal, styles.buttonClose, {backgroundColor: '#4a8a3f'}]}
-                                onPress={() => setModalVisible(!modalVisible)}
+                                onPress={loadOngoingRound}
                             >
                                     <Text style={styles.textButton}>Yes</Text>
                             </Pressable>

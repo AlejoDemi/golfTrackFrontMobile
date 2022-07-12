@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 const FeedCard = (props) => {
     return (
-        <View style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={() => props.navigation.navigate('FullRound',{roundId: props.roundId})}>
             <View style={{flexDirection: 'row', justifyContent:'space-around'}}>
                 <View>
                     <Text style={styles.course}>{props.course}</Text>
@@ -11,7 +11,7 @@ const FeedCard = (props) => {
                 </View>
                 <Text style={styles.score}>{props.score}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 

@@ -22,7 +22,6 @@ export class Course {
         for (let i = 0; i < holeNum; i++) {
             counter += this.holesList[holeNum-9+i].par;
         }
-        console.log(counter);
         return counter
     }
 
