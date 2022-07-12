@@ -17,9 +17,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useDispatch} from "react-redux";
 import {saveId} from "./UserSlice";
 import {setUnit} from "../HomeScreen/PlayScreenSlice";
-import * as Google from 'expo-google-app-auth';
-import {gql, useMutation} from "@apollo/client";
 import GoogleButton from "../../components/GoogleButton";
+import {FacebookLogin} from "../../components/FacebookLogin";
 
 function FrontScreen({navigation}) {
 
@@ -71,6 +70,7 @@ function FrontScreen({navigation}) {
                         </TouchableOpacity>
                         <Text style={styles.title}>Sign in with another account</Text>
                         <GoogleButton navigation={navigation}/>
+                        <FacebookLogin/>
                     </Animatable.View>
 
                 </ImageBackground>

@@ -1,9 +1,7 @@
 import * as Facebook from "expo-facebook";
-import {Alert, StyleSheet, Text} from "react-native";
+import {Alert, StyleSheet, Text, TouchableOpacity} from "react-native";
 
 import React, {useState} from 'react';
-import {View} from "react-native";
-import {TouchableOpacity} from "react-native-web";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import {gql, useMutation} from "@apollo/client";
 import {useDispatch} from "react-redux";
