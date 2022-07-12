@@ -28,7 +28,6 @@
     "@reduxjs/toolkit": "^1.8.1",
     "expo": "^45.0.5",
     "expo-facebook": "~12.1.0",
-    "expo-google-sign-in": "^11.0.0",
     "expo-haptics": "~11.1.0",
     "expo-image-picker": "^12.0.2",
     "expo-location": "^14.2.2",

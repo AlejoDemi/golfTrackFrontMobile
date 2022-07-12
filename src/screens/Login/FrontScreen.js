@@ -11,68 +11,32 @@ import {
     StatusBar
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useDispatch} from "react-redux";
 import {saveId} from "./UserSlice";
 import {setUnit} from "../HomeScreen/PlayScreenSlice";
 import * as Google from 'expo-google-app-auth';
+import {gql, useMutation} from "@apollo/client";
+import GoogleButton from "../../components/GoogleButton";
 
 function FrontScreen({navigation}) {
 
+    const dispatch = useDispatch();
     const [user, setUser] = useState();
 
-    const initAsync = async () => {
-        await GoogleSignIn.initAsync({
-            // You may ommit the clientId when the firebase `googleServicesFile` is configured
-            clientId: '<YOUR_IOS_CLIENT_ID>',
-        });
-        await _syncUserWithStateAsync();
-    };
-
-    const _syncUserWithStateAsync = async () => {
-        const user = await GoogleSignIn.signInSilentlyAsync();
-        setUser(null);
-    };
-
-    const signOutAsync = async () => {
-        await GoogleSignIn.signOutAsync();
-        setUser(null);
-    };
-
-    const signInAsync = async () => {
-        try {
-            await GoogleSignIn.askForPlayServicesAsync();
-            const { type, user } = await GoogleSignIn.signInAsync();
-            if (type === 'success') {
-                await _syncUserWithStateAsync();
-            }
-        } catch ({ message }) {
-            alert('login: Error:' + message);
-        }
-    };
-
-    const onPress = async () => {
-        if (user) {
-            await signOutAsync();
-        } else {
-            await signInAsync();
-        }
-    };
 
 
-    const dispatch = useDispatch();
     useEffect(async () => {
         const token = await AsyncStorage.getItem('TOKEN');
         const id = await AsyncStorage.getItem('PLAYER_ID');
         const unit = await AsyncStorage.getItem('UNIT');
             if (token) {
                 dispatch(saveId(id));
-                console.log(id);
                 navigation.navigate('Home');
             }
             if (unit){
-                console.log(unit)
                 dispatch(setUnit(unit));
             }else{
                 await AsyncStorage.setItem('UNIT', 'yards');
@@ -106,9 +70,7 @@ function FrontScreen({navigation}) {
                                 size={20}/>
                         </TouchableOpacity>
                         <Text style={styles.title}>Sign in with another account</Text>
-                        <TouchableOpacity onPress={onPress()}>
-                            <Text>Google</Text>
-                        </TouchableOpacity>
+                        <GoogleButton/>
                     </Animatable.View>
 
                 </ImageBackground>
@@ -178,7 +140,7 @@ const styles = StyleSheet.create({
     textSign: {
         color: 'white',
         fontWeight: 'bold'
-    }
+    },
 });
 
 export default FrontScreen;

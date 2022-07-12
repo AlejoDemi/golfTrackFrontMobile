@@ -123,26 +123,14 @@ function SignUpScreen({navigation}) {
                     "password": data.password,
                 }
             },
-            onCompleted: r => {
-                setId(r.addPlayer.id);
-                _storeUser();
-                navigation.navigate('Home');
+            onCompleted: async r => {
+                navigation.navigate('LogInScreen');
             },
         }).then(r => setIsLoading(false)).catch(e => {
             setIsLoading(false);
             setError(e.message);
         });
     }
-
-    const _storeUser = async () => {
-        try {
-            await AsyncStorage.setItem('@user_id', id);
-            await AsyncStorage.setItem('@user_name', data.username);
-        } catch (e) {
-            // saving error
-            console.log("Couldn't save id")
-        }
-    };
 
     return (
         <View style={styles.container}>
