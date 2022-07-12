@@ -1,5 +1,5 @@
 import * as Facebook from "expo-facebook";
-import {Alert, StyleSheet, Text, TouchableOpacity} from "react-native";
+import {ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 
 import React, {useState} from 'react';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -17,6 +17,7 @@ mutation Mutation($input: IDPLoginInput!) {
   }
 }`
 export const FacebookLogin = () => {
+    const [clicked, setClicked] = useState(false);
     const dispatch = useDispatch();
     const [idpLogin, {data,loading}] = useMutation(IDP_LOGIN, {
         onCompleted: r => {
@@ -25,6 +26,7 @@ export const FacebookLogin = () => {
     });
 
     const logIn =async () => {
+        setClicked(true);
         try {
             await Facebook.initializeAsync({
                 appId: '1758858884454657',
@@ -63,6 +65,19 @@ export const FacebookLogin = () => {
         }
     }
 
+    if(clicked){
+        return(
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator
+                    color = '#4a8a3f'
+                    size = "small"
+                    style = {styles.activityIndicator}/>
+            </View>
+        );
+
+
+    }
+
     return (
         <TouchableOpacity onPress={logIn} style={styles.facebookButton}>
             <FontAwesome5
@@ -93,7 +108,20 @@ const styles = StyleSheet.create({
         color: 'white',
         marginLeft: 20,
         fontWeight: 'bold'
-    }
+    },
+
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 80
+    },
 })
 
 

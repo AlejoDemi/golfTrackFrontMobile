@@ -3,7 +3,7 @@ import * as Google from "expo-google-app-auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {saveId} from "../screens/Login/UserSlice";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import {Text, TouchableOpacity, StyleSheet} from "react-native";
+import {Text, TouchableOpacity, StyleSheet, View, ActivityIndicator} from "react-native";
 import {gql, useMutation} from "@apollo/client";
 import {useDispatch} from "react-redux";
 
@@ -26,7 +26,7 @@ const GoogleButton = (props) => {
     });
 
     const handleGoogleSignIn = async () => {
-
+        setClicked(true);
         const config = {
             androidClientId: "718565700367-6gthmjbhrostj71uln11lnh2cjvjr8fr.apps.googleusercontent.com",
             iosClientId: "718565700367-o2hntq7frv29ukk5h8d1avt6afean9b2.apps.googleusercontent.com",
@@ -64,6 +64,19 @@ const GoogleButton = (props) => {
             });
     }
 
+    if(clicked){
+        return(
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator
+                    color = '#4a8a3f'
+                    size = "small"
+                    style = {styles.activityIndicator}/>
+            </View>
+        );
+
+
+    }
+
     return (
         <TouchableOpacity onPress={handleGoogleSignIn} style={styles.googleButton}>
             <FontAwesome5
@@ -94,5 +107,18 @@ const styles = StyleSheet.create({
         color: 'white',
         marginLeft: 20,
         fontWeight: 'bold'
-    }
+    },
+
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 80
+    },
 })
