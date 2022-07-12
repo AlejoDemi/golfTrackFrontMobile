@@ -10,7 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const IDP_LOGIN = gql`
-mutation Mutation($input: IDPLoginInput) {
+mutation Mutation($input: IDPLoginInput!) {
   idpLogin(input: $input){
       id
       token
@@ -29,20 +29,32 @@ export const FacebookLogin = () => {
             await Facebook.initializeAsync({
                 appId: '1758858884454657',
             });
-            const {type, token} =
-                await Facebook.logInWithReadPermissionsAsync({
-                    permissions: ['public_profile'],
-                });
+            const {type, token} = await Facebook.logInWithReadPermissionsAsync();
             if (type === 'success') {
                 // Get the user's name using Facebook's Graph API
-                fetch(`https://graph.facebook.com/me?access_token=${token}`)
+                fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email`)
                     .then(response => response.json())
-                    .then(data => {
-                        AsyncStorage.setItem('TOKEN', data.data.loginPlayer.token);
-                        AsyncStorage.setItem('PLAYER_ID', data.data.loginPlayer.id);
-                        navigation.navigate('Home')
+                    .then(async data => {
+                        console.log('Facebook signin success');
+                        console.log(data);
+                        // Handle back
+                        await idpLogin({
+                            variables: {
+                                "input": {
+                                    "service": 'facebook',
+                                    "email": data.email,
+                                    'fullName': data.name,
+                                }
+                            },
+                        }).then(r => {
+                                AsyncStorage.setItem('TOKEN', r.data.idpLogin.token);
+                                AsyncStorage.setItem('PLAYER_ID', r.data.idpLogin.id);
+                                props.navigation.navigate('Home')
+                            }
+                        ).catch(e => {
+                            console.log(e);
+                        })
                     })
-                Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
             } else {
                 // type === 'cancel'
             }
@@ -52,7 +64,7 @@ export const FacebookLogin = () => {
     }
 
     return (
-        <TouchableOpacity onPress={logIn} style={styles.googleButton}>
+        <TouchableOpacity onPress={logIn} style={styles.facebookButton}>
             <FontAwesome5
                 name="facebook"
                 color="#fff"
@@ -65,7 +77,7 @@ export const FacebookLogin = () => {
 
 
 const styles = StyleSheet.create({
-    googleButton: {
+    facebookButton: {
         backgroundColor: '#4a8a3f',
         padding: "3%",
         alignSelf:"center",

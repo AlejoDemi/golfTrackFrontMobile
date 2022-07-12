@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import * as Google from "expo-google-app-auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {saveId} from "../screens/Login/UserSlice";
@@ -18,6 +18,7 @@ mutation Mutation($input: IDPLoginInput!) {
 const GoogleButton = (props) => {
 
     const dispatch = useDispatch();
+    const [clicked, setClicked] = useState(false);
     const [idpLogin, {data,loading}] = useMutation(IDP_LOGIN, {
         onCompleted: r => {
             dispatch(saveId(r.idpLogin.id));
@@ -62,6 +63,7 @@ const GoogleButton = (props) => {
                 console.log(err);
             });
     }
+
     return (
         <TouchableOpacity onPress={handleGoogleSignIn} style={styles.googleButton}>
             <FontAwesome5
