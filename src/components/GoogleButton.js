@@ -8,7 +8,7 @@ import {gql, useMutation} from "@apollo/client";
 import {useDispatch} from "react-redux";
 
 const IDP_LOGIN = gql`
-mutation Mutation($input: IDPLoginInput) {
+mutation Mutation($input: IDPLoginInput!) {
   idpLogin(input: $input){
       id
       token
@@ -47,9 +47,9 @@ const GoogleButton = (props) => {
                             }
                         },
                     }).then(r => {
-                            AsyncStorage.setItem('TOKEN', r.data.loginPlayer.token);
-                            AsyncStorage.setItem('PLAYER_ID', r.data.loginPlayer.id);
-                            navigation.navigate('Home')
+                            AsyncStorage.setItem('TOKEN', r.data.idpLogin.token);
+                            AsyncStorage.setItem('PLAYER_ID', r.data.idpLogin.id);
+                            props.navigation.navigate('Home')
                         }
                     ).catch(e => {
                         console.log(e);

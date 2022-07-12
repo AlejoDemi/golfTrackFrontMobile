@@ -70,7 +70,7 @@ function FrontScreen({navigation}) {
                                 size={20}/>
                         </TouchableOpacity>
                         <Text style={styles.title}>Sign in with another account</Text>
-                        <GoogleButton/>
+                        <GoogleButton navigation={navigation}/>
                     </Animatable.View>
 
                 </ImageBackground>
