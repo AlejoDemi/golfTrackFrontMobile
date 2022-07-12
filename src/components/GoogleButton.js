@@ -26,7 +26,7 @@ const GoogleButton = (props) => {
     });
 
     const handleGoogleSignIn = async () => {
-        setClicked(true);
+        setClicked(!clicked);
         const config = {
             androidClientId: "718565700367-6gthmjbhrostj71uln11lnh2cjvjr8fr.apps.googleusercontent.com",
             iosClientId: "718565700367-o2hntq7frv29ukk5h8d1avt6afean9b2.apps.googleusercontent.com",
@@ -57,6 +57,7 @@ const GoogleButton = (props) => {
                     })
                 } else {
                     console.log('Google signIn cancelled');
+                    setClicked(!clicked);
                 }
             })
             .catch((err) => {

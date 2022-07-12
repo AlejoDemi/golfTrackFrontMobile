@@ -26,7 +26,7 @@ export const FacebookLogin = () => {
     });
 
     const logIn =async () => {
-        setClicked(true);
+        setClicked(!clicked);
         try {
             await Facebook.initializeAsync({
                 appId: '1758858884454657',
@@ -61,7 +61,7 @@ export const FacebookLogin = () => {
                 // type === 'cancel'
             }
         } catch ({message}) {
-            alert(`Facebook Login Error: ${message}`);
+            setClicked(!clicked);
         }
     }
 
