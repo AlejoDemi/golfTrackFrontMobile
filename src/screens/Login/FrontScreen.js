@@ -20,6 +20,7 @@ import {setUnit} from "../HomeScreen/PlayScreenSlice";
 import * as Google from 'expo-google-app-auth';
 import {gql, useMutation} from "@apollo/client";
 import GoogleButton from "../../components/GoogleButton";
+import {FacebookLogin} from "../../components/FacebookLogin";
 
 function FrontScreen({navigation}) {
 
@@ -71,6 +72,7 @@ function FrontScreen({navigation}) {
                         </TouchableOpacity>
                         <Text style={styles.title}>Sign in with another account</Text>
                         <GoogleButton/>
+                        <FacebookLogin></FacebookLogin>
                     </Animatable.View>
 
                 </ImageBackground>
