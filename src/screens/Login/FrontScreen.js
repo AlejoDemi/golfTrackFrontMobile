@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View,
     StyleSheet,
@@ -16,8 +16,50 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useDispatch} from "react-redux";
 import {saveId} from "./UserSlice";
 import {setUnit} from "../HomeScreen/PlayScreenSlice";
+import * as Google from 'expo-google-app-auth';
 
 function FrontScreen({navigation}) {
+
+    const [user, setUser] = useState();
+
+    const initAsync = async () => {
+        await GoogleSignIn.initAsync({
+            // You may ommit the clientId when the firebase `googleServicesFile` is configured
+            clientId: '<YOUR_IOS_CLIENT_ID>',
+        });
+        await _syncUserWithStateAsync();
+    };
+
+    const _syncUserWithStateAsync = async () => {
+        const user = await GoogleSignIn.signInSilentlyAsync();
+        setUser(null);
+    };
+
+    const signOutAsync = async () => {
+        await GoogleSignIn.signOutAsync();
+        setUser(null);
+    };
+
+    const signInAsync = async () => {
+        try {
+            await GoogleSignIn.askForPlayServicesAsync();
+            const { type, user } = await GoogleSignIn.signInAsync();
+            if (type === 'success') {
+                await _syncUserWithStateAsync();
+            }
+        } catch ({ message }) {
+            alert('login: Error:' + message);
+        }
+    };
+
+    const onPress = async () => {
+        if (user) {
+            await signOutAsync();
+        } else {
+            await signInAsync();
+        }
+    };
+
 
     const dispatch = useDispatch();
     useEffect(async () => {
@@ -64,7 +106,11 @@ function FrontScreen({navigation}) {
                                 size={20}/>
                         </TouchableOpacity>
                         <Text style={styles.title}>Sign in with another account</Text>
+                        <TouchableOpacity onPress={onPress()}>
+                            <Text>Google</Text>
+                        </TouchableOpacity>
                     </Animatable.View>
+
                 </ImageBackground>
             </View>
         );

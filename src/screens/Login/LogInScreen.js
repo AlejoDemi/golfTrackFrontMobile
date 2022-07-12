@@ -172,6 +172,7 @@ function LogInScreen({navigation}) {
                         <Text style={styles.textSignUp}>Sign Up</Text>
                     </TouchableOpacity>
 
+
                     {
                         isLoading &&
                         <View style={styles.loadingContainer}>
