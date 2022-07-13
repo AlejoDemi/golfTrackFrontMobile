@@ -51,7 +51,8 @@ export const FacebookLogin = () => {
                         }).then(r => {
                                 AsyncStorage.setItem('TOKEN', r.data.idpLogin.token);
                                 AsyncStorage.setItem('PLAYER_ID', r.data.idpLogin.id);
-                                props.navigation.navigate('Home')
+                                props.navigation.navigate('Home');
+                                setClicked(!clicked);
                             }
                         ).catch(e => {
                             console.log(e);

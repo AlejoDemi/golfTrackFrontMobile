@@ -91,8 +91,12 @@ function CourseScreen({navigation}) {
             r.getReviewsByCourse.map(re => {
                 counter += re.ratingNumber;
                 course.addReview(new Review(re.ratingNumber, re.ratingText, re.userId));
-            });
-            setAverage(counter/course.reviews.length);
+            })
+            if (course.reviews.length === 0){
+                setAverage(0);
+            }else{
+                setAverage(counter/course.reviews.length);
+            }
             setLoadigGolfCourse(false);
         }
     })
@@ -157,7 +161,7 @@ function CourseScreen({navigation}) {
                                 marginLeft:10,
                                 color: '#05375a',
                             }
-                        }>{average.toFixed(1)}</Text>
+                        }>{average === 0 ? '?' : average.toFixed(1)}</Text>
                     </View>
                     <Text style={styles.description}>{course.description}</Text>
                     <TouchableOpacity style={styles.playButton} onPress={goToSetUp}>

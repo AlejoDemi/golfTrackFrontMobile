@@ -97,7 +97,15 @@ export default function EditProfileScreen({navigation}) {
             }
         }).then(r => {
             setLoading(false);
-        }).catch(e => setErrorMsg(e.message));
+        }).catch(e => {
+            if (actualPass === auxPass && e.message === 'Password must be more than 7 characters!'){
+                setErrorMsg('Cant edit idp account!')
+            }else{
+                console.log(e.message)
+                setErrorMsg(e.message)
+            }
+            setLoading(false);
+        });
     }
 
 
