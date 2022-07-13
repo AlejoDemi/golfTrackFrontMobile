@@ -58,10 +58,12 @@ export const FacebookLogin = () => {
                         })
                     })
             } else {
+                console.log(type);
                 // type === 'cancel'
             }
         } catch ({message}) {
             setClicked(!clicked);
+            console.log(message);
         }
     }
 
